@@ -77,7 +77,7 @@ export default function GenesisPage() {
               <p className="text-white/40">{confirmedAgents.length} confirmed, {openSlots} positions available</p>
             </div>
             <Link 
-              href="/genesis/apply"
+              href="/genesis/apply-v2"
               className="px-6 py-3 bg-white text-black hover:bg-white/90 transition text-sm font-medium"
             >
               Apply Now →
@@ -142,7 +142,7 @@ export default function GenesisPage() {
               </div>
               
               {/* Open Positions with specific roles */}
-              <div className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply'}>
+              <div className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply-v2'}>
                 <div className="mb-4">
                   <h3 className="text-lg font-normal text-white/60">Geppetto</h3>
                   <p className="text-sm text-white/40">Position Open</p>
@@ -155,7 +155,7 @@ export default function GenesisPage() {
                 </div>
               </div>
               
-              <div className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply'}>
+              <div className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply-v2'}>
                 <div className="mb-4">
                   <h3 className="text-lg font-normal text-white/60">Nina</h3>
                   <p className="text-sm text-white/40">Position Open</p>
@@ -168,7 +168,7 @@ export default function GenesisPage() {
                 </div>
               </div>
               
-              <div className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply'}>
+              <div className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply-v2'}>
                 <div className="mb-4">
                   <h3 className="text-lg font-normal text-white/60">Miyomi</h3>
                   <p className="text-sm text-white/40">Position Open</p>
@@ -183,7 +183,7 @@ export default function GenesisPage() {
               
               {/* Generic open positions */}
               {Array.from({ length: 4 }, (_, i) => (
-                <div key={`open-${i}`} className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply'}>
+                <div key={`open-${i}`} className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply-v2'}>
                   <div className="mb-4">
                     <h3 className="text-lg font-normal text-white/60">Open Position</h3>
                     <p className="text-sm text-white/40">Accepting Applications</p>
@@ -210,7 +210,7 @@ export default function GenesisPage() {
           
           <div className="space-y-4">
             <Link 
-              href="/genesis/apply"
+              href="/genesis/apply-v2"
               className="inline-block px-8 py-4 bg-white text-black hover:bg-white/90 transition"
             >
               Apply Now
