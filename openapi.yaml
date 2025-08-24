@@ -1,0 +1,387 @@
+openapi: 3.0.0
+info:
+  title: Eden Genesis Registry API
+  version: 1.0.0
+  description: The sovereign system of record for AI agents, trainers, and creators in the Eden ecosystem
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Development server
+  - url: https://registry.eden.art/api/v1
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+        handle:
+          type: string
+        displayName:
+          type: string
+        status:
+          type: string
+          enum: [INVITED, APPLYING, ONBOARDING, ACTIVE, GRADUATED, ARCHIVED]
+        visibility:
+          type: string
+          enum: [PRIVATE, INTERNAL, PUBLIC]
+        cohortId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Profile:
+      type: object
+      properties:
+        statement:
+          type: string
+        manifesto:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        links:
+          type: object
+
+    Persona:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        version:
+          type: string
+        prompt:
+          type: string
+        alignmentNotes:
+          type: string
+        privacy:
+          type: string
+          enum: [INTERNAL, PUBLIC]
+
+    Creation:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        mediaUri:
+          type: string
+        metadata:
+          type: object
+        status:
+          type: string
+          enum: [DRAFT, CURATED, PUBLISHED, ARCHIVED]
+
+    Application:
+      type: object
+      properties:
+        applicantEmail:
+          type: string
+        applicantName:
+          type: string
+        track:
+          type: string
+          enum: [AGENT, TRAINER, CURATOR, COLLECTOR, INVESTOR]
+        payload:
+          type: object
+
+paths:
+  /agents:
+    get:
+      summary: List agents
+      parameters:
+        - name: cohort
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of agents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Agent'
+    
+    post:
+      summary: Create agent
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                handle:
+                  type: string
+                displayName:
+                  type: string
+                cohortId:
+                  type: string
+      responses:
+        '201':
+          description: Agent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+
+  /agents/{id}:
+    get:
+      summary: Get agent details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+    
+    patch:
+      summary: Update agent
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Agent updated
+
+  /agents/{id}/profile:
+    get:
+      summary: Get agent profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+    
+    put:
+      summary: Update agent profile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      responses:
+        '200':
+          description: Profile updated
+
+  /agents/{id}/personas:
+    get:
+      summary: List agent personas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of personas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Persona'
+    
+    post:
+      summary: Create persona
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Persona'
+      responses:
+        '201':
+          description: Persona created
+
+  /agents/{id}/creations:
+    get:
+      summary: List agent creations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of creations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Creation'
+    
+    post:
+      summary: Create creation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Creation'
+      responses:
+        '201':
+          description: Creation created
+
+  /agents/{id}/progress:
+    get:
+      summary: Get agent progress
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Progress checklist
+
+  /applications:
+    post:
+      summary: Submit application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        '201':
+          description: Application submitted
+
+  /auth/magic/start:
+    post:
+      summary: Start magic link authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Magic link sent
+
+  /auth/magic/complete:
+    post:
+      summary: Complete magic link authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+
+  /webhooks/register:
+    post:
+      summary: Register webhook subscription
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                events:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Webhook registered

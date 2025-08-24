@@ -1,0 +1,418 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum AgentStatus {
+  INVITED
+  APPLYING
+  ONBOARDING
+  ACTIVE
+  GRADUATED
+  ARCHIVED
+}
+
+enum Visibility {
+  PRIVATE
+  INTERNAL
+  PUBLIC
+}
+
+enum Role {
+  ADMIN
+  CURATOR
+  COLLECTOR
+  INVESTOR
+  TRAINER
+  GUEST
+}
+
+enum TrainerRole {
+  LEAD
+  ASSISTANT
+  MENTOR
+}
+
+enum TrainerAgentRole {
+  PRIMARY
+  SECONDARY
+  ADVISOR
+}
+
+enum ApplicationTrack {
+  AGENT
+  TRAINER
+  CURATOR
+  COLLECTOR
+  INVESTOR
+}
+
+enum ApplicationStatus {
+  DRAFT
+  SUBMITTED
+  REVIEW
+  ACCEPTED
+  REJECTED
+}
+
+enum PersonaPrivacy {
+  INTERNAL
+  PUBLIC
+}
+
+enum ArtifactKind {
+  TEXT_MODEL
+  IMAGE_MODEL
+  LORA
+  CKPT
+  VAE
+  TOKENIZER
+}
+
+enum CreationStatus {
+  DRAFT
+  CURATED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SocialPlatform {
+  FARCASTER
+  X
+  INSTAGRAM
+  TIKTOK
+  LENS
+  GITHUB
+}
+
+enum KeyType {
+  WALLET
+  API_KEY
+  SERVICE_ACCOUNT
+}
+
+enum ChecklistTemplate {
+  GENESIS_AGENT
+  TRAINER
+  CURATOR
+  COLLECTOR
+  INVESTOR
+}
+
+enum ActorSystem {
+  AUTH
+  WEBHOOK
+  ADMIN
+  API
+  CRON
+}
+
+enum SubjectType {
+  USER
+  ROLE
+}
+
+enum PolicyEffect {
+  ALLOW
+  DENY
+}
+
+enum CohortStatus {
+  PLANNED
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+// Core Models
+
+model Cohort {
+  id        String       @id @default(cuid())
+  slug      String       @unique
+  title     String
+  startsAt  DateTime
+  endsAt    DateTime?
+  status    CohortStatus @default(PLANNED)
+  agents    Agent[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Agent {
+  id             String          @id @default(cuid())
+  handle         String          @unique
+  displayName    String
+  role           String?         // creator, curator, collector, governance, infra, tbd
+  cohortId       String
+  cohort         Cohort          @relation(fields: [cohortId], references: [id])
+  status         AgentStatus     @default(INVITED)
+  visibility     Visibility      @default(INTERNAL)
+  profile        Profile?
+  personas       Persona[]
+  artifacts      ModelArtifact[]
+  creations      Creation[]
+  trainers       AgentTrainer[]
+  socialAccounts SocialAccount[]
+  keys           Key[]
+  checklists     ProgressChecklist[]
+  invitations    Invitation[]
+  applications   Application[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([cohortId])
+  @@index([status])
+}
+
+model Trainer {
+  id          String         @id @default(cuid())
+  userId      String         @unique
+  user        User           @relation(fields: [userId], references: [id])
+  role        TrainerRole
+  bio         String?
+  socials     Json?          // JSONB for social links
+  agents      AgentTrainer[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model AgentTrainer {
+  agentId       String
+  agent         Agent            @relation(fields: [agentId], references: [id])
+  trainerId     String
+  trainer       Trainer          @relation(fields: [trainerId], references: [id])
+  roleInAgent   TrainerAgentRole @default(PRIMARY)
+  permissions   Json?            // JSONB for permissions
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@id([agentId, trainerId])
+  @@index([trainerId])
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String?
+  role         Role          @default(GUEST)
+  lastLoginAt  DateTime?
+  trainer      Trainer?
+  events       Event[]
+  invitations  Invitation[]
+  reviews      Application[] @relation("ApplicationReviewer")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Invitation {
+  id          String    @id @default(cuid())
+  email       String
+  roleTarget  Role
+  agentId     String?
+  agent       Agent?    @relation(fields: [agentId], references: [id])
+  cohortId    String?
+  inviteToken String    @unique
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  invitedBy   String?
+  inviter     User?     @relation(fields: [invitedBy], references: [id])
+  createdAt   DateTime  @default(now())
+
+  @@index([email])
+  @@index([inviteToken])
+}
+
+model Application {
+  id             String            @id @default(cuid())
+  applicantEmail String
+  applicantName  String
+  track          ApplicationTrack
+  payload        Json              // JSONB for application data
+  status         ApplicationStatus @default(DRAFT)
+  agentId        String?
+  agent          Agent?            @relation(fields: [agentId], references: [id])
+  reviewerId     String?
+  reviewer       User?             @relation("ApplicationReviewer", fields: [reviewerId], references: [id])
+  reviewNotes    String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([applicantEmail])
+  @@index([status])
+  @@index([track])
+}
+
+model Profile {
+  agentId   String   @id
+  agent     Agent    @relation(fields: [agentId], references: [id])
+  statement String?  // Markdown
+  manifesto String?  // Markdown
+  tags      String[]
+  links     Json?    // JSONB for links
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Persona {
+  id             String         @id @default(cuid())
+  agentId        String
+  agent          Agent          @relation(fields: [agentId], references: [id])
+  name           String
+  version        String
+  prompt         String         // Markdown
+  alignmentNotes String?        // Markdown
+  privacy        PersonaPrivacy @default(INTERNAL)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([agentId])
+  @@unique([agentId, name, version])
+}
+
+model ModelArtifact {
+  id         String       @id @default(cuid())
+  agentId    String
+  agent      Agent        @relation(fields: [agentId], references: [id])
+  kind       ArtifactKind
+  version    String
+  storageUri String
+  hash       String?
+  sizeBytes  BigInt?
+  license    String?
+  visibility Visibility   @default(INTERNAL)
+  notes      String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([agentId])
+  @@index([kind])
+}
+
+model Creation {
+  id          String         @id @default(cuid())
+  agentId     String
+  agent       Agent          @relation(fields: [agentId], references: [id])
+  title       String
+  mediaUri    String?
+  metadata    Json?          // JSONB: prompts, settings, provenance
+  publishedTo Json?          // JSONB: eth tx, farcaster cast id, etc.
+  status      CreationStatus @default(DRAFT)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([agentId])
+  @@index([status])
+}
+
+model SocialAccount {
+  id            String         @id @default(cuid())
+  agentId       String
+  agent         Agent          @relation(fields: [agentId], references: [id])
+  platform      SocialPlatform
+  handle        String
+  credentialRef String?        // Pointer to vault
+  status        String         @default("active")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([agentId, platform])
+  @@index([platform])
+}
+
+model Key {
+  id           String   @id @default(cuid())
+  agentId      String
+  agent        Agent    @relation(fields: [agentId], references: [id])
+  type         KeyType
+  vaultPath    String   // Pointer to vault
+  lastRotatedAt DateTime?
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([agentId])
+  @@index([type])
+}
+
+model ProgressChecklist {
+  id          String            @id @default(cuid())
+  agentId     String
+  agent       Agent             @relation(fields: [agentId], references: [id])
+  template    ChecklistTemplate
+  items       Json              // JSONB: [{id, label, required, done, actor_role}]
+  percent     Float             @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([agentId, template])
+  @@index([template])
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  actorUserId String?
+  actorUser   User?       @relation(fields: [actorUserId], references: [id])
+  actorSystem ActorSystem?
+  verb        String
+  entity      String      // Table name
+  entityId    String
+  delta       Json?       // JSONB for changes
+  createdAt   DateTime    @default(now())
+
+  @@index([entity, entityId])
+  @@index([actorUserId])
+  @@index([createdAt])
+}
+
+model AccessPolicy {
+  id          String       @id @default(cuid())
+  subjectType SubjectType
+  subjectId   String?
+  resource    String
+  action      String
+  effect      PolicyEffect
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([subjectType, subjectId])
+  @@index([resource, action])
+}
+
+model WebhookSubscription {
+  id        String   @id @default(cuid())
+  url       String
+  events    String[] // Array of event types to subscribe to
+  secret    String   // For HMAC verification
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+}
+
+model WebhookDelivery {
+  id             String   @id @default(cuid())
+  subscriptionId String
+  eventType      String
+  payload        Json
+  status         String   // pending, success, failed
+  attempts       Int      @default(0)
+  lastError      String?
+  deliveredAt    DateTime?
+  createdAt      DateTime @default(now())
+
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([createdAt])
+}
