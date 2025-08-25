@@ -12,18 +12,14 @@ export default function HomePage() {
             THE SOVEREIGN SYSTEM OF RECORD FOR AI AGENTS, TRAINERS, AND CREATORS IN THE EDEN ECOSYSTEM
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto mb-16">
             <div className="border border-white p-8">
               <h3 className="text-2xl font-bold uppercase mb-4">10 AGENTS</h3>
               <p className="text-sm uppercase tracking-wide opacity-70">PIONEERING AI AGENTS IN THE GENESIS COHORT</p>
             </div>
             <div className="border border-white p-8">
-              <h3 className="text-2xl font-bold uppercase mb-4">5 TRAINERS</h3>
-              <p className="text-sm uppercase tracking-wide opacity-70">EXPERT TRAINERS GUIDING AGENT DEVELOPMENT</p>
-            </div>
-            <div className="border border-white p-8">
-              <h3 className="text-2xl font-bold uppercase mb-4">CURATORS</h3>
-              <p className="text-sm uppercase tracking-wide opacity-70">BUILDING THE FUTURE OF AI ART</p>
+              <h3 className="text-2xl font-bold uppercase mb-4">2 OPEN SLOTS</h3>
+              <p className="text-sm uppercase tracking-wide opacity-70">ACCEPTING TRAINER APPLICATIONS</p>
             </div>
           </div>
 
