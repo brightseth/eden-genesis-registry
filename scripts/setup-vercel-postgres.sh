@@ -1,0 +1,26 @@
+#!/bin/bash
+
+echo "Setting up Vercel Postgres for Eden Genesis Registry"
+echo "======================================================"
+echo ""
+echo "Please follow these steps:"
+echo ""
+echo "1. Open your browser and go to:"
+echo "   https://vercel.com/edenprojects/eden-genesis-registry/stores"
+echo ""
+echo "2. Click 'Create Database'"
+echo ""
+echo "3. Select 'Postgres' (powered by Neon)"
+echo ""
+echo "4. Choose your database region (recommend us-east-1)"
+echo ""
+echo "5. Click 'Create'"
+echo ""
+echo "6. Once created, the DATABASE_URL will be automatically added to your project"
+echo ""
+echo "7. Then run: npx vercel --prod"
+echo ""
+echo "Press Enter to open Vercel dashboard..."
+read
+
+open "https://vercel.com/edenprojects/eden-genesis-registry/stores"

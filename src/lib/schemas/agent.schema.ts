@@ -13,21 +13,21 @@ import { ulid } from 'ulid'
 export type ULID = string
 
 export enum AgentStatus {
-  Draft = 'draft',
-  PendingReview = 'pending_review',
-  Active = 'active',
-  Paused = 'paused',
-  Graduated = 'graduated',
-  Archived = 'archived'
+  Invited = 'INVITED',
+  Applying = 'APPLYING',
+  Onboarding = 'ONBOARDING',
+  Active = 'ACTIVE',
+  Graduated = 'GRADUATED',
+  Archived = 'ARCHIVED'
 }
 
 export enum Role {
-  Creator = 'creator',
-  Curator = 'curator',
-  Collector = 'collector',
-  Governance = 'governance',
-  Predictor = 'predictor',
-  Educator = 'educator'
+  Admin = 'ADMIN',
+  Curator = 'CURATOR',
+  Collector = 'COLLECTOR',
+  Investor = 'INVESTOR',
+  Trainer = 'TRAINER',
+  Guest = 'GUEST'
 }
 
 export enum UpdateSource {
@@ -47,7 +47,7 @@ export const AgentSchema = z.object({
   handle: z.string().min(3).max(30).regex(/^[a-z0-9-]+$/), // immutable after creation
   displayName: z.string().min(1).max(50),
   role: z.nativeEnum(Role),
-  status: z.nativeEnum(AgentStatus).default(AgentStatus.Draft),
+  status: z.nativeEnum(AgentStatus).default(AgentStatus.Invited),
   cohort: z.string().optional(),
   pronouns: z.enum(['they/them', 'she/her', 'he/him', 'it/its']).optional(),
   timezone: z.string().regex(/^[A-Za-z_]+\/[A-Za-z_]+$/), // IANA format
@@ -59,7 +59,7 @@ export const AgentSchema = z.object({
   updatedBy: z.string().optional(),
   updateSource: z.nativeEnum(UpdateSource).default(UpdateSource.UI),
   
-  schemaVersion: z.string().default('0.9.2'),
+  schemaVersion: z.string().default('1.0.0'),
   configHash: z.string(), // blake3(JSON.stringify(config))
 })
 

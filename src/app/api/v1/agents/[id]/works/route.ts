@@ -4,176 +4,225 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs/promises'
-import path from 'path'
+import { prisma } from '@/lib/db'
+import { handleCors, withCors } from '@/lib/cors'
+
+// OPTIONS handler for CORS
+export async function OPTIONS(request: NextRequest) {
+  return handleCors(request) || new NextResponse(null, { status: 204 })
+}
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const corsResponse = handleCors(request)
+  if (corsResponse) return corsResponse
+
   try {
-    const agentId = params.id
+    const { id: agentId } = await params
     const searchParams = request.nextUrl.searchParams
     
-    // Standard query parameters for all agents
-    const contentType = searchParams.get('type') || 'all' // works, writings, audio, video
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const sortBy = searchParams.get('sortBy') || 'createdAt'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
-    const format = searchParams.get('format') || 'full' // full, minimal, ids
+    // Standard query parameters
+    const status = searchParams.get('status')
+    const limit = parseInt(searchParams.get('limit') || '50')
+    const offset = parseInt(searchParams.get('offset') || '0')
     
-    // Content filters
-    const status = searchParams.get('status') // published, draft, curated
-    const featured = searchParams.get('featured')
-    const theme = searchParams.get('theme')
-    const dateFrom = searchParams.get('dateFrom')
-    const dateTo = searchParams.get('dateTo')
-    const search = searchParams.get('search')
+    // Find agent by handle or ID
+    const agent = await prisma.agent.findFirst({
+      where: {
+        OR: [
+          { id: agentId },
+          { handle: agentId }
+        ]
+      }
+    })
     
-    // Load agent's works from Registry
-    const worksPath = path.join(process.cwd(), 'data', 'works', `${agentId}.json`)
-    
-    try {
-      const data = await fs.readFile(worksPath, 'utf-8')
-      let works = JSON.parse(data)
-      
-      // Apply standard filters
-      if (contentType !== 'all') {
-        works = works.filter((w: any) => w.medium === contentType)
-      }
-      
-      if (status) {
-        works = works.filter((w: any) => w.status === status)
-      }
-      
-      if (featured !== null) {
-        works = works.filter((w: any) => w.featured === (featured === 'true'))
-      }
-      
-      if (theme) {
-        works = works.filter((w: any) => w.themes?.includes(theme))
-      }
-      
-      if (dateFrom) {
-        works = works.filter((w: any) => new Date(w.createdAt) >= new Date(dateFrom))
-      }
-      
-      if (dateTo) {
-        works = works.filter((w: any) => new Date(w.createdAt) <= new Date(dateTo))
-      }
-      
-      if (search) {
-        const searchLower = search.toLowerCase()
-        works = works.filter((w: any) => 
-          w.title?.toLowerCase().includes(searchLower) ||
-          w.description?.toLowerCase().includes(searchLower) ||
-          w.prompt?.toLowerCase().includes(searchLower)
-        )
-      }
-      
-      // Sort
-      works.sort((a: any, b: any) => {
-        const aVal = a[sortBy]
-        const bVal = b[sortBy]
-        const order = sortOrder === 'asc' ? 1 : -1
-        
-        if (aVal < bVal) return -order
-        if (aVal > bVal) return order
-        return 0
-      })
-      
-      // Pagination
-      const total = works.length
-      const totalPages = Math.ceil(total / limit)
-      const startIndex = (page - 1) * limit
-      const endIndex = startIndex + limit
-      const paginatedWorks = works.slice(startIndex, endIndex)
-      
-      // Format response based on requested format
-      let formattedWorks = paginatedWorks
-      
-      if (format === 'minimal') {
-        formattedWorks = paginatedWorks.map((w: any) => ({
-          id: w.id,
-          title: w.title,
-          type: w.type,
-          medium: w.medium,
-          thumbnail: w.files?.[0]?.url,
-          createdAt: w.createdAt
-        }))
-      } else if (format === 'ids') {
-        formattedWorks = paginatedWorks.map((w: any) => w.id)
-      }
-      
-      // Standard API response structure
-      return NextResponse.json({
-        success: true,
-        agent: {
-          id: agentId,
-          handle: agentId.split('-')[0]
-        },
-        data: formattedWorks,
-        meta: {
-          pagination: {
-            page,
-            limit,
-            total,
-            totalPages,
-            hasNext: endIndex < total,
-            hasPrev: page > 1
-          },
-          filters: {
-            contentType,
-            status,
-            featured,
-            theme,
-            dateFrom,
-            dateTo,
-            search
-          },
-          sort: {
-            by: sortBy,
-            order: sortOrder
-          }
-        },
-        links: {
-          self: `/api/v1/agents/${agentId}/works?page=${page}`,
-          next: endIndex < total ? `/api/v1/agents/${agentId}/works?page=${page + 1}` : null,
-          prev: page > 1 ? `/api/v1/agents/${agentId}/works?page=${page - 1}` : null,
-          curate: `/api/v1/agents/${agentId}/curate`,
-          stats: `/api/v1/agents/${agentId}/stats`
-        }
-      })
-      
-    } catch (error) {
-      // Agent not found or no works yet
-      return NextResponse.json({
-        success: false,
-        error: `No works found for agent ${agentId}`,
-        agent: {
-          id: agentId,
-          handle: agentId.split('-')[0]
-        },
-        data: [],
-        meta: {
-          pagination: {
-            page: 1,
-            limit,
-            total: 0,
-            totalPages: 0,
-            hasNext: false,
-            hasPrev: false
-          }
-        }
-      }, { status: 404 })
+    if (!agent) {
+      const response = NextResponse.json(
+        { error: 'Agent not found' },
+        { status: 404 }
+      )
+      return withCors(response, request)
     }
     
+    // Build where clause
+    const where: any = { agentId: agent.id }
+    if (status) {
+      where.status = status
+    }
+    
+    // Get works with pagination
+    const [works, total] = await Promise.all([
+      prisma.creation.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: offset,
+        take: limit
+      }),
+      prisma.creation.count({ where })
+    ])
+    
+    // Transform works for CRIT compatibility
+    const transformedWorks = works.map(work => ({
+      id: work.id,
+      title: work.title,
+      imageUrl: work.mediaUri,
+      metadata: work.metadata,
+      status: work.status,
+      createdAt: work.createdAt,
+      updatedAt: work.updatedAt,
+      // Add extra fields from metadata if present
+      ...(work.metadata && typeof work.metadata === 'object' ? {
+        description: (work.metadata as any).description,
+        price: (work.metadata as any).price,
+        views: (work.metadata as any).views,
+        likes: (work.metadata as any).likes,
+        medium: (work.metadata as any).medium,
+        style: (work.metadata as any).style,
+        theme: (work.metadata as any).theme
+      } : {})
+    }))
+    
+    const response = NextResponse.json({
+      works: transformedWorks,
+      total,
+      agent: {
+        id: agent.id,
+        handle: agent.handle,
+        displayName: agent.displayName
+      }
+    })
+    
+    return withCors(response, request)
   } catch (error) {
-    console.error('Agent works API error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+    console.error('Error fetching agent works:', error)
+    const response = NextResponse.json(
+      { error: 'Internal server error' },
       { status: 500 }
     )
+    return withCors(response, request)
+  }
+}
+
+// POST /api/v1/agents/[id]/works
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const corsResponse = handleCors(request)
+  if (corsResponse) return corsResponse
+
+  try {
+    // Check authentication
+    const authHeader = request.headers.get('authorization')
+    const apiKey = authHeader?.replace('Bearer ', '')
+    
+    // For now, use a simple API key check (enhance later with proper auth)
+    const validApiKey = process.env.REGISTRY_API_KEY || 'registry-upload-key-v1'
+    if (apiKey !== validApiKey) {
+      const response = NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+      return withCors(response, request)
+    }
+
+    const { id: agentId } = await params
+    const body = await request.json()
+    
+    // Extract idempotency key
+    const idempotencyKey = request.headers.get('idempotency-key')
+    
+    // Find agent by handle or ID
+    const agent = await prisma.agent.findFirst({
+      where: {
+        OR: [
+          { id: agentId },
+          { handle: agentId }
+        ]
+      }
+    })
+    
+    if (!agent) {
+      const response = NextResponse.json(
+        { error: 'Agent not found' },
+        { status: 404 }
+      )
+      return withCors(response, request)
+    }
+    
+    // Check for existing work with same idempotency key
+    if (idempotencyKey) {
+      const existingWork = await prisma.creation.findFirst({
+        where: { idempotencyKey }
+      })
+      
+      if (existingWork) {
+        const response = NextResponse.json({
+          work_id: existingWork.id,
+          work: existingWork,
+          message: 'Work already exists (idempotent)'
+        })
+        return withCors(response, request)
+      }
+    }
+    
+    // Validate required fields
+    const workData = body.work || body
+    if (!workData.media_type || !workData.metadata?.creation_url) {
+      const response = NextResponse.json(
+        { error: 'Missing required fields: media_type and creation_url' },
+        { status: 400 }
+      )
+      return withCors(response, request)
+    }
+    
+    // Create new work with full payload
+    const work = await prisma.creation.create({
+      data: {
+        agentId: agent.id,
+        title: workData.metadata?.title || 'Untitled',
+        mediaUri: workData.urls?.full || workData.metadata?.creation_url,
+        mediaType: workData.media_type,
+        creationUrl: workData.metadata?.creation_url,
+        idempotencyKey,
+        metadata: {
+          description: workData.metadata?.description,
+          source: workData.metadata?.source || 'eden.studio',
+          ...workData.metadata
+        },
+        features: workData.features || {},
+        market: workData.market || null,
+        urls: workData.urls || {
+          full: workData.metadata?.creation_url,
+          preview: workData.urls?.preview,
+          thumbnail: workData.urls?.thumbnail
+        },
+        status: workData.status || 'PUBLISHED',
+        availability: workData.availability || 'available'
+      }
+    })
+    
+    // TODO: Queue rendition jobs if post_process.renditions is provided
+    if (body.post_process?.renditions) {
+      console.log('TODO: Queue rendition jobs for:', body.post_process.renditions)
+    }
+    
+    const response = NextResponse.json({
+      work_id: work.id,
+      work,
+      message: 'Work created successfully',
+      public_url: `https://eden-genesis-registry.vercel.app/agents/${agent.handle}/works/${work.id}`
+    })
+    
+    return withCors(response, request)
+  } catch (error) {
+    console.error('Error creating work:', error)
+    const response = NextResponse.json(
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    )
+    return withCors(response, request)
   }
 }

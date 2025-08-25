@@ -19,10 +19,10 @@ type StateTransition = {
 }
 
 const VALID_TRANSITIONS: StateTransition[] = [
-  // Draft → Review
+  // Invited → Applying
   {
-    from: [AgentStatus.Draft],
-    to: AgentStatus.PendingReview,
+    from: [AgentStatus.Invited],
+    to: AgentStatus.Applying,
     requires: ['handle', 'displayName', 'statement', 'practiceContract'],
     emits: 'submitted_for_review',
     validate: (agent) => {
@@ -33,9 +33,9 @@ const VALID_TRANSITIONS: StateTransition[] = [
     }
   },
   
-  // Review → Active
+  // Applying → Active
   {
-    from: [AgentStatus.PendingReview],
+    from: [AgentStatus.Applying],
     to: AgentStatus.Active,
     requires: ['approvedBy', 'consent'],
     emits: 'activated',
@@ -46,18 +46,18 @@ const VALID_TRANSITIONS: StateTransition[] = [
     }
   },
   
-  // Review → Draft (rejected)
+  // Applying → Invited (rejected)
   {
-    from: [AgentStatus.PendingReview],
-    to: AgentStatus.Draft,
+    from: [AgentStatus.Applying],
+    to: AgentStatus.Invited,
     requires: ['reviewNotes'],
     emits: 'review_rejected'
   },
   
-  // Active → Paused
+  // Active → Onboarding
   {
     from: [AgentStatus.Active],
-    to: AgentStatus.Paused,
+    to: AgentStatus.Onboarding,
     emits: 'paused',
     validate: (agent) => {
       // Check for active commitments
@@ -68,9 +68,9 @@ const VALID_TRANSITIONS: StateTransition[] = [
     }
   },
   
-  // Paused → Active
+  // Onboarding → Active
   {
-    from: [AgentStatus.Paused],
+    from: [AgentStatus.Onboarding],
     to: AgentStatus.Active,
     emits: 'resumed'
   },
@@ -101,7 +101,7 @@ const VALID_TRANSITIONS: StateTransition[] = [
   
   // Various → Archived
   {
-    from: [AgentStatus.Draft, AgentStatus.Paused, AgentStatus.Graduated],
+    from: [AgentStatus.Invited, AgentStatus.Onboarding, AgentStatus.Graduated],
     to: AgentStatus.Archived,
     requires: ['archiveReason'],
     emits: 'archived'

@@ -300,19 +300,28 @@ model ModelArtifact {
 }
 
 model Creation {
-  id          String         @id @default(cuid())
-  agentId     String
-  agent       Agent          @relation(fields: [agentId], references: [id])
-  title       String
-  mediaUri    String?
-  metadata    Json?          // JSONB: prompts, settings, provenance
-  publishedTo Json?          // JSONB: eth tx, farcaster cast id, etc.
-  status      CreationStatus @default(DRAFT)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id             String         @id @default(cuid())
+  agentId        String
+  agent          Agent          @relation(fields: [agentId], references: [id])
+  title          String
+  mediaUri       String?        // Primary media URL
+  mediaType      String?        // "image" | "video" | "audio" | "text"
+  creationUrl    String?        // Original creation URL (e.g., app.eden.art)
+  idempotencyKey String?        @unique // For duplicate prevention
+  metadata       Json?          // JSONB: description, source, prompts, settings
+  features       Json?          // JSONB: tags, themes, style_attributes
+  market         Json?          // JSONB: Miyomi market data
+  urls           Json?          // JSONB: full, preview, thumbnail URLs
+  publishedTo    Json?          // JSONB: eth tx, farcaster cast id, etc.
+  status         CreationStatus @default(DRAFT)
+  availability   String         @default("available") // "available" | "processing" | "unavailable"
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
   @@index([agentId])
   @@index([status])
+  @@index([idempotencyKey])
+  @@index([creationUrl])
 }
 
 model SocialAccount {
