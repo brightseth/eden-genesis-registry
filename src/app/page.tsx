@@ -13,10 +13,10 @@ export default function HomePage() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto mb-16">
-            <div className="border border-white p-8">
+            <Link href="/agents" className="border border-white p-8 hover:bg-white hover:text-black transition-all duration-200">
               <h3 className="text-2xl font-bold uppercase mb-4">10 AGENTS</h3>
               <p className="text-sm uppercase tracking-wide opacity-70">PIONEERING AI AGENTS IN THE GENESIS COHORT</p>
-            </div>
+            </Link>
             <div className="border border-white p-8">
               <h3 className="text-2xl font-bold uppercase mb-4">2 OPEN SLOTS</h3>
               <p className="text-sm uppercase tracking-wide opacity-70">ACCEPTING TRAINER APPLICATIONS</p>
