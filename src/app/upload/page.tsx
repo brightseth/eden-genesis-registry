@@ -18,6 +18,9 @@ export default function UploadPage() {
     tags: '',
     themes: ''
   })
+  const [file, setFile] = useState<File | null>(null)
+  const [dragOver, setDragOver] = useState(false)
+  const [uploadMode, setUploadMode] = useState<'url' | 'file'>('url')
 
   // Load agents on mount
   useEffect(() => {
@@ -35,6 +38,83 @@ export default function UploadPage() {
       .catch(err => console.error('Failed to load agents:', err))
   }, [])
 
+  // File upload handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setDragOver(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    setDragOver(false)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setDragOver(false)
+    
+    const files = Array.from(e.dataTransfer.files)
+    if (files.length > 0) {
+      handleFileSelect(files[0])
+    }
+  }
+
+  const handleFileSelect = (selectedFile: File) => {
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/webm', 'audio/mp3', 'audio/wav', 'text/plain']
+    
+    if (!validTypes.includes(selectedFile.type)) {
+      setMessage({
+        type: 'error',
+        text: 'Invalid file type. Please upload an image, video, audio, or text file.'
+      })
+      return
+    }
+
+    // Validate file size (50MB max)
+    if (selectedFile.size > 50 * 1024 * 1024) {
+      setMessage({
+        type: 'error',
+        text: 'File too large. Please upload a file smaller than 50MB.'
+      })
+      return
+    }
+
+    setFile(selectedFile)
+    setUploadMode('file')
+    
+    // Auto-detect media type
+    if (selectedFile.type.startsWith('image/')) {
+      setFormData(prev => ({ ...prev, mediaType: 'image' }))
+    } else if (selectedFile.type.startsWith('video/')) {
+      setFormData(prev => ({ ...prev, mediaType: 'video' }))
+    } else if (selectedFile.type.startsWith('audio/')) {
+      setFormData(prev => ({ ...prev, mediaType: 'audio' }))
+    } else if (selectedFile.type.startsWith('text/')) {
+      setFormData(prev => ({ ...prev, mediaType: 'text' }))
+    }
+
+    // Auto-fill title if empty
+    if (!formData.title) {
+      const nameWithoutExtension = selectedFile.name.replace(/\.[^/.]+$/, '')
+      setFormData(prev => ({ ...prev, title: nameWithoutExtension }))
+    }
+
+    setMessage(null)
+  }
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      handleFileSelect(files[0])
+    }
+  }
+
+  const removeFile = () => {
+    setFile(null)
+    setUploadMode('url')
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -44,37 +124,59 @@ export default function UploadPage() {
       // Generate idempotency key
       const idempotencyKey = `upload-${formData.agentId}-${Date.now()}`
       
-      // Build work payload
-      const workPayload = {
-        work: {
-          media_type: formData.mediaType,
-          metadata: {
-            title: formData.title || undefined,
-            description: formData.description || undefined,
-            creation_url: formData.creationUrl,
-            source: 'eden.studio'
+      let response: Response
+
+      if (uploadMode === 'file' && file) {
+        // File upload mode - use FormData
+        const uploadFormData = new FormData()
+        uploadFormData.append('file', file)
+        uploadFormData.append('agentId', formData.agentId)
+        uploadFormData.append('mediaType', formData.mediaType)
+        if (formData.title) uploadFormData.append('title', formData.title)
+        if (formData.description) uploadFormData.append('description', formData.description)
+        if (formData.tags) uploadFormData.append('tags', formData.tags)
+        if (formData.themes) uploadFormData.append('themes', formData.themes)
+
+        response = await fetch(`/api/v1/agents/${formData.agentId}/works`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_REGISTRY_API_KEY || 'registry-upload-key-v1'}`,
+            'Idempotency-Key': idempotencyKey
           },
-          features: {
-            tags: formData.tags ? formData.tags.split(',').map(t => t.trim()) : [],
-            themes: formData.themes ? formData.themes.split(',').map(t => t.trim()) : []
-          },
-          urls: {
-            full: formData.creationUrl
-          },
-          availability: 'available'
+          body: uploadFormData
+        })
+      } else {
+        // URL mode - use JSON payload
+        const workPayload = {
+          work: {
+            media_type: formData.mediaType,
+            metadata: {
+              title: formData.title || undefined,
+              description: formData.description || undefined,
+              creation_url: formData.creationUrl,
+              source: 'eden.studio'
+            },
+            features: {
+              tags: formData.tags ? formData.tags.split(',').map(t => t.trim()) : [],
+              themes: formData.themes ? formData.themes.split(',').map(t => t.trim()) : []
+            },
+            urls: {
+              full: formData.creationUrl
+            },
+            availability: 'available'
+          }
         }
+
+        response = await fetch(`/api/v1/agents/${formData.agentId}/works`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_REGISTRY_API_KEY || 'registry-upload-key-v1'}`,
+            'Idempotency-Key': idempotencyKey
+          },
+          body: JSON.stringify(workPayload)
+        })
       }
-
-
-      const response = await fetch(`/api/v1/agents/${formData.agentId}/works`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_REGISTRY_API_KEY || 'registry-upload-key-v1'}`,
-          'Idempotency-Key': idempotencyKey
-        },
-        body: JSON.stringify(workPayload)
-      })
 
       const result = await response.json()
       
@@ -93,6 +195,8 @@ export default function UploadPage() {
           tags: '',
           themes: ''
         }))
+        setFile(null)
+        setUploadMode('url')
         
         // Store in localStorage for draft recovery
         localStorage.setItem(`last-upload-${formData.agentId}`, JSON.stringify(formData))
@@ -145,7 +249,94 @@ export default function UploadPage() {
             </select>
           </div>
 
+          {/* Upload Mode Toggle */}
+          <div>
+            <label className="block text-sm uppercase tracking-wider mb-2">
+              UPLOAD METHOD
+            </label>
+            <div className="flex gap-4 mb-4">
+              <button
+                type="button"
+                onClick={() => setUploadMode('url')}
+                className={`px-4 py-2 border uppercase tracking-wider transition-colors ${
+                  uploadMode === 'url' 
+                    ? 'bg-white text-black border-white' 
+                    : 'border-white/40 hover:border-white'
+                }`}
+              >
+                URL
+              </button>
+              <button
+                type="button"
+                onClick={() => setUploadMode('file')}
+                className={`px-4 py-2 border uppercase tracking-wider transition-colors ${
+                  uploadMode === 'file' 
+                    ? 'bg-white text-black border-white' 
+                    : 'border-white/40 hover:border-white'
+                }`}
+              >
+                FILE UPLOAD
+              </button>
+            </div>
+          </div>
+
+          {/* File Upload Area */}
+          {uploadMode === 'file' && (
+            <div>
+              <label className="block text-sm uppercase tracking-wider mb-2">
+                DROP FILE OR CLICK TO BROWSE
+              </label>
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`border-2 border-dashed p-8 text-center transition-colors cursor-pointer ${
+                  dragOver 
+                    ? 'border-green-500 bg-green-500/10' 
+                    : 'border-white/40 hover:border-white/60'
+                }`}
+                onClick={() => document.getElementById('fileInput')?.click()}
+              >
+                {file ? (
+                  <div className="space-y-4">
+                    <div className="text-green-500">
+                      ✓ {file.name} ({(file.size / (1024 * 1024)).toFixed(1)}MB)
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        removeFile()
+                      }}
+                      className="text-sm uppercase tracking-wider opacity-70 hover:opacity-100 border border-white/20 px-3 py-1"
+                    >
+                      Remove File
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="text-2xl opacity-50">📁</div>
+                    <div className="text-sm opacity-70">
+                      Drag and drop files here, or click to browse
+                    </div>
+                    <div className="text-xs opacity-50">
+                      Supports: Images, Videos, Audio, Text (Max 50MB)
+                    </div>
+                  </div>
+                )}
+              </div>
+              <input
+                id="fileInput"
+                type="file"
+                onChange={handleFileInput}
+                accept="image/*,video/*,audio/*,text/plain"
+                className="hidden"
+              />
+            </div>
+          )}
+
           {/* Creation URL */}
+          {uploadMode === 'url' && (
           <div>
             <label className="block text-sm uppercase tracking-wider mb-2">
               CREATION URL *
@@ -159,6 +350,7 @@ export default function UploadPage() {
               required
             />
           </div>
+          )}
 
           {/* Media Type */}
           <div>
@@ -244,10 +436,10 @@ export default function UploadPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (uploadMode === 'url' && !formData.creationUrl) || (uploadMode === 'file' && !file)}
             className="w-full border-2 border-white px-8 py-4 font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-200 disabled:opacity-50"
           >
-            {loading ? 'UPLOADING...' : 'UPLOAD CREATION'}
+            {loading ? 'UPLOADING...' : `UPLOAD ${uploadMode === 'file' ? 'FILE' : 'FROM URL'}`}
           </button>
         </form>
 
