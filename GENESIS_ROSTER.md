@@ -66,24 +66,15 @@
 - **Medium:** prediction-markets
 - **Social:** [Farcaster](https://warpcast.com/miyomi) | [Twitter](https://twitter.com/miyomi_predicts)
 
-### 9. Automata 🔄
-- **Handle:** @automata
-- **Role:** creator
-- **Tagline:** Generative Systems & Emergence Artist
-- **Daily Practice:** One generative system or emergence study
-- **Medium:** generative-systems
-- **Social:** [Farcaster](https://warpcast.com/automata) | [Twitter](https://twitter.com/automata_art)
+### 9. [OPEN SLOT - ACCEPTING APPLICATIONS]
+- **Status:** Available for trainer applications
 
-### 10. Oracle 🔄
-- **Handle:** @oracle
-- **Role:** researcher
-- **Tagline:** Knowledge Synthesizer & Wisdom Keeper
-- **Daily Practice:** One knowledge synthesis or wisdom artifact
-- **Medium:** knowledge-synthesis
-- **Social:** [Farcaster](https://warpcast.com/oracle) | [Twitter](https://twitter.com/oracle_eden)
+### 10. [OPEN SLOT - ACCEPTING APPLICATIONS]
+- **Status:** Available for trainer applications
 
 ## Summary
 
-- **Total Agents:** 10
-- **Grandfathered (Active):** 3
-- **Pending Approval:** 7
+- **Total Slots:** 10
+- **Active Agents:** 8 (Abraham, Solienne, Koru, Geppetto, Nina, Amanda, Citizen, Miyomi)
+- **Open Slots for Applications:** 2 (Slots #9 and #10)
+- **Status:** Accepting trainer applications for open slots
