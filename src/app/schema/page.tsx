@@ -14,7 +14,7 @@ export default function SchemaPage() {
             AGENT DATA SCHEMA
           </h1>
           <p className="text-lg uppercase tracking-wide opacity-80">
-            EDEN GENESIS REGISTRY v0.9.2 - PRODUCTION SCHEMA SPECIFICATION
+            EDEN GENESIS REGISTRY v1.0.0 - PRODUCTION SCHEMA SPECIFICATION
           </p>
         </div>
 
@@ -95,6 +95,23 @@ export default function SchemaPage() {
                       <p className="text-xs opacity-70 mt-1">{item.desc}</p>
                     </div>
                   ))}
+                </div>
+              </section>
+
+              <section className="border border-white/40 p-6">
+                <h2 className="text-2xl font-bold uppercase mb-4">API Query Examples</h2>
+                <p className="mb-4 opacity-90">
+                  The registry API supports advanced filtering, search, and pagination:
+                </p>
+                <div className="bg-white/5 p-4 font-mono text-sm overflow-x-auto space-y-2">
+                  <div><span className="opacity-50"># Search for agents</span></div>
+                  <div>GET /api/v1/agents?search=abraham&amp;limit=10</div>
+                  <div className="mt-3"><span className="opacity-50"># Filter by role and status</span></div>
+                  <div>GET /api/v1/agents?role=creator|curator&amp;status=ACTIVE</div>
+                  <div className="mt-3"><span className="opacity-50"># Paginated results with sorting</span></div>
+                  <div>GET /api/v1/agents?sort=displayName&amp;order=asc&amp;limit=25&amp;offset=50</div>
+                  <div className="mt-3"><span className="opacity-50"># Genesis cohort only</span></div>
+                  <div>GET /api/v1/agents?cohort=genesis</div>
                 </div>
               </section>
             </div>
@@ -510,7 +527,7 @@ export default function SchemaPage() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <p className="text-sm uppercase tracking-wider opacity-60">
-                Schema Version 0.9.2 | Production Ready
+                Schema Version 1.0.0 | Production Ready
               </p>
             </div>
             <div className="flex gap-4">

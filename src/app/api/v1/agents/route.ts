@@ -21,10 +21,17 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const cohort = searchParams.get('cohort')
   const status = searchParams.get('status')
+  const role = searchParams.get('role')
+  const search = searchParams.get('search')
+  const limit = parseInt(searchParams.get('limit') || '50')
+  const offset = parseInt(searchParams.get('offset') || '0')
+  const sort = searchParams.get('sort') || 'createdAt'
+  const order = searchParams.get('order') === 'desc' ? 'desc' : 'asc'
   
   const where: any = {}
   let cohortSlug = cohort
   
+  // Cohort filter
   if (cohort) {
     const cohortRecord = await prisma.cohort.findUnique({
       where: { slug: cohort }
@@ -34,27 +41,92 @@ export async function GET(request: NextRequest) {
     }
   }
   
+  // Status filter (pipe-separated for multiple)
   if (status) {
     where.status = { in: status.split('|') }
   }
   
-  const agents = await prisma.agent.findMany({
-    where,
-    include: {
-      cohort: true,
-      profile: true,
-      checklists: true
-    }
-  })
+  // Role filter (pipe-separated for multiple)
+  if (role) {
+    where.role = { in: role.split('|') }
+  }
   
-  // Return consistent envelope format
+  // Search filter (searches handle, displayName, and profile statement)
+  if (search) {
+    const searchTerm = `%${search.toLowerCase()}%`
+    where.OR = [
+      { handle: { contains: search, mode: 'insensitive' } },
+      { displayName: { contains: search, mode: 'insensitive' } },
+      { 
+        profile: {
+          statement: { contains: search, mode: 'insensitive' }
+        }
+      }
+    ]
+  }
+  
+  // Build orderBy
+  const orderBy: any = {}
+  if (sort === 'handle') {
+    orderBy.handle = order
+  } else if (sort === 'displayName') {
+    orderBy.displayName = order
+  } else if (sort === 'status') {
+    orderBy.status = order
+  } else if (sort === 'role') {
+    orderBy.role = order
+  } else {
+    orderBy.createdAt = order
+  }
+  
+  // Execute query with pagination
+  const [agents, totalCount] = await Promise.all([
+    prisma.agent.findMany({
+      where,
+      include: {
+        cohort: true,
+        profile: true,
+        checklists: true,
+        _count: {
+          select: {
+            creations: true,
+            personas: true,
+            artifacts: true
+          }
+        }
+      },
+      orderBy,
+      take: Math.min(limit, 100), // Cap at 100
+      skip: offset
+    }),
+    prisma.agent.count({ where })
+  ])
+  
+  // Return consistent envelope format with pagination
   const response = NextResponse.json({
     agents: agents.map(agent => ({
       ...agent,
-      cohort: agent.cohort.slug
+      cohort: agent.cohort.slug,
+      counts: agent._count
     })),
     total: agents.length,
-    cohort: cohortSlug
+    totalCount,
+    hasMore: offset + agents.length < totalCount,
+    pagination: {
+      limit,
+      offset,
+      total: totalCount,
+      pages: Math.ceil(totalCount / limit),
+      currentPage: Math.floor(offset / limit) + 1
+    },
+    filters: {
+      cohort: cohortSlug,
+      status,
+      role,
+      search,
+      sort,
+      order
+    }
   })
   
   return withCors(response, request)
