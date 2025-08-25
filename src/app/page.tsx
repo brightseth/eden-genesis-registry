@@ -42,12 +42,6 @@ export default function HomePage() {
             >
               UPLOAD WORK
             </Link>
-            <Link
-              href="/admin"
-              className="inline-block border-2 border-white px-10 py-4 font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-200"
-            >
-              ADMIN
-            </Link>
           </div>
 
           <div className="mt-24 pt-12 border-t border-white/20">
