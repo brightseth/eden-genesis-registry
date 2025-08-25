@@ -16,12 +16,7 @@ export default function UploadPage() {
     description: '',
     mediaType: 'image',
     tags: '',
-    themes: '',
-    // Miyomi market fields (optional)
-    marketId: '',
-    marketPosition: '',
-    marketEntryPrice: '',
-    marketPnl: ''
+    themes: ''
   })
 
   // Load agents on mount
@@ -70,15 +65,6 @@ export default function UploadPage() {
         }
       }
 
-      // Add market data if Miyomi fields are filled
-      if (formData.marketId) {
-        (workPayload.work as any).market = {
-          id: formData.marketId,
-          position: formData.marketPosition,
-          entry_price: parseFloat(formData.marketEntryPrice) || 0,
-          pnl: parseFloat(formData.marketPnl) || 0
-        }
-      }
 
       const response = await fetch(`/api/v1/agents/${formData.agentId}/works`, {
         method: 'POST',
@@ -105,11 +91,7 @@ export default function UploadPage() {
           title: '',
           description: '',
           tags: '',
-          themes: '',
-          marketId: '',
-          marketPosition: '',
-          marketEntryPrice: '',
-          marketPnl: ''
+          themes: ''
         }))
         
         // Store in localStorage for draft recovery
@@ -251,66 +233,6 @@ export default function UploadPage() {
             />
           </div>
 
-          {/* Miyomi Market Fields (Optional) */}
-          <details className="border border-white/20 p-4">
-            <summary className="cursor-pointer text-sm uppercase tracking-wider opacity-70">
-              MIYOMI MARKET DATA (OPTIONAL)
-            </summary>
-            <div className="space-y-4 mt-4">
-              <div>
-                <label className="block text-sm uppercase tracking-wider mb-2">
-                  MARKET ID
-                </label>
-                <input
-                  type="text"
-                  value={formData.marketId}
-                  onChange={(e) => setFormData({ ...formData, marketId: e.target.value })}
-                  placeholder="poly_2025_us_election"
-                  className="w-full bg-transparent border border-white px-4 py-2 focus:outline-none focus:border-green-500"
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm uppercase tracking-wider mb-2">
-                    POSITION
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.marketPosition}
-                    onChange={(e) => setFormData({ ...formData, marketPosition: e.target.value })}
-                    placeholder="YES/NO"
-                    className="w-full bg-transparent border border-white px-4 py-2 focus:outline-none focus:border-green-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm uppercase tracking-wider mb-2">
-                    ENTRY PRICE
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={formData.marketEntryPrice}
-                    onChange={(e) => setFormData({ ...formData, marketEntryPrice: e.target.value })}
-                    placeholder="0.62"
-                    className="w-full bg-transparent border border-white px-4 py-2 focus:outline-none focus:border-green-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm uppercase tracking-wider mb-2">
-                    P&L
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={formData.marketPnl}
-                    onChange={(e) => setFormData({ ...formData, marketPnl: e.target.value })}
-                    placeholder="0.00"
-                    className="w-full bg-transparent border border-white px-4 py-2 focus:outline-none focus:border-green-500"
-                  />
-                </div>
-              </div>
-            </div>
-          </details>
 
           {/* Message Display */}
           {message && (
