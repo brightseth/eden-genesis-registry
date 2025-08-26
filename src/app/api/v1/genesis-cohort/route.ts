@@ -152,9 +152,23 @@ export async function GET(request: NextRequest) {
       }
     ];
 
+    // Map to the format the Academy UI expects
+    const mappedAgents = genesisCohortAgents.map(agent => ({
+      id: agent.id,
+      name: agent.name,
+      status: agent.status,
+      date: agent.date,
+      hasProfile: ['abraham', 'solienne', 'geppetto', 'koru'].includes(agent.id),
+      trainer: agent.trainer,
+      worksCount: agent.worksCount,
+      description: agent.profile?.statement || agent.profile?.tagline || '',
+      image: `/agents/${agent.id}/profile.svg`,
+      trainerStatus: agent.trainerStatus
+    }));
+
     // Add metadata about application opportunities
     const response = {
-      agents: genesisCohortAgents,
+      agents: mappedAgents,
       applicationOpportunities: {
         trainerMatching: {
           count: genesisCohortAgents.filter(a => a.trainerStatus === 'needed').length,
