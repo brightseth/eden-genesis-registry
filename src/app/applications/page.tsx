@@ -126,7 +126,7 @@ export default function ApplicationsPage() {
           {filteredApplications.length === 0 ? (
             <div className="border border-white/20 p-8 text-center">
               <div className="text-lg uppercase opacity-70">
-                No applications found for "{filter}"
+                No applications found for &quot;{filter}&quot;
               </div>
             </div>
           ) : (

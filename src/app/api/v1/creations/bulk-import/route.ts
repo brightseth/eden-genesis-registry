@@ -14,7 +14,7 @@ import {
   inferMedium,
   generateCreationThemes,
   type Creation,
-  type BulkImport
+  // type BulkImport
 } from '@/lib/schemas/creation.schema'
 
 // ============================================
@@ -87,8 +87,8 @@ export async function POST(request: NextRequest) {
           console.log(`✅ Processed ${results.imported}/${works.length} works`)
         }
         
-      } catch (error: any) {
-        results.errors.push(`Failed to process work ${index}: ${error.message}`)
+      } catch (error: unknown) {
+        results.errors.push(`Failed to process work ${index}: ${error instanceof Error ? error.message : 'Unknown error'}`)
         results.failed++
       }
     }
@@ -109,10 +109,10 @@ export async function POST(request: NextRequest) {
       message: `Successfully imported ${results.imported} works for ${agentId}`
     }, { status: 201 })
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Bulk import error:', error)
     return NextResponse.json(
-      { error: 'Bulk import failed', details: error.message },
+      { error: 'Bulk import failed', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
@@ -134,7 +134,7 @@ async function getExistingWorks(agentId: string): Promise<Creation[]> {
   }
 }
 
-function isDuplicate(importWork: any, existingWorks: Creation[]): boolean {
+function isDuplicate(importWork: Record<string, unknown>, existingWorks: Creation[]): boolean {
   // Check by legacy ID first
   if (importWork.academyId) {
     return existingWorks.some(w => w.legacyId === importWork.academyId)
@@ -156,9 +156,9 @@ async function isValidFileUrl(url: string): Promise<boolean> {
 }
 
 async function transformImportedWork(
-  importWork: any,
+  importWork: Record<string, unknown>,
   agentId: string,
-  options: any
+  options: Record<string, unknown>
 ): Promise<Creation> {
   const agentHandle = agentId.split('-')[0] // Extract handle from agent ID
   
@@ -183,8 +183,8 @@ async function transformImportedWork(
     title: importWork.title || generateTitle(agentHandle, importWork.dayNumber),
     prompt: importWork.prompt,
     
-    type: workType as any,
-    medium: medium as any,
+    type: workType as Creation['type'],
+    medium: medium as Creation['medium'],
     status: 'published',
     
     model: importWork.model,
@@ -283,7 +283,7 @@ async function saveImportedWorks(agentId: string, works: Creation[]): Promise<vo
   await fs.writeFile(summaryPath, JSON.stringify(summary, null, 2))
 }
 
-function countByField(items: any[], field: string | null): Record<string, number> {
+function countByField(items: Record<string, unknown>[], field: string | null): Record<string, number> {
   const counts: Record<string, number> = {}
   
   const values = field ? items.map(item => item[field]) : items
@@ -332,9 +332,9 @@ export async function GET(request: NextRequest) {
       total: works.length
     })
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json(
-      { error: 'Failed to load works', details: error.message },
+      { error: 'Failed to load works', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

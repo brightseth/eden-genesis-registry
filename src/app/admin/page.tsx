@@ -13,7 +13,7 @@ interface Agent {
   hasPersona: boolean
   hasArtifacts: boolean
   creationCount: number
-  trainers: any[]
+  trainers: Array<{ id: string; trainer: { user: { name?: string } } }>
 }
 
 interface DashboardSummary {
@@ -27,7 +27,7 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [summary, setSummary] = useState<DashboardSummary | null>(null)
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
+  const [, setSelectedAgent] = useState<Agent | null>(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [newAgent, setNewAgent] = useState({
@@ -43,6 +43,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadDashboard()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadDashboard = async () => {

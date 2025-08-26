@@ -56,11 +56,11 @@ export async function POST(
       })
       
       if (checklist) {
-        const items = checklist.items as any[]
-        const personaItem = items.find((item: any) => item.id === 'persona')
+        const items = checklist.items as Array<Record<string, unknown>>
+        const personaItem = items.find((item: Record<string, unknown>) => item.id === 'persona')
         if (personaItem) {
           personaItem.done = true
-          const completedCount = items.filter((item: any) => item.done).length
+          const completedCount = items.filter((item: Record<string, unknown>) => item.done).length
           const percent = Math.round((completedCount / items.length) * 100)
           
           await tx.progressChecklist.update({

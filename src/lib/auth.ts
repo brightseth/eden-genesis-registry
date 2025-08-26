@@ -39,7 +39,7 @@ export async function getUserFromToken(token: string) {
       where: { id: payload.userId }
     })
     return user
-  } catch (error) {
+  } catch {
     return null
   }
 }

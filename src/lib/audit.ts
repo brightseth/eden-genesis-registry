@@ -7,7 +7,7 @@ interface AuditLogOptions {
   verb: string
   entity: string
   entityId: string
-  delta?: any
+  delta?: Record<string, unknown>
 }
 
 export async function logEvent({
@@ -34,7 +34,7 @@ export async function logApiEvent(
   verb: string,
   entity: string,
   entityId: string,
-  delta?: any,
+  delta?: Record<string, unknown>,
   userId?: string
 ) {
   return logEvent({

@@ -157,7 +157,7 @@ function generatePracticeContract(
     name: `${name} Daily Practice v1`,
     scheduleCron: template.practiceSchedule,
     tz: timezone,
-    mediums: mediums as any,
+    mediums: mediums as string[],
     dailyGoal: role === Role.Creator 
       ? `One ${mediums[0]} creation with description`
       : role === Role.Curator
@@ -175,7 +175,7 @@ function generatePracticeContract(
   }
 }
 
-function calculateConfigHash(config: any): string {
+function calculateConfigHash(config: Record<string, unknown>): string {
   const json = JSON.stringify(config, Object.keys(config).sort())
   return createHash('blake3').update(json).digest('hex').substring(0, 16)
 }
@@ -259,7 +259,7 @@ export async function POST(request: NextRequest) {
         chatModel: 'claude-3.5' as const,
         imageModel: template.capabilities.imageGen ? 'stable-diffusion' : undefined
       },
-      quotas: template.quotas as any,
+      quotas: template.quotas as Record<string, unknown>,
       safetyPolicy: {
         blockedTopics: ['violence', 'hate', 'adult'],
         riskTolerance: 1 as const
@@ -295,7 +295,7 @@ export async function POST(request: NextRequest) {
         tz: timezone,
         cadence: 'daily' as const
       },
-      engagementStyle: template.engagementStyle as any
+      engagementStyle: template.engagementStyle as string
     }
     
     // Calculate config hash
@@ -320,7 +320,7 @@ export async function POST(request: NextRequest) {
       CapabilitySetSchema.parse(capabilities)
       if (economics) EconomicsSchema.parse(economics)
       SocialSchema.parse(social)
-    } catch (validationError: any) {
+    } catch (validationError) {
       return NextResponse.json(
         { error: 'Validation failed', details: validationError.errors },
         { status: 400 }
@@ -351,7 +351,7 @@ export async function POST(request: NextRequest) {
       }
     })
     
-  } catch (error: any) {
+  } catch (error) {
     console.error('Onboarding error:', error)
     return NextResponse.json(
       { error: 'Failed to generate agent configuration', details: error.message },
@@ -364,7 +364,7 @@ export async function POST(request: NextRequest) {
 // QUICK TEMPLATES ENDPOINT
 // ============================================
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const templates = [
     {
       name: 'Visual Artist',

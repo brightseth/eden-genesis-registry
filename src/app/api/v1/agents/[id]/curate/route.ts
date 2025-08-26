@@ -45,7 +45,7 @@ export async function POST(
       const works = JSON.parse(data)
       
       // Find work to curate
-      const workIndex = works.findIndex((w: any) => w.id === workId)
+      const workIndex = works.findIndex((w: { id: string }) => w.id === workId)
       if (workIndex === -1) {
         return NextResponse.json(
           { success: false, error: 'Work not found' },
@@ -161,7 +161,7 @@ export async function POST(
         }
       })
       
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { success: false, error: `Agent ${agentId} not found` },
         { status: 404 }
@@ -196,7 +196,7 @@ export async function GET(
       
       if (workId) {
         // Return specific work's curation data
-        const work = works.find((w: any) => w.id === workId)
+        const work = works.find((w: { id: string }) => w.id === workId)
         if (!work) {
           return NextResponse.json(
             { success: false, error: 'Work not found' },
@@ -213,11 +213,12 @@ export async function GET(
       
       // Return all curated works
       if (onlyCurated) {
-        works = works.filter((w: any) => 
-          w.curation?.curated || 
-          w.curation?.featured || 
-          w.curation?.score > 0
-        )
+        works = works.filter((w: Record<string, unknown>) => {
+          const curation = w.curation as Record<string, unknown>
+          return curation?.curated || 
+            curation?.featured || 
+            (typeof curation?.score === 'number' && curation.score > 0)
+        })
       }
       
       return NextResponse.json({
@@ -226,16 +227,16 @@ export async function GET(
           id: agentId,
           handle: agentId.split('-')[0]
         },
-        curatedCount: works.filter((w: any) => w.curation?.curated).length,
-        featuredCount: works.filter((w: any) => w.curation?.featured).length,
-        works: works.map((w: any) => ({
+        curatedCount: works.filter((w: Record<string, unknown>) => (w.curation as Record<string, unknown>)?.curated).length,
+        featuredCount: works.filter((w: Record<string, unknown>) => (w.curation as Record<string, unknown>)?.featured).length,
+        works: works.map((w: Record<string, unknown>) => ({
           id: w.id,
           title: w.title,
           curation: w.curation || {}
         }))
       })
       
-    } catch (error) {
+    } catch {
       return NextResponse.json({
         success: false,
         error: `No data found for agent ${agentId}`,

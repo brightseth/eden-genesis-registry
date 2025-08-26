@@ -6,10 +6,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
-import { z } from 'zod'
-import { 
-  RegistryAnalysisSchema, 
-  CurationAnalysisSchema,
+// import { z } from 'zod'
+import {
   type RegistryAnalysis,
   type CurationAnalysis 
 } from '@/lib/schemas/curation.schema'
@@ -39,7 +37,7 @@ export async function POST(
       const allWorks = JSON.parse(data)
       
       // Filter to requested works
-      const works = allWorks.filter((w: any) => workIds.includes(w.id))
+      const works = allWorks.filter((w: { id: string }) => workIds.includes(w.id))
       
       if (works.length === 0) {
         return NextResponse.json(
@@ -48,7 +46,7 @@ export async function POST(
         )
       }
       
-      const analyses: any[] = []
+      const analyses: Array<{ workId: string; title: string; analysis: RegistryAnalysis | CurationAnalysis }> = []
       
       for (const work of works) {
         let analysis: RegistryAnalysis | CurationAnalysis
@@ -99,7 +97,7 @@ export async function POST(
         summary: generateAnalysisSummary(analyses, analysisType)
       })
       
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { success: false, error: `Agent ${agentId} not found` },
         { status: 404 }
@@ -116,7 +114,7 @@ export async function POST(
 }
 
 // Perform registry-level analysis
-async function performRegistryAnalysis(work: any, allWorks: any[]): Promise<RegistryAnalysis> {
+async function performRegistryAnalysis(work: Record<string, unknown>, allWorks: Record<string, unknown>[]): Promise<RegistryAnalysis> {
   // Calculate quality scores
   const technicalQuality = calculateTechnicalQuality(work)
   const aestheticScore = calculateAestheticScore(work)
@@ -151,10 +149,10 @@ async function performRegistryAnalysis(work: any, allWorks: any[]): Promise<Regi
 
 // Perform curator-specific analysis
 async function performCurationAnalysis(
-  work: any, 
-  exhibitionContext: any,
+  work: Record<string, unknown>, 
+  exhibitionContext: Record<string, unknown>,
   curatorId: string,
-  allWorks: any[]
+  allWorks: Record<string, unknown>[]
 ): Promise<CurationAnalysis> {
   // Calculate exhibition fit
   const exhibitionFit = calculateExhibitionFit(work, exhibitionContext)
@@ -188,7 +186,7 @@ async function performCurationAnalysis(
 
 // Helper functions for analysis
 
-function calculateTechnicalQuality(work: any): number {
+function calculateTechnicalQuality(work: Record<string, unknown>): number {
   let score = 70 // Base score
   
   // Check for high resolution
@@ -198,17 +196,17 @@ function calculateTechnicalQuality(work: any): number {
   if (work.prompt && work.description) score += 10
   
   // Check for proper file formats
-  if (work.files?.every((f: any) => f.url && f.type)) score += 10
+  if (work.files && Array.isArray(work.files) && work.files.every((f: Record<string, unknown>) => f.url && f.type)) score += 10
   
   return Math.min(100, score)
 }
 
-function calculateAestheticScore(work: any): number {
+function calculateAestheticScore(work: Record<string, unknown>): number {
   let score = 60 // Base score
   
   // Boost for certain themes
   const highValueThemes = ['identity', 'consciousness', 'emergence', 'transformation']
-  const workThemes = work.themes || []
+  const workThemes = (work.themes as string[]) || []
   const matchingThemes = workThemes.filter((t: string) => 
     highValueThemes.some(hvt => t.toLowerCase().includes(hvt))
   )
@@ -221,14 +219,14 @@ function calculateAestheticScore(work: any): number {
   return Math.min(100, score)
 }
 
-function calculateUniqueness(work: any, allWorks: any[]): number {
+function calculateUniqueness(work: Record<string, unknown>, allWorks: Record<string, unknown>[]): number {
   // Simple uniqueness based on theme combinations
-  const workThemeSet = new Set(work.themes || [])
+  const workThemeSet = new Set((work.themes as string[]) || [])
   let matchCount = 0
   
   for (const other of allWorks) {
     if (other.id === work.id) continue
-    const otherThemeSet = new Set(other.themes || [])
+    const otherThemeSet = new Set((other.themes as string[]) || [])
     const intersection = [...workThemeSet].filter(t => otherThemeSet.has(t))
     if (intersection.length === workThemeSet.size) matchCount++
   }
@@ -237,14 +235,14 @@ function calculateUniqueness(work: any, allWorks: any[]): number {
   return Math.round(uniquenessRatio * 100)
 }
 
-function findSimilarWorks(work: any, allWorks: any[]): string[] {
+function findSimilarWorks(work: Record<string, unknown>, allWorks: Record<string, unknown>[]): string[] {
   const similar: Array<{id: string, score: number}> = []
-  const workThemes = new Set(work.themes || [])
+  const workThemes = new Set((work.themes as string[]) || [])
   
   for (const other of allWorks) {
     if (other.id === work.id) continue
     
-    const otherThemes = new Set(other.themes || [])
+    const otherThemes = new Set((other.themes as string[]) || [])
     const intersection = [...workThemes].filter(t => otherThemes.has(t))
     const similarity = intersection.length / Math.max(workThemes.size, otherThemes.size)
     
@@ -259,7 +257,7 @@ function findSimilarWorks(work: any, allWorks: any[]): string[] {
     .map(s => s.id)
 }
 
-function checkForDuplicates(work: any, allWorks: any[]): boolean {
+function checkForDuplicates(work: Record<string, unknown>, allWorks: Record<string, unknown>[]): boolean {
   // Check if prompt is identical to another work
   if (work.prompt) {
     return allWorks.some(other => 
@@ -270,12 +268,12 @@ function checkForDuplicates(work: any, allWorks: any[]): boolean {
   return false
 }
 
-function extractStyleAttributes(work: any): string[] {
+function extractStyleAttributes(work: Record<string, unknown>): string[] {
   const attributes: string[] = []
   
   // Extract from themes
   const styleKeywords = ['geometric', 'abstract', 'surreal', 'minimal', 'complex', 'organic']
-  const themes = work.themes || []
+  const themes = (work.themes as string[]) || []
   
   for (const keyword of styleKeywords) {
     if (themes.some((t: string) => t.toLowerCase().includes(keyword))) {
@@ -294,15 +292,15 @@ function extractStyleAttributes(work: any): string[] {
   return attributes
 }
 
-function calculateExhibitionFit(work: any, context: any): number {
+function calculateExhibitionFit(work: Record<string, unknown>, context: Record<string, unknown>): number {
   if (!context) return 50
   
   let score = 50
   
   // Check theme alignment
-  if (context.themes) {
-    const workThemes = new Set(work.themes || [])
-    const contextThemes = new Set(context.themes)
+  if (context.themes && Array.isArray(context.themes)) {
+    const workThemes = new Set((work.themes as string[]) || [])
+    const contextThemes = new Set(context.themes as string[])
     const matching = [...contextThemes].filter(t => workThemes.has(t))
     score += (matching.length / contextThemes.size) * 30
   }
@@ -317,11 +315,11 @@ function calculateExhibitionFit(work: any, context: any): number {
   return Math.min(100, score)
 }
 
-function calculateThematicRelevance(work: any, context: any): number {
-  if (!context?.themes) return 50
+function calculateThematicRelevance(work: Record<string, unknown>, context: Record<string, unknown>): number {
+  if (!context?.themes || !Array.isArray(context.themes)) return 50
   
-  const workThemes = work.themes || []
-  const contextThemes = context.themes
+  const workThemes = (work.themes as string[]) || []
+  const contextThemes = context.themes as string[]
   
   let relevance = 0
   for (const theme of contextThemes) {
@@ -335,11 +333,11 @@ function calculateThematicRelevance(work: any, context: any): number {
   return Math.min(100, relevance)
 }
 
-function calculateComparativeRanking(work: any, allWorks: any[], context: any): number {
+function calculateComparativeRanking(work: Record<string, unknown>, allWorks: Record<string, unknown>[]): number {
   // Rank work compared to others in context
-  const score = work.analysis?.registry?.qualityScore || 50
+  const score = (work.analysis as { registry?: { qualityScore?: number } })?.registry?.qualityScore || 50
   const allScores = allWorks
-    .map(w => w.analysis?.registry?.qualityScore || 0)
+    .map(w => (w.analysis as { registry?: { qualityScore?: number } })?.registry?.qualityScore || 0)
     .filter(s => s > 0)
     .sort((a, b) => b - a)
   
@@ -347,14 +345,14 @@ function calculateComparativeRanking(work: any, allWorks: any[], context: any): 
   return rank > 0 ? rank : allWorks.length
 }
 
-function findRecommendedPairings(work: any, allWorks: any[], context: any): string[] {
+function findRecommendedPairings(work: Record<string, unknown>, allWorks: Record<string, unknown>[]): string[] {
   const pairings: Array<{id: string, score: number}> = []
-  const workThemes = new Set(work.themes || [])
+  const workThemes = new Set((work.themes as string[]) || [])
   
   for (const other of allWorks) {
     if (other.id === work.id) continue
     
-    const otherThemes = new Set(other.themes || [])
+    const otherThemes = new Set((other.themes as string[]) || [])
     
     // Look for complementary themes
     const intersection = [...workThemes].filter(t => otherThemes.has(t))
@@ -378,14 +376,14 @@ function findRecommendedPairings(work: any, allWorks: any[], context: any): stri
     .map(p => p.id)
 }
 
-function generateCuratorNotes(work: any, context: any): string {
+function generateCuratorNotes(work: Record<string, unknown>, context: Record<string, unknown>): string {
   const notes: string[] = []
   
-  if (work.themes?.includes('identity')) {
+  if ((work.themes as string[])?.includes('identity')) {
     notes.push('Strong identity exploration theme')
   }
   
-  if (work.analysis?.registry?.uniquenessScore > 80) {
+  if ((work.analysis as { registry?: { uniquenessScore?: number } })?.registry?.uniquenessScore && (work.analysis as { registry?: { uniquenessScore?: number } })?.registry?.uniquenessScore > 80) {
     notes.push('Highly unique within collection')
   }
   
@@ -396,29 +394,29 @@ function generateCuratorNotes(work: any, context: any): string {
   return notes.join('. ') || 'Standard presentation recommended'
 }
 
-function generatePresentationNotes(work: any, context: any): string | undefined {
+function generatePresentationNotes(work: Record<string, unknown>, context: Record<string, unknown>): string | undefined {
   if (context?.venue) {
     return `Recommended for ${context.venue} exhibition space`
   }
   return undefined
 }
 
-function generateAnalysisSummary(analyses: any[], type: string): any {
+function generateAnalysisSummary(analyses: Array<{ analysis: RegistryAnalysis | CurationAnalysis }>, type: string): Record<string, unknown> {
   if (type === 'registry') {
-    const scores = analyses.map(a => a.analysis.qualityScore)
+    const scores = analyses.map(a => (a.analysis as RegistryAnalysis).qualityScore)
     return {
       averageQuality: scores.reduce((a, b) => a + b, 0) / scores.length,
       highQuality: scores.filter(s => s > 80).length,
       needsReview: scores.filter(s => s < 50).length,
-      duplicatesFound: analyses.filter(a => a.analysis.duplicateCheck).length
+      duplicatesFound: analyses.filter(a => (a.analysis as RegistryAnalysis).duplicateCheck).length
     }
   } else {
-    const fits = analyses.map(a => a.analysis.exhibitionFit)
+    const fits = analyses.map(a => (a.analysis as CurationAnalysis).exhibitionFit)
     return {
       averageFit: fits.reduce((a, b) => a + b, 0) / fits.length,
       strongCandidates: fits.filter(f => f > 80).length,
       weakCandidates: fits.filter(f => f < 50).length,
-      pairingsIdentified: analyses.filter(a => a.analysis.recommendedPairings.length > 0).length
+      pairingsIdentified: analyses.filter(a => (a.analysis as CurationAnalysis).recommendedPairings.length > 0).length
     }
   }
 }

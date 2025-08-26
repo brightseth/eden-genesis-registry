@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -16,12 +15,8 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       enabled: true,
-      bodySizeLimit: '2mb'
-    }
+    },
   },
-  images: {
-    domains: ['eden.art', 'storage.eden.art']
-  }
-};
+}
 
-export default nextConfig;
+module.exports = nextConfig

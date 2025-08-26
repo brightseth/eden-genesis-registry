@@ -3,11 +3,11 @@ import crypto from 'crypto'
 
 interface WebhookPayload {
   event: string
-  data: any
+  data: Record<string, unknown>
   timestamp: string
 }
 
-export async function sendWebhook(eventType: string, data: any) {
+export async function sendWebhook(eventType: string, data: Record<string, unknown>) {
   const subscriptions = await prisma.webhookSubscription.findMany({
     where: {
       active: true,
@@ -31,7 +31,7 @@ export async function sendWebhook(eventType: string, data: any) {
         data: {
           subscriptionId: subscription.id,
           eventType,
-          payload: payload as any,
+          payload: payload as Record<string, unknown>,
           status: 'pending'
         }
       })

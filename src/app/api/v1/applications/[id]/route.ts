@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { withAuth } from '@/middleware/auth'
+// import { withAuth } from '@/middleware/auth'
 import { logApiEvent } from '@/lib/audit'
 
 // PATCH /api/v1/applications/:id

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { AgentStatus, Visibility, Role, ApplicationTrack, ApplicationStatus, PersonaPrivacy, ArtifactKind, CreationStatus, SocialPlatform, KeyType } from '@prisma/client'
+import { AgentStatus, Visibility, Role, ApplicationTrack, PersonaPrivacy, ArtifactKind, CreationStatus, SocialPlatform, KeyType } from '@prisma/client'
 
 // Agent schemas
 export const createAgentSchema = z.object({
@@ -57,8 +57,8 @@ export const creationSchema = z.object({
   mediaUri: z.string().url().optional(),
   metadata: z.object({
     prompts: z.array(z.string()).optional(),
-    settings: z.record(z.any()).optional(),
-    provenance: z.record(z.any()).optional()
+    settings: z.record(z.unknown()).optional(),
+    provenance: z.record(z.unknown()).optional()
   }).optional(),
   publishedTo: z.object({
     ethereum: z.object({

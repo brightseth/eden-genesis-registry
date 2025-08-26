@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 
 export interface AgentAuth {
-  agent: any
+  agent: Record<string, unknown>
   apiKey: string
 }
 
@@ -65,7 +65,7 @@ export async function withAgentAuth(
     }
 
     // Check if the API key matches (stored in metadata)
-    const storedKey = (agent.metadata as any)?.apiKey
+    const storedKey = (agent.metadata as Record<string, unknown>)?.apiKey
     if (storedKey !== keyToValidate) {
       return NextResponse.json(
         { error: 'Invalid API key' },
@@ -96,7 +96,7 @@ export async function withAgentAuth(
  */
 export async function withOptionalAgentAuth(
   request: NextRequest
-): Promise<{ agent?: any, apiKey?: string }> {
+): Promise<{ agent?: Record<string, unknown>, apiKey?: string }> {
   const apiKey = request.headers.get('X-Eden-Api-Key') || 
                  request.headers.get('Authorization')?.replace('Bearer ', '')
   

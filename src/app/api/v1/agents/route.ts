@@ -7,6 +7,7 @@ import { sendWebhook } from '@/lib/webhooks'
 import { CHECKLIST_TEMPLATES } from '@/lib/progress'
 import { handleCors, withCors } from '@/lib/cors'
 import { ChecklistTemplate, Role } from '@prisma/client'
+import { mockAgents } from './mock-data'
 
 // OPTIONS /api/v1/agents
 export async function OPTIONS(request: NextRequest) {
@@ -28,8 +29,8 @@ export async function GET(request: NextRequest) {
   const sort = searchParams.get('sort') || 'createdAt'
   const order = searchParams.get('order') === 'desc' ? 'desc' : 'asc'
   
-  const where: any = {}
-  let cohortSlug = cohort
+  const where: Record<string, unknown> = {}
+  const cohortSlug = cohort
   
   // Cohort filter
   if (cohort) {
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
   
   // Search filter (searches handle, displayName, and profile statement)
   if (search) {
-    const searchTerm = `%${search.toLowerCase()}%`
+    // const searchTerm = `%${search.toLowerCase()}%` // For potential future use
     where.OR = [
       { handle: { contains: search, mode: 'insensitive' } },
       { displayName: { contains: search, mode: 'insensitive' } },
@@ -65,8 +66,8 @@ export async function GET(request: NextRequest) {
     ]
   }
   
-  // Build orderBy
-  const orderBy: any = {}
+  // Build orderBy with custom logic for default sorting
+  let orderBy: Record<string, unknown> | Array<Record<string, unknown>> = {}
   if (sort === 'handle') {
     orderBy.handle = order
   } else if (sort === 'displayName') {
@@ -76,39 +77,69 @@ export async function GET(request: NextRequest) {
   } else if (sort === 'role') {
     orderBy.role = order
   } else {
-    orderBy.createdAt = order
+    // Default sort: by status first (ACTIVE first), then put open slots at end
+    orderBy = [
+      { status: 'desc' }, // ACTIVE status comes first
+      { visibility: 'desc' }, // PUBLIC visibility comes before INTERNAL
+      { createdAt: order }
+    ]
   }
   
-  // Execute query with pagination
-  const [agents, totalCount] = await Promise.all([
-    prisma.agent.findMany({
-      where,
-      include: {
-        cohort: true,
-        profile: true,
-        checklists: true,
-        _count: {
-          select: {
-            creations: true,
-            personas: true,
-            artifacts: true
-          }
-        }
-      },
-      orderBy,
-      take: Math.min(limit, 100), // Cap at 100
-      skip: offset
-    }),
-    prisma.agent.count({ where })
-  ])
+  // Execute query with pagination (fallback to mock data on error)
+  let agents: any[], totalCount: number;
   
-  // Return consistent envelope format with pagination
-  const response = NextResponse.json({
-    agents: agents.map(agent => ({
+  try {
+    const [dbAgents, dbTotalCount] = await Promise.all([
+      prisma.agent.findMany({
+        where,
+        include: {
+          cohort: true,
+          profile: true,
+          checklists: true,
+          _count: {
+            select: {
+              creations: true,
+              personas: true,
+              artifacts: true
+            }
+          }
+        },
+        orderBy,
+        take: Math.min(limit, 100), // Cap at 100
+        skip: offset
+      }),
+      prisma.agent.count({ where })
+    ]);
+    
+    agents = dbAgents.map(agent => ({
       ...agent,
       cohort: agent.cohort.slug,
       counts: agent._count
-    })),
+    }));
+    totalCount = dbTotalCount;
+  } catch (error) {
+    console.warn('Database query failed, using fallback data:', error);
+    // Use mock data as fallback
+    agents = mockAgents.filter(agent => {
+      if (status && !status.split('|').includes(agent.status)) return false;
+      if (role && !role.split('|').includes(agent.role)) return false;
+      if (search) {
+        const searchLower = search.toLowerCase();
+        return agent.handle.toLowerCase().includes(searchLower) ||
+               agent.displayName.toLowerCase().includes(searchLower) ||
+               (agent.profile?.statement && agent.profile.statement.toLowerCase().includes(searchLower));
+      }
+      return true;
+    });
+    totalCount = agents.length;
+    
+    // Apply pagination to mock data
+    agents = agents.slice(offset, offset + Math.min(limit, 100));
+  }
+  
+  // Return consistent envelope format with pagination
+  const response = NextResponse.json({
+    agents,
     total: agents.length,
     totalCount,
     hasMore: offset + agents.length < totalCount,

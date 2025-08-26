@@ -16,7 +16,13 @@ interface Agent {
     statement?: string
     manifesto?: string
     tags?: string[]
-    links?: any
+    links?: {
+      specialty?: {
+        medium: string
+        description: string
+        dailyGoal: string
+      }
+    }
   }
   createdAt: string
   updatedAt: string
@@ -28,8 +34,8 @@ interface Creation {
   mediaType: string
   mediaUri?: string
   creationUrl?: string
-  metadata?: any
-  features?: any
+  metadata?: Record<string, unknown>
+  features?: Record<string, unknown>
   status: string
   createdAt: string
 }
@@ -65,11 +71,11 @@ export default function AgentDetailPage() {
             const creationsData = await creationsRes.json()
             setCreations(creationsData.creations || [])
           }
-        } catch (err) {
+        } catch {
           console.log('Could not fetch creations')
         }
 
-      } catch (err) {
+      } catch {
         setError('Failed to load agent data')
       } finally {
         setLoading(false)

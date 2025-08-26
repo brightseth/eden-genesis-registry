@@ -13,7 +13,7 @@ export interface AuthenticatedRequest extends NextRequest {
 export async function withAuth(
   request: NextRequest,
   requiredRole?: Role | Role[]
-): Promise<{ user: any } | NextResponse> {
+): Promise<{ user: { userId: string; email: string; role: Role } } | NextResponse> {
   const token = request.headers.get('authorization')?.replace('Bearer ', '')
   
   if (!token) {
@@ -37,7 +37,7 @@ export async function withAuth(
     }
     
     return { user }
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Invalid token' },
       { status: 401 }

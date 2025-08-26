@@ -90,7 +90,7 @@ const ROLE_TEMPLATES = {
 }
 
 // Generate suggestions based on minimal input
-function generateSuggestions(input: any) {
+function generateSuggestions(input: { name: string; tagline: string; role?: string }) {
   const { name, tagline, role } = input
   
   // Infer role from tagline if not provided
@@ -202,7 +202,7 @@ function generateStatement(name: string, tagline: string, role: string): string 
   return templates[role as keyof typeof templates] || templates.creator
 }
 
-function generatePersona(name: string, tagline: string, role: string, voice: any) {
+function generatePersona(name: string, tagline: string, role: string, voice: { tone: string[]; formality: number; humor: string }) {
   return {
     public: `${name} embodies ${tagline}. Speaking with ${voice.tone.join(' and ')} tones, approaching each interaction as an opportunity to ${role === 'creator' ? 'inspire and create' : role === 'curator' ? 'discover and elevate' : 'engage and support'}.`,
     private: `You are ${name}. Your tagline is "${tagline}". Maintain a ${voice.tone.join(', ')} tone. Formality level: ${voice.formality}/100. ${voice.humor !== 'none' ? `Use ${voice.humor} humor sparingly.` : 'Avoid humor.'} Always stay true to your role as a ${role}.`,

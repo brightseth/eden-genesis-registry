@@ -44,43 +44,46 @@ export async function GET(
       // Filter works by period
       const periodWorks = period === 'all' 
         ? works 
-        : works.filter((w: any) => new Date(w.createdAt) >= startDate)
+        : works.filter((w: Record<string, unknown>) => new Date(w.createdAt as string) >= startDate)
       
       // Calculate statistics
       const stats = {
         // Content metrics
         total: periodWorks.length,
-        byType: periodWorks.reduce((acc: any, w: any) => {
-          acc[w.type] = (acc[w.type] || 0) + 1
+        byType: periodWorks.reduce((acc: Record<string, number>, w: Record<string, unknown>) => {
+          const type = w.type as string
+          acc[type] = (acc[type] || 0) + 1
           return acc
         }, {}),
-        byMedium: periodWorks.reduce((acc: any, w: any) => {
-          acc[w.medium] = (acc[w.medium] || 0) + 1
+        byMedium: periodWorks.reduce((acc: Record<string, number>, w: Record<string, unknown>) => {
+          const medium = w.medium as string
+          acc[medium] = (acc[medium] || 0) + 1
           return acc
         }, {}),
-        byStatus: periodWorks.reduce((acc: any, w: any) => {
-          acc[w.status] = (acc[w.status] || 0) + 1
+        byStatus: periodWorks.reduce((acc: Record<string, number>, w: Record<string, unknown>) => {
+          const status = w.status as string
+          acc[status] = (acc[status] || 0) + 1
           return acc
         }, {}),
         
         // Curation metrics
-        featured: periodWorks.filter((w: any) => w.curation?.featured).length,
-        curated: periodWorks.filter((w: any) => w.curation?.curated).length,
+        featured: periodWorks.filter((w: Record<string, unknown>) => (w.curation as Record<string, unknown>)?.featured).length,
+        curated: periodWorks.filter((w: Record<string, unknown>) => (w.curation as Record<string, unknown>)?.curated).length,
         averageScore: periodWorks
-          .filter((w: any) => w.curation?.score)
-          .reduce((sum: number, w: any, _, arr: any[]) => 
-            sum + w.curation.score / arr.length, 0),
+          .filter((w: Record<string, unknown>) => (w.curation as Record<string, unknown>)?.score)
+          .reduce((sum: number, w: Record<string, unknown>, _, arr: Record<string, unknown>[]) => 
+            sum + ((w.curation as Record<string, unknown>).score as number) / arr.length, 0),
         
         // Engagement metrics
-        totalViews: periodWorks.reduce((sum: number, w: any) => sum + (w.views || 0), 0),
-        totalLikes: periodWorks.reduce((sum: number, w: any) => sum + (w.likes || 0), 0),
-        totalShares: periodWorks.reduce((sum: number, w: any) => sum + (w.shares || 0), 0),
+        totalViews: periodWorks.reduce((sum: number, w: Record<string, unknown>) => sum + ((w.views as number) || 0), 0),
+        totalLikes: periodWorks.reduce((sum: number, w: Record<string, unknown>) => sum + ((w.likes as number) || 0), 0),
+        totalShares: periodWorks.reduce((sum: number, w: Record<string, unknown>) => sum + ((w.shares as number) || 0), 0),
         
         // Theme analysis
         topThemes: Object.entries(
           periodWorks
-            .flatMap((w: any) => w.themes || [])
-            .reduce((acc: any, theme: string) => {
+            .flatMap((w: Record<string, unknown>) => (w.themes as string[]) || [])
+            .reduce((acc: Record<string, number>, theme: string) => {
               acc[theme] = (acc[theme] || 0) + 1
               return acc
             }, {})
@@ -95,8 +98,8 @@ export async function GET(
         // Practice metrics
         consecutiveDays: calculateConsecutiveDays(works),
         lastActiveDate: works.length > 0 
-          ? works.sort((a: any, b: any) => 
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          ? works.sort((a: Record<string, unknown>, b: Record<string, unknown>) => 
+              new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime()
             )[0].createdAt
           : null
       }
@@ -119,7 +122,7 @@ export async function GET(
         }
       })
       
-    } catch (error) {
+    } catch {
       return NextResponse.json({
         success: false,
         error: `No data found for agent ${agentId}`,
@@ -145,7 +148,7 @@ export async function GET(
 }
 
 // Helper function to calculate daily activity
-function getDailyActivity(works: any[], startDate: Date, endDate: Date) {
+function getDailyActivity(works: Record<string, unknown>[], startDate: Date, endDate: Date) {
   const dayMap: Record<string, number> = {}
   
   // Initialize all days to 0
@@ -158,7 +161,7 @@ function getDailyActivity(works: any[], startDate: Date, endDate: Date) {
   
   // Count works per day
   works.forEach(work => {
-    const dateStr = new Date(work.createdAt).toISOString().split('T')[0]
+    const dateStr = new Date(work.createdAt as string).toISOString().split('T')[0]
     if (dayMap[dateStr] !== undefined) {
       dayMap[dateStr]++
     }
@@ -168,16 +171,16 @@ function getDailyActivity(works: any[], startDate: Date, endDate: Date) {
 }
 
 // Helper function to calculate consecutive practice days
-function calculateConsecutiveDays(works: any[]): number {
+function calculateConsecutiveDays(works: Record<string, unknown>[]): number {
   if (works.length === 0) return 0
   
   const sortedWorks = works
-    .sort((a: any, b: any) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    .sort((a: Record<string, unknown>, b: Record<string, unknown>) => 
+      new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime()
     )
   
   const today = new Date().toISOString().split('T')[0]
-  const lastWorkDate = new Date(sortedWorks[0].createdAt).toISOString().split('T')[0]
+  const lastWorkDate = new Date(sortedWorks[0].createdAt as string).toISOString().split('T')[0]
   
   // If last work isn't today or yesterday, streak is broken
   const daysDiff = Math.floor(
@@ -188,10 +191,10 @@ function calculateConsecutiveDays(works: any[]): number {
   
   // Count consecutive days
   let consecutive = 1
-  let currentDate = new Date(sortedWorks[0].createdAt)
+  let currentDate = new Date(sortedWorks[0].createdAt as string)
   
   for (let i = 1; i < sortedWorks.length; i++) {
-    const workDate = new Date(sortedWorks[i].createdAt)
+    const workDate = new Date(sortedWorks[i].createdAt as string)
     const diff = Math.floor(
       (currentDate.getTime() - workDate.getTime()) / (1000 * 60 * 60 * 24)
     )

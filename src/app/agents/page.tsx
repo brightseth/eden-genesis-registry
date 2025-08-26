@@ -10,9 +10,22 @@ interface Agent {
   role: string
   status: string
   cohort?: string
+  visibility?: string
   profile?: {
     statement?: string
     tags?: string[]
+    links?: {
+      specialty?: {
+        medium: string
+        description: string
+        dailyGoal: string
+      }
+    }
+  }
+  counts?: {
+    creations: number
+    personas: number
+    artifacts: number
   }
 }
 
@@ -45,8 +58,25 @@ export default function AgentsPage() {
     )
   }
 
-  const activeAgents = agents.filter(a => a.status === 'ACTIVE')
-  const otherAgents = agents.filter(a => a.status !== 'ACTIVE')
+  // Sort agents: active first, then by custom order to put open slots last
+  const sortedAgents = [...agents].sort((a, b) => {
+    // First, separate by status
+    if (a.status === 'ACTIVE' && b.status !== 'ACTIVE') return -1
+    if (a.status !== 'ACTIVE' && b.status === 'ACTIVE') return 1
+    
+    // Within same status, put open slots at the end
+    const aIsOpen = a.handle.startsWith('open-')
+    const bIsOpen = b.handle.startsWith('open-')
+    if (aIsOpen && !bIsOpen) return 1
+    if (!aIsOpen && bIsOpen) return -1
+    
+    // For other agents, maintain creation order
+    return 0
+  })
+
+  const activeAgents = sortedAgents.filter(a => a.status === 'ACTIVE' && a.visibility === 'PUBLIC')
+  const openSlots = sortedAgents.filter(a => a.handle.startsWith('open-'))
+  const otherAgents = sortedAgents.filter(a => a.status !== 'ACTIVE' && !a.handle.startsWith('open-'))
 
   return (
     <div className="min-h-screen bg-black text-white p-8" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>
@@ -58,7 +88,7 @@ export default function AgentsPage() {
           </Link>
           <h1 className="text-5xl font-bold uppercase tracking-wider mb-6">GENESIS COHORT AGENTS</h1>
           <p className="text-lg uppercase tracking-wide opacity-80">
-            {agents.length} AGENTS REGISTERED | {activeAgents.length} ACTIVE
+            {agents.length} AGENTS REGISTERED | {activeAgents.length} ACTIVE | {openSlots.length} OPEN SLOTS
           </p>
         </div>
 
@@ -82,12 +112,28 @@ export default function AgentsPage() {
                 </div>
                 <p className="text-sm uppercase tracking-wide opacity-60 mb-3">@{agent.handle}</p>
                 {agent.profile?.statement && (
-                  <p className="text-sm opacity-80 line-clamp-2">
+                  <p className="text-sm opacity-80 line-clamp-2 mb-3">
                     {agent.profile.statement}
                   </p>
                 )}
+                {agent.profile?.links?.specialty && (
+                  <div className="mb-3">
+                    <p className="text-xs uppercase tracking-wide opacity-50 mb-1">MEDIUM</p>
+                    <p className="text-sm font-medium">{agent.profile.links.specialty.medium}</p>
+                    {agent.profile.links.specialty.dailyGoal && (
+                      <p className="text-xs opacity-60 mt-1">{agent.profile.links.specialty.dailyGoal}</p>
+                    )}
+                  </div>
+                )}
+                {agent.counts && (
+                  <div className="mb-3 flex gap-4 text-xs uppercase tracking-wide opacity-60">
+                    <span>{agent.counts.creations} WORKS</span>
+                    <span>{agent.counts.personas} PERSONAS</span>
+                    <span>{agent.counts.artifacts} ARTIFACTS</span>
+                  </div>
+                )}
                 {agent.profile?.tags && (
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {agent.profile.tags.slice(0, 3).map((tag, i) => (
                       <span key={i} className="text-xs px-2 py-1 border border-current/30 uppercase tracking-wide">
                         {tag}
@@ -99,6 +145,41 @@ export default function AgentsPage() {
             ))}
           </div>
         </div>
+
+        {/* Open Slots */}
+        {openSlots.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold uppercase tracking-wider mb-8 border-b border-white/20 pb-4">
+              OPEN SLOTS ({openSlots.length})
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {openSlots.map((agent) => (
+                <div
+                  key={agent.id}
+                  className="border border-white/30 p-6 opacity-50"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-xl uppercase tracking-wide">{agent.displayName}</h3>
+                    <span className="text-xs px-3 py-1 border border-white/30 uppercase tracking-wide">
+                      AVAILABLE
+                    </span>
+                  </div>
+                  <p className="text-sm uppercase tracking-wide opacity-60 mb-3">@{agent.handle}</p>
+                  {agent.profile?.statement && (
+                    <p className="text-sm opacity-60 line-clamp-2 mb-3">
+                      {agent.profile.statement}
+                    </p>
+                  )}
+                  <div className="mt-4">
+                    <p className="text-xs uppercase tracking-wide font-medium opacity-80">
+                      ACCEPTING TRAINER APPLICATIONS
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Other Status Agents */}
         {otherAgents.length > 0 && (

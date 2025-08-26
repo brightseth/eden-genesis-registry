@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   const cohortSlug = searchParams.get('cohort')
   
   try {
-    let where: any = {}
+    let where: Record<string, unknown> = {}
     
     if (cohortSlug) {
       const cohort = await prisma.cohort.findUnique({

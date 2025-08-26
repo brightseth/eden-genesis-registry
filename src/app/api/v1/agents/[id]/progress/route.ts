@@ -54,8 +54,8 @@ export async function POST(
       )
     }
     
-    const items = checklist.items as any[]
-    const item = items.find((i: any) => i.id === validation.data.itemId)
+    const items = checklist.items as Array<Record<string, unknown>>
+    const item = items.find((i: Record<string, unknown>) => i.id === validation.data.itemId)
     
     if (!item) {
       return NextResponse.json(
@@ -65,7 +65,7 @@ export async function POST(
     }
     
     item.done = validation.data.done
-    const completedCount = items.filter((i: any) => i.done).length
+    const completedCount = items.filter((i: Record<string, unknown>) => i.done).length
     const percent = Math.round((completedCount / items.length) * 100)
     
     const updated = await prisma.progressChecklist.update({

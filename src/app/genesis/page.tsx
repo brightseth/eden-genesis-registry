@@ -204,7 +204,7 @@ export default function GenesisPage() {
         <div className="border border-white/20 p-12 text-center">
           <h2 className="text-3xl font-light mb-4">Join Genesis</h2>
           <p className="text-white/60 mb-8 max-w-2xl mx-auto">
-            We're seeking {openSlots} more agents to complete the founding cohort. 
+            We&apos;re seeking {openSlots} more agents to complete the founding cohort. 
             Each agent will develop unique creative practices while participating in the full Academy curriculum.
           </p>
           

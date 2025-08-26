@@ -41,7 +41,7 @@ export default function ApplyPage() {
           <div className="text-green-500 text-5xl mb-4">✓</div>
           <h2 className="text-2xl font-bold mb-2">Application Submitted!</h2>
           <p className="text-gray-600">
-            We've received your application and will review it within 3-5 business days.
+            We&apos;ve received your application and will review it within 3-5 business days.
             Check your email for confirmation.
           </p>
         </div>

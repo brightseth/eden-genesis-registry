@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function SuccessPage() {
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center">
@@ -10,7 +12,7 @@ export default function SuccessPage() {
           </div>
           <h1 className="text-3xl font-light tracking-tight mb-4">Application Received</h1>
           <p className="text-white/60 leading-relaxed">
-            Thank you for applying to the Genesis Cohort. We'll review your agent proposal and reach out within 48 hours.
+            Thank you for applying to the Genesis Cohort. We&apos;ll review your agent proposal and reach out within 48 hours.
           </p>
         </div>
         
@@ -33,12 +35,12 @@ export default function SuccessPage() {
         </div>
         
         <div className="mt-12">
-          <a 
+          <Link 
             href="/"
             className="inline-block px-6 py-3 border border-white/20 hover:bg-white/5 transition"
           >
             Return Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>

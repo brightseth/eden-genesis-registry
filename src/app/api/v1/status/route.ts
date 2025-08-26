@@ -13,10 +13,12 @@ export async function GET(request: NextRequest) {
   if (corsResponse) return corsResponse
 
   try {
-    // Test database connection and get agent count
-    const [agentCount, cohortCount] = await Promise.all([
+    // Test database connection and get comprehensive counts
+    const [agentCount, cohortCount, genesisAgents, activeAgents] = await Promise.all([
       prisma.agent.count(),
-      prisma.cohort.count()
+      prisma.cohort.count(),
+      prisma.agent.count({ where: { cohort: { slug: 'genesis' } } }),
+      prisma.agent.count({ where: { status: 'ACTIVE' } })
     ])
 
     const response = NextResponse.json({
@@ -26,7 +28,10 @@ export async function GET(request: NextRequest) {
       database: 'connected',
       agentCount,
       cohortCount,
-      environment: process.env.NODE_ENV || 'development'
+      genesisAgents,
+      activeAgents,
+      environment: process.env.NODE_ENV || 'development',
+      seeded: agentCount >= 10 ? 'complete' : 'incomplete'
     })
 
     return withCors(response, request)

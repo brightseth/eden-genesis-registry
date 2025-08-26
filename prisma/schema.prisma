@@ -150,7 +150,7 @@ model Agent {
   id             String          @id @default(cuid())
   handle         String          @unique
   displayName    String
-  role           String?         // creator, curator, collector, governance, infra, tbd
+  role           Role            @default(GUEST)  // Use canonical Role enum
   cohortId       String
   cohort         Cohort          @relation(fields: [cohortId], references: [id])
   status         AgentStatus     @default(INVITED)

@@ -24,7 +24,7 @@ async function getApplications() {
   }
 }
 
-async function saveApplications(applications: any[]) {
+async function saveApplications(applications: Record<string, unknown>[]) {
   await ensureDataDir()
   await fs.writeFile(APPLICATIONS_FILE, JSON.stringify(applications, null, 2))
 }

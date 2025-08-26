@@ -13,7 +13,7 @@ export async function GET(
   const { searchParams } = new URL(request.url)
   const status = searchParams.get('status')
   
-  const where: any = { agentId: params.id }
+  const where: Record<string, unknown> = { agentId: params.id }
   if (status) {
     where.status = status.split('|')
   }
@@ -69,11 +69,11 @@ export async function POST(
         })
         
         if (checklist && creationCount === 3) {
-          const items = checklist.items as any[]
-          const creationsItem = items.find((item: any) => item.id === 'creations')
+          const items = checklist.items as Array<{ id: string; done?: boolean }>
+          const creationsItem = items.find((item: { id: string }) => item.id === 'creations')
           if (creationsItem) {
             creationsItem.done = true
-            const completedCount = items.filter((item: any) => item.done).length
+            const completedCount = items.filter((item: { done?: boolean }) => item.done).length
             const percent = Math.round((completedCount / items.length) * 100)
             
             await tx.progressChecklist.update({

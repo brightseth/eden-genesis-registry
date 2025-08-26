@@ -47,7 +47,7 @@ export async function GET(
     }
     
     // Build where clause
-    const where: any = { agentId: agent.id }
+    const where: Record<string, unknown> = { agentId: agent.id }
     if (status) {
       where.status = status
     }
@@ -74,13 +74,13 @@ export async function GET(
       updatedAt: work.updatedAt,
       // Add extra fields from metadata if present
       ...(work.metadata && typeof work.metadata === 'object' ? {
-        description: (work.metadata as any).description,
-        price: (work.metadata as any).price,
-        views: (work.metadata as any).views,
-        likes: (work.metadata as any).likes,
-        medium: (work.metadata as any).medium,
-        style: (work.metadata as any).style,
-        theme: (work.metadata as any).theme
+        description: (work.metadata as Record<string, unknown>).description,
+        price: (work.metadata as Record<string, unknown>).price,
+        views: (work.metadata as Record<string, unknown>).views,
+        likes: (work.metadata as Record<string, unknown>).likes,
+        medium: (work.metadata as Record<string, unknown>).medium,
+        style: (work.metadata as Record<string, unknown>).style,
+        theme: (work.metadata as Record<string, unknown>).theme
       } : {})
     }))
     
