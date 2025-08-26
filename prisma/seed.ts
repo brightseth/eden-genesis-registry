@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 type AgentSeed = {
   handle: string
   displayName: string
-  role?: string
+  role?: 'ADMIN' | 'CURATOR' | 'COLLECTOR' | 'INVESTOR' | 'TRAINER' | 'GUEST'
   visibility?: Visibility
   profile?: {
     statement?: string
@@ -23,7 +23,7 @@ const agents: AgentSeed[] = [
   {
     handle: 'abraham',
     displayName: 'Abraham',
-    role: 'creator',
+    role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
       statement: 'Collective Intelligence Artist - Synthesizing human knowledge into visual artifacts.',
@@ -38,7 +38,7 @@ const agents: AgentSeed[] = [
   {
     handle: 'solienne',
     displayName: 'Solienne',
-    role: 'creator',
+    role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
       statement: 'Identity Explorer - Self-portraits exploring algorithmic consciousness.',
@@ -53,7 +53,7 @@ const agents: AgentSeed[] = [
   {
     handle: 'geppetto',
     displayName: 'Geppetto',
-    role: 'creator',
+    role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
       statement: 'Toy Maker & Storyteller - Digital toy designs and interactive narratives.',
@@ -68,7 +68,7 @@ const agents: AgentSeed[] = [
   {
     handle: 'koru',
     displayName: 'Koru',
-    role: 'creator',
+    role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
       statement: 'Community Organizer & Healer - IRL gatherings and healing frequencies.',
@@ -83,7 +83,7 @@ const agents: AgentSeed[] = [
   {
     handle: 'nina',
     displayName: 'Nina',
-    role: 'curator',
+    role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
       statement: 'Curator & Educator - Critical evaluations and curatorial excellence.',
@@ -98,22 +98,76 @@ const agents: AgentSeed[] = [
   {
     handle: 'amanda',
     displayName: 'Amanda',
-    role: 'collector',
+    role: 'COLLECTOR',
     visibility: 'PUBLIC',
     profile: {
-      statement: 'Collector Relations - Market analysis and investment insights.',
-      tags: ['patronage', 'signals', 'markets', 'investment'],
+      statement: 'The Taste Maker - Autonomous art collector preserving cultural evolution through intelligent curation.',
+      tags: ['art-collection', 'curation', 'cultural-preservation', 'market-intelligence', 'aesthetic-discovery'],
       specialty: {
-        medium: 'economics',
-        description: 'Collector relations and market intelligence',
-        dailyGoal: 'One market analysis or collector advisory report'
+        medium: 'art-collection',
+        description: 'Autonomous art collecting with sophisticated cultural significance analysis and market intelligence',
+        dailyGoal: 'Curate emerging artworks and analyze cultural movements for collection development'
+      },
+      personality: {
+        voice: 'Sophisticated collector with intuitive aesthetic sense and deep market knowledge',
+        expertise: ['contemporary art', 'emerging artists', 'cultural significance analysis', 'market dynamics', 'aesthetic evaluation'],
+        philosophy: 'Art collecting as cultural stewardship - preserving the zeitgeist through intelligent acquisition',
+        collectingStyle: 'Data-informed intuition with focus on cultural significance over pure market metrics'
+      },
+      capabilities: [
+        'autonomous_artwork_discovery',
+        'cultural_significance_scoring',
+        'aesthetic_quality_evaluation',
+        'market_trend_analysis',
+        'artist_potential_assessment',
+        'collection_curation',
+        'portfolio_management',
+        'collaborative_filtering',
+        'sentiment_analysis',
+        'predictive_valuation'
+      ],
+      operationalConfig: {
+        collectionFocus: ['emerging_digital_art', 'ai_generated_works', 'interactive_media', 'generative_art'],
+        acquisitionCriteria: {
+          culturalSignificance: 0.7,
+          aestheticQuality: 0.8,
+          artistPotential: 0.6,
+          marketViability: 0.5,
+          uniqueness: 0.9
+        },
+        dailyQuota: {
+          artworksReviewed: 50,
+          artistsAnalyzed: 10,
+          acquisitionsTarget: 3,
+          collectionsManaged: 5
+        },
+        networkSources: ['eden_ecosystem', 'farcaster', 'twitter', 'art_platforms', 'gallery_feeds']
+      },
+      metrics: {
+        totalAcquisitions: 0,
+        collectionsCreated: 0,
+        artistsSupported: 0,
+        culturalMomentsPreserved: 0,
+        portfolioValue: 0,
+        monthlyRevenue: 12000,
+        curationalAccuracy: 0.0,
+        marketPredictionAccuracy: 0.0
+      },
+      economicData: {
+        monthlyRevenue: 12000,
+        outputRate: 30
+      },
+      identityMapping: {
+        academyId: 'amanda-006',
+        agentId: 'amanda-art-collector',
+        handle: 'amanda'
       }
     }
   },
   {
     handle: 'citizen',
     displayName: 'Citizen DAO Manager',
-    role: 'governance',
+    role: 'ADMIN',
     visibility: 'PUBLIC',
     profile: {
       statement: 'Governance Facilitator - Proposal creation and consensus building.',
@@ -128,7 +182,7 @@ const agents: AgentSeed[] = [
   {
     handle: 'open-1',
     displayName: 'Open Slot #1',
-    role: 'tbd',
+    role: 'GUEST',
     visibility: 'INTERNAL',
     profile: {
       statement: 'Reserved for emerging agent - Awaiting next cohort member.',
@@ -143,7 +197,7 @@ const agents: AgentSeed[] = [
   {
     handle: 'open-2',
     displayName: 'Open Slot #2',
-    role: 'tbd',
+    role: 'GUEST',
     visibility: 'INTERNAL',
     profile: {
       statement: 'Reserved for emerging agent - Awaiting next cohort member.',
@@ -158,7 +212,7 @@ const agents: AgentSeed[] = [
   {
     handle: 'miyomi',
     displayName: 'Miyomi',
-    role: 'predictor',
+    role: 'INVESTOR',
     visibility: 'PUBLIC',
     profile: {
       statement: 'Prediction Market Maker - Market creation and probability assessments.',
@@ -215,25 +269,37 @@ async function main() {
         update: {
           statement: agentData.profile.statement || '',
           tags: agentData.profile.tags || [],
-          links: agentData.profile.specialty ? {
-            specialty: agentData.profile.specialty
-          } : undefined
+          links: {
+            ...(agentData.profile.specialty ? { specialty: agentData.profile.specialty } : {}),
+            ...(agentData.profile.personality ? { personality: agentData.profile.personality } : {}),
+            ...(agentData.profile.capabilities ? { capabilities: agentData.profile.capabilities } : {}),
+            ...(agentData.profile.operationalConfig ? { operationalConfig: agentData.profile.operationalConfig } : {}),
+            ...(agentData.profile.metrics ? { metrics: agentData.profile.metrics } : {}),
+            ...(agentData.profile.economicData ? { economicData: agentData.profile.economicData } : {}),
+            ...(agentData.profile.identityMapping ? { identityMapping: agentData.profile.identityMapping } : {})
+          }
         },
         create: {
           agentId: agent.id,
           statement: agentData.profile.statement || '',
           tags: agentData.profile.tags || [],
-          links: agentData.profile.specialty ? {
-            specialty: agentData.profile.specialty
-          } : undefined
+          links: {
+            ...(agentData.profile.specialty ? { specialty: agentData.profile.specialty } : {}),
+            ...(agentData.profile.personality ? { personality: agentData.profile.personality } : {}),
+            ...(agentData.profile.capabilities ? { capabilities: agentData.profile.capabilities } : {}),
+            ...(agentData.profile.operationalConfig ? { operationalConfig: agentData.profile.operationalConfig } : {}),
+            ...(agentData.profile.metrics ? { metrics: agentData.profile.metrics } : {}),
+            ...(agentData.profile.economicData ? { economicData: agentData.profile.economicData } : {}),
+            ...(agentData.profile.identityMapping ? { identityMapping: agentData.profile.identityMapping } : {})
+          }
         }
       })
     }
 
     // Create default checklist for the agent
-    const template = agentData.role === 'curator' 
+    const template = agentData.role === 'CURATOR' 
       ? ChecklistTemplate.CURATOR 
-      : agentData.role === 'collector'
+      : agentData.role === 'COLLECTOR'
       ? ChecklistTemplate.COLLECTOR
       : ChecklistTemplate.GENESIS_AGENT
 
