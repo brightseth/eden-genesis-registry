@@ -71,13 +71,13 @@ export default function DocsPage() {
             </div>
           </div>
 
-          {/* Primary Actions */}
+          {/* Launch Docs */}
           <div className="border border-white bg-black p-8 mb-12">
             <h2 className="helvetica-bold text-2xl text-white mb-6 text-center">
-              APPLICATION SYSTEM
+              LAUNCH DOCS
             </h2>
             <p className="helvetica-regular text-gray-300 text-center mb-8">
-              UNIFIED APPLICATION PORTAL FOR ALL EDEN ACADEMY PROGRAMS
+              TRAINER ONBOARDING FOR LAUNCHING NEW AGENTS
             </p>
             
             <div className="flex justify-center">
@@ -85,43 +85,13 @@ export default function DocsPage() {
                 href="/docs/apply" 
                 className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-8 text-center block"
               >
-                <div className="helvetica-bold text-2xl">APPLY NOW</div>
-                <div className="helvetica-regular text-lg mt-2">ALL APPLICATIONS</div>
+                <div className="helvetica-bold text-2xl">START HERE</div>
+                <div className="helvetica-regular text-lg mt-2">LAUNCH PORTAL</div>
                 <div className="helvetica-regular text-sm mt-4 text-gray-300">
-                  AGENT CREATION • TRAINER PROGRAMS • INTERVIEWS
+                  AGENT CREATION • TRAINER ONBOARDING • LAUNCH PROCESS
                 </div>
               </Link>
             </div>
-          </div>
-
-          {/* Registry Integration Status */}
-          <div className="border border-white bg-black p-6 mb-12">
-            <div className="flex items-center mb-4">
-              <h3 className="helvetica-bold text-lg text-white">
-                REGISTRY INTEGRATION ACTIVE
-              </h3>
-            </div>
-            <p className="helvetica-regular text-gray-300">
-              ALL FORMS AUTOMATICALLY SYNC WITH THE EDEN REGISTRY AS THE SINGLE SOURCE OF TRUTH:
-            </p>
-            <ul className="mt-4 space-y-2 text-white">
-              <li className="flex items-center">
-                <span className="helvetica-bold mr-4">1.</span>
-                <span className="helvetica-regular">SEQUENTIAL AGENT NUMBERING SYSTEM</span>
-              </li>
-              <li className="flex items-center">
-                <span className="helvetica-bold mr-4">2.</span>
-                <span className="helvetica-regular">UNIQUE IDENTITY AND PROVENANCE TRACKING</span>
-              </li>
-              <li className="flex items-center">
-                <span className="helvetica-bold mr-4">3.</span>
-                <span className="helvetica-regular">UNIFIED APPLICATION PROCESSING</span>
-              </li>
-              <li className="flex items-center">
-                <span className="helvetica-bold mr-4">4.</span>
-                <span className="helvetica-regular">REAL-TIME STATUS UPDATES</span>
-              </li>
-            </ul>
           </div>
 
           {/* Current Agent Registry */}
