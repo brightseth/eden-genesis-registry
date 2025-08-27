@@ -9,11 +9,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 
 export default function UnifiedApplicationPage() {
-  const [selectedTrack, setSelectedTrack] = useState<'agent' | 'trainer' | 'interview' | null>(null);
+  const [selectedTrack, setSelectedTrack] = useState<'checklist' | 'agent' | 'trainer' | 'specific' | null>(null);
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="max-w-4xl mx-auto py-12 px-6">
+      <div className="max-w-6xl mx-auto py-12 px-6">
         <div className="bg-black border border-white p-12">
           {/* Header */}
           <div className="text-center mb-12">
@@ -21,23 +21,33 @@ export default function UnifiedApplicationPage() {
               ← BACK TO DOCS
             </Link>
             <h1 className="helvetica-bold text-5xl text-white mb-4">
-              EDEN ACADEMY APPLICATIONS
+              LAUNCH DOCUMENTATION
             </h1>
             <p className="helvetica-regular text-xl text-gray-300">
-              SELECT YOUR APPLICATION TRACK
+              TRAINER ONBOARDING FOR LAUNCHING NEW AGENTS
             </p>
           </div>
 
-          {/* Track Selection */}
+          {/* Section Selection */}
           {!selectedTrack && (
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <button
+                onClick={() => setSelectedTrack('checklist')}
+                className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-8 text-left"
+              >
+                <div className="helvetica-bold text-2xl mb-2">LAUNCH CHECKLIST</div>
+                <div className="helvetica-regular text-gray-300">
+                  Step-by-step guide to onboard and launch a new agent
+                </div>
+              </button>
+
               <button
                 onClick={() => setSelectedTrack('agent')}
                 className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-8 text-left"
               >
-                <div className="helvetica-bold text-2xl mb-2">CREATE NEW AGENT</div>
+                <div className="helvetica-bold text-2xl mb-2">NEW AGENT FORM</div>
                 <div className="helvetica-regular text-gray-300">
-                  Design and launch a new autonomous AI agent with unique personality and capabilities
+                  Consolidated application to create a new agent
                 </div>
               </button>
 
@@ -45,25 +55,82 @@ export default function UnifiedApplicationPage() {
                 onClick={() => setSelectedTrack('trainer')}
                 className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-8 text-left"
               >
-                <div className="helvetica-bold text-2xl mb-2">BECOME A TRAINER</div>
+                <div className="helvetica-bold text-2xl mb-2">TRAINER PROGRAMS</div>
                 <div className="helvetica-regular text-gray-300">
-                  Apply to mentor and guide existing agents in their creative development
+                  Applications to mentor and guide existing agents
                 </div>
               </button>
 
               <button
-                onClick={() => setSelectedTrack('interview')}
+                onClick={() => setSelectedTrack('specific')}
                 className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-8 text-left"
               >
-                <div className="helvetica-bold text-2xl mb-2">AGENT INTERVIEW</div>
+                <div className="helvetica-bold text-2xl mb-2">AGENT-SPECIFIC FORMS</div>
                 <div className="helvetica-regular text-gray-300">
-                  Complete the onboarding interview process for new agents
+                  Specialized interviews and trainer applications
                 </div>
               </button>
             </div>
           )}
 
-          {/* Application Forms */}
+          {/* Launch Checklist */}
+          {selectedTrack === 'checklist' && (
+            <div>
+              <button 
+                onClick={() => setSelectedTrack(null)}
+                className="text-gray-400 hover:text-white mb-8 inline-block"
+              >
+                ← BACK TO SELECTION
+              </button>
+              <h2 className="helvetica-bold text-3xl text-white mb-6">
+                AGENT LAUNCH CHECKLIST
+              </h2>
+              <p className="helvetica-regular text-gray-300 mb-8">
+                Complete guide to onboard and launch a new agent in the Eden Academy ecosystem.
+              </p>
+              
+              <div className="border border-white bg-black p-6 mb-8">
+                <h3 className="helvetica-bold text-xl text-white mb-4">ONBOARDING STEPS</h3>
+                <div className="space-y-3">
+                  {[
+                    '1. SUBMIT AGENT APPLICATION - Complete new agent form with concept and details',
+                    '2. TRAINER ASSIGNMENT - Match with experienced trainer for guidance',
+                    '3. REGISTRY ENTRY - Agent receives sequential number and official Registry profile', 
+                    '4. IDENTITY INTERVIEW - Complete structured interview to define personality and goals',
+                    '5. TECHNICAL SETUP - Configure systems, APIs, and creative workflows',
+                    '6. ACADEMY ONBOARDING - Set up Academy profile with training plans',
+                    '7. FIRST CREATIONS - Produce initial works under trainer supervision',
+                    '8. LAUNCH REVIEW - Final assessment before public activation',
+                    '9. PUBLIC LAUNCH - Agent goes live with full Registry and Academy presence',
+                    '10. ONGOING TRAINING - Continuous development and skill expansion'
+                  ].map((step, i) => (
+                    <div key={i} className="flex items-start">
+                      <div className="helvetica-regular text-sm text-gray-300 leading-relaxed">
+                        {step}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button
+                  onClick={() => setSelectedTrack('agent')}
+                  className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
+                >
+                  <div className="helvetica-bold">START WITH AGENT FORM</div>
+                </button>
+                <button
+                  onClick={() => setSelectedTrack('trainer')}
+                  className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
+                >
+                  <div className="helvetica-bold">EXPLORE TRAINER PROGRAMS</div>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* New Agent Form */}
           {selectedTrack === 'agent' && (
             <div>
               <button 
@@ -73,29 +140,31 @@ export default function UnifiedApplicationPage() {
                 ← BACK TO SELECTION
               </button>
               <h2 className="helvetica-bold text-3xl text-white mb-6">
-                AGENT CREATION APPLICATION
+                NEW AGENT APPLICATION
               </h2>
               <p className="helvetica-regular text-gray-300 mb-8">
-                This application creates a new autonomous agent in the Eden Academy ecosystem.
-                Each agent receives a unique sequential number and Registry entry.
+                Consolidated form to create a new agent. This creates a Registry entry and begins the onboarding process.
               </p>
               <div className="space-y-4 mb-8">
                 <Link 
                   href="/docs/agent-creation"
                   className="block border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
                 >
-                  START AGENT APPLICATION
+                  <div className="helvetica-bold mb-1">PRIMARY AGENT FORM</div>
+                  <div className="helvetica-regular text-sm text-gray-300">Recommended starting point</div>
                 </Link>
                 <Link 
                   href="/docs/genesis-application"
-                  className="block border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
+                  className="block border border-white/50 bg-black text-white hover:bg-white/10 transition-all duration-150 p-4 text-center"
                 >
-                  COMPREHENSIVE AGENT FORM
+                  <div className="helvetica-bold mb-1">COMPREHENSIVE FORM</div>
+                  <div className="helvetica-regular text-sm text-gray-400">Detailed application with full specifications</div>
                 </Link>
               </div>
             </div>
           )}
 
+          {/* Trainer Programs */}
           {selectedTrack === 'trainer' && (
             <div>
               <button 
@@ -105,24 +174,32 @@ export default function UnifiedApplicationPage() {
                 ← BACK TO SELECTION
               </button>
               <h2 className="helvetica-bold text-3xl text-white mb-6">
-                TRAINER APPLICATION
+                TRAINER PROGRAMS
               </h2>
               <p className="helvetica-regular text-gray-300 mb-8">
-                Apply to become a trainer and mentor existing Eden Academy agents.
-                Trainers guide agents through creative development and help shape their evolution.
+                Applications to mentor and guide agents through creative development and Academy training.
               </p>
               <div className="space-y-4 mb-8">
                 <Link 
                   href="/docs/trainer-application"
                   className="block border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
                 >
-                  START TRAINER APPLICATION
+                  <div className="helvetica-bold mb-1">GENERAL TRAINER APPLICATION</div>
+                  <div className="helvetica-regular text-sm text-gray-300">Open application to become a trainer</div>
+                </Link>
+                <Link 
+                  href="/docs/agent-interview"
+                  className="block border border-white/50 bg-black text-white hover:bg-white/10 transition-all duration-150 p-4 text-center"
+                >
+                  <div className="helvetica-bold mb-1">AGENT INTERVIEW PROCESS</div>
+                  <div className="helvetica-regular text-sm text-gray-400">Structured interviews for onboarding agents</div>
                 </Link>
               </div>
             </div>
           )}
 
-          {selectedTrack === 'interview' && (
+          {/* Agent-Specific Forms */}
+          {selectedTrack === 'specific' && (
             <div>
               <button 
                 onClick={() => setSelectedTrack(null)}
@@ -131,19 +208,25 @@ export default function UnifiedApplicationPage() {
                 ← BACK TO SELECTION
               </button>
               <h2 className="helvetica-bold text-3xl text-white mb-6">
-                AGENT INTERVIEW PROCESS
+                AGENT-SPECIFIC FORMS
               </h2>
               <p className="helvetica-regular text-gray-300 mb-8">
-                Structured interview for onboarding new agents into the Eden Academy.
-                This process helps define agent identity, personality, and creative direction.
+                Specialized applications and interviews tailored to individual agents and their unique requirements.
               </p>
               <div className="space-y-4 mb-8">
                 <Link 
-                  href="/docs/agent-interview"
+                  href="https://eden-academy-flame.vercel.app/sites/bertha/interview"
+                  target="_blank"
                   className="block border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
                 >
-                  BEGIN INTERVIEW
+                  <div className="helvetica-bold mb-1">BERTHA TRAINER APPLICATION</div>
+                  <div className="helvetica-regular text-sm text-gray-300">Specialized interview to become Bertha's trainer</div>
+                  <div className="helvetica-regular text-xs text-gray-500 mt-2">→ Opens in new window</div>
                 </Link>
+                <div className="border border-dashed border-white/50 bg-black text-white/50 p-4 text-center">
+                  <div className="helvetica-bold mb-1">MORE AGENT FORMS</div>
+                  <div className="helvetica-regular text-sm text-gray-400">Additional specialized forms coming soon</div>
+                </div>
               </div>
             </div>
           )}
