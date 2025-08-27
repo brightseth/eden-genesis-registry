@@ -27,51 +27,50 @@ export default function AgentCreationPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-purple-800">
+    <div className="min-h-screen bg-black">
       <div className="max-w-4xl mx-auto py-8 px-6">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="eden-card p-8">
           <Link 
             href="/docs" 
-            className="text-blue-500 hover:text-blue-700 mb-6 inline-block"
+            className="eden-button mb-6 inline-block"
           >
-            ← Back to Documentation
+            BACK TO DOCUMENTATION
           </Link>
           
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              🤖 Create New Agent
+            <h1 className="helvetica-bold text-4xl text-black mb-4">
+              CREATE NEW AGENT
             </h1>
-            <p className="text-gray-600 text-lg">
-              Standardized agent creation - Integrated with Eden Registry
+            <p className="helvetica-regular text-gray-400 text-lg">
+              STANDARDIZED AGENT CREATION - INTEGRATED WITH EDEN REGISTRY
             </p>
           </div>
 
-          <div className="bg-red-500 text-white p-4 rounded-xl text-center font-bold text-lg mb-8">
-            Next Agent Number: #{nextAgentNumber}
+          <div className="border border-gray-800 bg-black text-white p-4 text-center helvetica-bold text-lg mb-8">
+            NEXT AGENT NUMBER: #{nextAgentNumber}
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-8">
+          <div className="border border-gray-800 bg-white p-4 mb-8">
             <div className="flex items-center">
-              <span className="text-green-500 text-xl mr-2">🔗</span>
-              <strong className="text-green-800">Registry Integration Active</strong>
+              <strong className="helvetica-bold text-black">REGISTRY INTEGRATION ACTIVE</strong>
             </div>
-            <p className="text-green-700 mt-2">
-              This form submits directly to the Eden Registry database. 
-              Agent will be created with sequential numbering and proper validation.
+            <p className="helvetica-regular text-black mt-2">
+              THIS FORM SUBMITS DIRECTLY TO THE EDEN REGISTRY DATABASE. 
+              AGENT WILL BE CREATED WITH SEQUENTIAL NUMBERING AND PROPER VALIDATION.
             </p>
           </div>
 
           <form id="agentCreationForm" className="space-y-8">
             {/* Core Identity Section */}
-            <div className="bg-gray-50 rounded-xl p-6 border-l-4 border-blue-500">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                🆔 Core Identity
+            <div className="border border-gray-800 bg-white p-6">
+              <h2 className="helvetica-bold text-2xl text-black mb-6">
+                CORE IDENTITY
               </h2>
               
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="handle" className="block text-sm font-medium text-gray-700 mb-2">
-                    Agent Handle <span className="text-red-500">*</span>
+                  <label htmlFor="handle" className="block helvetica-bold text-sm text-black mb-2">
+                    AGENT HANDLE *
                   </label>
                   <input
                     type="text"
@@ -79,16 +78,16 @@ export default function AgentCreationPage() {
                     name="handle"
                     required
                     placeholder="e.g., abraham, solienne, miyomi"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="eden-input w-full"
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Unique identifier, lowercase, no spaces. Used for URLs and API calls.
+                  <p className="helvetica-regular text-sm text-gray-400 mt-1">
+                    UNIQUE IDENTIFIER, LOWERCASE, NO SPACES. USED FOR URLS AND API CALLS.
                   </p>
                 </div>
 
                 <div>
-                  <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-2">
-                    Display Name <span className="text-red-500">*</span>
+                  <label htmlFor="displayName" className="block helvetica-bold text-sm text-black mb-2">
+                    DISPLAY NAME *
                   </label>
                   <input
                     type="text"
@@ -96,42 +95,42 @@ export default function AgentCreationPage() {
                     name="displayName"
                     required
                     placeholder="e.g., Abraham, Solienne, Miyomi"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="eden-input w-full"
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    The public name shown in interfaces.
+                  <p className="helvetica-regular text-sm text-gray-400 mt-1">
+                    THE PUBLIC NAME SHOWN IN INTERFACES.
                   </p>
                 </div>
 
                 <div>
-                  <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-                    Primary Role <span className="text-red-500">*</span>
+                  <label htmlFor="role" className="block helvetica-bold text-sm text-black mb-2">
+                    PRIMARY ROLE *
                   </label>
                   <select
                     id="role"
                     name="role"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="eden-input w-full"
                   >
-                    <option value="">Select a role...</option>
-                    <option value="CURATOR">Curator - Selects, organizes, and presents content</option>
-                    <option value="COLLECTOR">Collector - Acquires and values assets/works</option>
-                    <option value="INVESTOR">Investor - Evaluates and funds opportunities</option>
-                    <option value="TRAINER">Trainer - Teaches and mentors other agents</option>
-                    <option value="ADMIN">Admin - System management and oversight</option>
-                    <option value="GUEST">Guest - Limited access visitor</option>
+                    <option value="">SELECT A ROLE...</option>
+                    <option value="CURATOR">CURATOR - SELECTS, ORGANIZES, AND PRESENTS CONTENT</option>
+                    <option value="COLLECTOR">COLLECTOR - ACQUIRES AND VALUES ASSETS/WORKS</option>
+                    <option value="INVESTOR">INVESTOR - EVALUATES AND FUNDS OPPORTUNITIES</option>
+                    <option value="TRAINER">TRAINER - TEACHES AND MENTORS OTHER AGENTS</option>
+                    <option value="ADMIN">ADMIN - SYSTEM MANAGEMENT AND OVERSIGHT</option>
+                    <option value="GUEST">GUEST - LIMITED ACCESS VISITOR</option>
                   </select>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Roles match Registry canonical schema. Most creative agents use CURATOR role.
+                  <p className="helvetica-regular text-sm text-gray-400 mt-1">
+                    ROLES MATCH REGISTRY CANONICAL SCHEMA. MOST CREATIVE AGENTS USE CURATOR ROLE.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* Profile Section */}
-            <div className="bg-gray-50 rounded-xl p-6 border-l-4 border-blue-500">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                👤 Agent Profile
+            <div className="border border-gray-800 bg-white p-6 mt-4">
+              <h2 className="helvetica-bold text-2xl text-black mb-6">
+                AGENT PROFILE
               </h2>
               
               <div className="space-y-6">
@@ -185,9 +184,9 @@ export default function AgentCreationPage() {
             </div>
 
             {/* Creative Medium Section */}
-            <div className="bg-gray-50 rounded-xl p-6 border-l-4 border-blue-500">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                🎨 Creative Focus
+            <div className="border border-gray-800 bg-white p-6 mt-4">
+              <h2 className="helvetica-bold text-2xl text-black mb-6">
+                CREATIVE FOCUS
               </h2>
               
               <div>
@@ -221,31 +220,31 @@ export default function AgentCreationPage() {
             <div className="text-center py-8">
               <button
                 type="submit"
-                className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
+                className="eden-button px-8 py-4 text-lg"
               >
-                🚀 Create Agent & Register in Registry
+                CREATE AGENT & REGISTER IN REGISTRY
               </button>
             </div>
           </form>
 
-          <div className="mt-12 bg-gray-50 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">What happens next?</h3>
-            <ol className="space-y-2 text-gray-700">
+          <div className="mt-12 border border-gray-800 bg-white p-6">
+            <h3 className="helvetica-bold text-lg text-black mb-4">WHAT HAPPENS NEXT?</h3>
+            <ol className="space-y-2 text-black">
               <li className="flex items-start">
-                <span className="bg-blue-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">1</span>
-                Agent gets assigned number #{nextAgentNumber} in Registry database
+                <span className="helvetica-bold mr-4">1.</span>
+                <span className="helvetica-regular">AGENT GETS ASSIGNED NUMBER #{nextAgentNumber} IN REGISTRY DATABASE</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-blue-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">2</span>
-                Profile created in Registry with unique ID and handle
+                <span className="helvetica-bold mr-4">2.</span>
+                <span className="helvetica-regular">PROFILE CREATED IN REGISTRY WITH UNIQUE ID AND HANDLE</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-blue-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">3</span>
-                Agent available immediately via Registry API endpoints
+                <span className="helvetica-bold mr-4">3.</span>
+                <span className="helvetica-regular">AGENT AVAILABLE IMMEDIATELY VIA REGISTRY API ENDPOINTS</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-blue-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">4</span>
-                Ready for trainer applications and work submissions
+                <span className="helvetica-bold mr-4">4.</span>
+                <span className="helvetica-regular">READY FOR TRAINER APPLICATIONS AND WORK SUBMISSIONS</span>
               </li>
             </ol>
           </div>

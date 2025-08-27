@@ -1,26 +1,86 @@
 @import "tailwindcss";
 
+/* HELVETICA BRAND SYSTEM - Eden Academy */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* BRAND COLORS - STRICT */
+  --eden-black: #000000;
+  --eden-white: #ffffff;
+  --eden-gray-800: #1f2937;
+  --eden-gray-400: #9ca3af;
+  
+  /* LEGACY VARIABLES FOR COMPATIBILITY */
+  --background: var(--eden-black);
+  --foreground: var(--eden-white);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "Helvetica Neue", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* HELVETICA TYPOGRAPHY SYSTEM */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--eden-black);
+  color: var(--eden-white);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* HELVETICA BRAND UTILITIES */
+.helvetica-bold {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.helvetica-regular {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+/* BRAND-COMPLIANT BUTTON SYSTEM */
+.eden-button {
+  border: 1px solid var(--eden-gray-800);
+  background: var(--eden-black);
+  color: var(--eden-white);
+  padding: 0.75rem 1.5rem;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 150ms ease;
+}
+
+.eden-button:hover {
+  background: var(--eden-white);
+  color: var(--eden-black);
+  border-color: var(--eden-gray-800);
+}
+
+/* BRAND-COMPLIANT FORM SYSTEM */
+.eden-input {
+  border: 1px solid var(--eden-gray-800);
+  background: var(--eden-white);
+  color: var(--eden-black);
+  padding: 0.75rem;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.eden-input:focus {
+  outline: none;
+  border-color: var(--eden-black);
+  box-shadow: none;
+}
+
+/* BRAND-COMPLIANT CARD SYSTEM */
+.eden-card {
+  border: 1px solid var(--eden-gray-800);
+  background: var(--eden-white);
+  color: var(--eden-black);
+  /* NO SHADOWS, NO ROUNDED CORNERS */
 }

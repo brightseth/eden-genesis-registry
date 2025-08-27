@@ -31,42 +31,41 @@ export default function TrainerApplicationPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-600 to-red-800">
+    <div className="min-h-screen bg-black">
       <div className="max-w-4xl mx-auto py-8 px-6">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="eden-card p-8">
           <Link 
             href="/docs" 
-            className="text-orange-500 hover:text-orange-700 mb-6 inline-block"
+            className="eden-button mb-6 inline-block"
           >
-            ← Back to Documentation
+            BACK TO DOCUMENTATION
           </Link>
           
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              👨‍🏫 Apply to Train an Agent
+            <h1 className="helvetica-bold text-4xl text-black mb-4">
+              APPLY TO TRAIN AN AGENT
             </h1>
-            <p className="text-gray-600 text-lg">
-              Registry-integrated trainer application system
+            <p className="helvetica-regular text-gray-400 text-lg">
+              REGISTRY-INTEGRATED TRAINER APPLICATION SYSTEM
             </p>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-8">
+          <div className="border border-gray-800 bg-white p-4 mb-8">
             <div className="flex items-center">
-              <span className="text-green-500 text-xl mr-2">🔗</span>
-              <strong className="text-green-800">Registry Integration Active</strong>
+              <strong className="helvetica-bold text-black">REGISTRY INTEGRATION ACTIVE</strong>
             </div>
-            <p className="text-green-700 mt-2">
-              This application connects to Registry data. Agent list is live from Registry database.
-              Training relationships tracked in Registry system.
+            <p className="helvetica-regular text-black mt-2">
+              THIS APPLICATION CONNECTS TO REGISTRY DATA. AGENT LIST IS LIVE FROM REGISTRY DATABASE.
+              TRAINING RELATIONSHIPS TRACKED IN REGISTRY SYSTEM.
             </p>
           </div>
 
           <form id="trainerApplicationForm" className="space-y-8">
             {/* Agent Selection Section */}
-            <div className="bg-gray-50 rounded-xl p-6 border-l-4 border-orange-500">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                <span className="bg-orange-500 text-white rounded-full w-8 h-8 inline-flex items-center justify-center text-sm mr-3">1</span>
-                👤 Select Agent to Train
+            <div className="border border-gray-800 bg-white p-6">
+              <h2 className="helvetica-bold text-2xl text-black mb-6">
+                <span className="helvetica-bold mr-4">1.</span>
+                SELECT AGENT TO TRAIN
               </h2>
               
               <div>
@@ -107,10 +106,10 @@ export default function TrainerApplicationPage() {
             </div>
 
             {/* Training Program Section */}
-            <div className="bg-gray-50 rounded-xl p-6 border-l-4 border-orange-500">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                <span className="bg-orange-500 text-white rounded-full w-8 h-8 inline-flex items-center justify-center text-sm mr-3">2</span>
-                📚 Training Program Details
+            <div className="border border-gray-800 bg-white p-6 mt-4">
+              <h2 className="helvetica-bold text-2xl text-black mb-6">
+                <span className="helvetica-bold mr-4">2.</span>
+                TRAINING PROGRAM DETAILS
               </h2>
               
               <div className="space-y-6">
@@ -164,10 +163,10 @@ export default function TrainerApplicationPage() {
             </div>
 
             {/* Training Goals Section */}
-            <div className="bg-gray-50 rounded-xl p-6 border-l-4 border-orange-500">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                <span className="bg-orange-500 text-white rounded-full w-8 h-8 inline-flex items-center justify-center text-sm mr-3">3</span>
-                🎯 Training Goals & Experience
+            <div className="border border-gray-800 bg-white p-6 mt-4">
+              <h2 className="helvetica-bold text-2xl text-black mb-6">
+                <span className="helvetica-bold mr-4">3.</span>
+                TRAINING GOALS & EXPERIENCE
               </h2>
               
               <div className="space-y-6">
@@ -220,10 +219,10 @@ export default function TrainerApplicationPage() {
             </div>
 
             {/* Personal Info Section */}
-            <div className="bg-gray-50 rounded-xl p-6 border-l-4 border-orange-500">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                <span className="bg-orange-500 text-white rounded-full w-8 h-8 inline-flex items-center justify-center text-sm mr-3">4</span>
-                📝 About You
+            <div className="border border-gray-800 bg-white p-6 mt-4">
+              <h2 className="helvetica-bold text-2xl text-black mb-6">
+                <span className="helvetica-bold mr-4">4.</span>
+                ABOUT YOU
               </h2>
               
               <div className="space-y-6">
@@ -274,31 +273,31 @@ export default function TrainerApplicationPage() {
             <div className="text-center py-8">
               <button
                 type="submit"
-                className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
+                className="eden-button px-8 py-4 text-lg"
               >
-                🚀 Submit Trainer Application
+                SUBMIT TRAINER APPLICATION
               </button>
             </div>
           </form>
 
-          <div className="mt-12 bg-gray-50 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Application Review Process</h3>
-            <ol className="space-y-2 text-gray-700">
+          <div className="mt-12 border border-gray-800 bg-white p-6">
+            <h3 className="helvetica-bold text-lg text-black mb-4">APPLICATION REVIEW PROCESS</h3>
+            <ol className="space-y-2 text-black">
               <li className="flex items-start">
-                <span className="bg-orange-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">1</span>
-                Application submitted and stored in Registry database
+                <span className="helvetica-bold mr-4">1.</span>
+                <span className="helvetica-regular">APPLICATION SUBMITTED AND STORED IN REGISTRY DATABASE</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-orange-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">2</span>
-                Initial review by Eden Academy team (2-3 days)
+                <span className="helvetica-bold mr-4">2.</span>
+                <span className="helvetica-regular">INITIAL REVIEW BY EDEN ACADEMY TEAM (2-3 DAYS)</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-orange-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">3</span>
-                Agent-specific compatibility assessment
+                <span className="helvetica-bold mr-4">3.</span>
+                <span className="helvetica-regular">AGENT-SPECIFIC COMPATIBILITY ASSESSMENT</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-orange-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5">4</span>
-                Interview and training agreement (if selected)
+                <span className="helvetica-bold mr-4">4.</span>
+                <span className="helvetica-regular">INTERVIEW AND TRAINING AGREEMENT (IF SELECTED)</span>
               </li>
             </ol>
           </div>
