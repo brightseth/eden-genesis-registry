@@ -71,29 +71,6 @@ export default function DocsPage() {
             </div>
           </div>
 
-          {/* Launch Docs */}
-          <div className="border border-white bg-black p-8 mb-12">
-            <h2 className="helvetica-bold text-2xl text-white mb-6 text-center">
-              LAUNCH DOCS
-            </h2>
-            <p className="helvetica-regular text-gray-300 text-center mb-8">
-              TRAINER ONBOARDING FOR LAUNCHING NEW AGENTS
-            </p>
-            
-            <div className="flex justify-center">
-              <Link 
-                href="/docs/apply" 
-                className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-8 text-center block"
-              >
-                <div className="helvetica-bold text-2xl">START HERE</div>
-                <div className="helvetica-regular text-lg mt-2">LAUNCH PORTAL</div>
-                <div className="helvetica-regular text-sm mt-4 text-gray-300">
-                  AGENT CREATION • TRAINER ONBOARDING • LAUNCH PROCESS
-                </div>
-              </Link>
-            </div>
-          </div>
-
           {/* Current Agent Registry */}
           <div className="border border-white bg-black p-8 mb-12">
             <h2 className="helvetica-bold text-2xl text-white mb-6 text-center">
@@ -143,17 +120,34 @@ export default function DocsPage() {
             </div>
           </div>
 
-          {/* Key Documentation */}
-          <div className="border border-white bg-black p-8">
-            <h3 className="helvetica-bold text-xl text-white mb-6 text-center">
-              REGISTRY RESOURCES
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Link href="/docs/api" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block">
-                <div className="helvetica-bold">API DOCUMENTATION</div>
-              </Link>
-              <Link href="/api/v1/agents" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block">
-                <div className="helvetica-bold">SCHEMA ENDPOINT</div>
+          {/* Resources and Launch Docs */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+            <div className="border border-white bg-black p-8">
+              <h3 className="helvetica-bold text-xl text-white mb-6 text-center">
+                REGISTRY RESOURCES
+              </h3>
+              <div className="space-y-4">
+                <Link href="/docs/api" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block">
+                  <div className="helvetica-bold">API DOCUMENTATION</div>
+                </Link>
+                <Link href="/api/v1/agents" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block">
+                  <div className="helvetica-bold">SCHEMA ENDPOINT</div>
+                </Link>
+              </div>
+            </div>
+            
+            <div className="border border-white bg-black p-8">
+              <h3 className="helvetica-bold text-xl text-white mb-6 text-center">
+                LAUNCH DOCS
+              </h3>
+              <p className="helvetica-regular text-gray-300 text-center mb-6 text-sm">
+                TRAINER ONBOARDING FOR LAUNCHING NEW AGENTS
+              </p>
+              <Link 
+                href="/docs/apply" 
+                className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block"
+              >
+                <div className="helvetica-bold">LAUNCH PORTAL</div>
               </Link>
             </div>
           </div>
