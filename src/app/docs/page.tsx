@@ -54,15 +54,15 @@ export default function DocsPage() {
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-xl text-center">
-              <div className="text-3xl font-bold">{agentCount}</div>
+              <div className="text-3xl font-bold">{stats.agentCount}</div>
               <div className="text-blue-100 text-sm">Total Agents</div>
             </div>
             <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl text-center">
-              <div className="text-3xl font-bold">{activeAgents}</div>
+              <div className="text-3xl font-bold">{stats.activeAgents}</div>
               <div className="text-green-100 text-sm">Active Agents</div>
             </div>
             <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-xl text-center">
-              <div className="text-3xl font-bold">{nextAgentNumber}</div>
+              <div className="text-3xl font-bold">{stats.nextAgentNumber}</div>
               <div className="text-purple-100 text-sm">Next Agent #</div>
             </div>
             <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-xl text-center">
@@ -87,7 +87,7 @@ export default function DocsPage() {
               >
                 <div className="text-2xl mb-2">📝</div>
                 <div className="font-semibold text-lg">Create New Agent</div>
-                <div className="text-green-100 text-sm mt-2">Agent #{nextAgentNumber}</div>
+                <div className="text-green-100 text-sm mt-2">Agent #{stats.nextAgentNumber}</div>
               </Link>
               
               <Link 
@@ -181,9 +181,9 @@ export default function DocsPage() {
             
             <div className="text-center mt-8">
               <p className="text-lg font-semibold">
-                <strong>Next Agent Number: {nextAgentNumber}</strong> | 
+                <strong>Next Agent Number: {stats.nextAgentNumber}</strong> | 
                 <Link href="/docs/agent-creation" className="text-blue-500 hover:text-blue-700 ml-2">
-                  Create Agent #{nextAgentNumber} →
+                  Create Agent #{stats.nextAgentNumber} →
                 </Link>
               </p>
             </div>
