@@ -154,6 +154,47 @@ export default function AgentDetailPage() {
             </div>
           </div>
 
+          {/* Related Links */}
+          <div className="border-t border-white/20 pt-8 mb-8">
+            <p className="text-sm uppercase tracking-wider opacity-60 mb-4">RELATED VIEWS</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Link 
+                href={`https://eden-academy.vercel.app/academy/agent/${agent.handle}`}
+                className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block"
+                target="_blank"
+              >
+                <div className="text-sm font-bold uppercase tracking-wide mb-1">ACADEMY PROFILE</div>
+                <div className="text-xs opacity-60">Training & Progress</div>
+              </Link>
+              
+              {agent.handle === 'solienne' && (
+                <Link 
+                  href="https://solienne.ai"
+                  className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block"
+                  target="_blank"
+                >
+                  <div className="text-sm font-bold uppercase tracking-wide mb-1">SOVEREIGN SITE</div>
+                  <div className="text-xs opacity-60">solienne.ai</div>
+                </Link>
+              )}
+              
+              {(agent.handle === 'abraham' || agent.handle === 'bertha' || agent.handle === 'sue' || agent.handle === 'citizen') && (
+                <div className="border border-dashed border-white/50 bg-black text-white/50 p-4 text-center">
+                  <div className="text-sm font-bold uppercase tracking-wide mb-1">SOVEREIGN SITE</div>
+                  <div className="text-xs opacity-40">Coming Soon</div>
+                </div>
+              )}
+              
+              <Link 
+                href={`/api/v1/agents/${agent.handle}`}
+                className="border border-white/50 bg-black text-white hover:bg-white/10 transition-all duration-150 p-4 text-center block"
+              >
+                <div className="text-sm font-bold uppercase tracking-wide mb-1">API DATA</div>
+                <div className="text-xs opacity-60">JSON Endpoint</div>
+              </Link>
+            </div>
+          </div>
+
           {agent.profile && (
             <>
               {agent.profile.statement && (
