@@ -78,6 +78,14 @@ export const applicationSchema = z.object({
   applicantEmail: z.string().email(),
   applicantName: z.string().min(1).max(100),
   track: z.nativeEnum(ApplicationTrack),
+  payload: z.record(z.unknown()) // Flexible JSON payload for experimental forms
+})
+
+// Strict application schema for canonical forms
+export const strictApplicationSchema = z.object({
+  applicantEmail: z.string().email(),
+  applicantName: z.string().min(1).max(100),
+  track: z.nativeEnum(ApplicationTrack),
   payload: z.object({
     experience: z.string().optional(),
     portfolio: z.string().url().optional(),

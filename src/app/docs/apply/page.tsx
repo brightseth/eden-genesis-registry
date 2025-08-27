@@ -214,15 +214,30 @@ export default function UnifiedApplicationPage() {
                 Specialized applications and interviews tailored to individual agents and their unique requirements.
               </p>
               <div className="space-y-4 mb-8">
-                <Link 
-                  href="https://eden-academy-flame.vercel.app/sites/bertha/interview"
-                  target="_blank"
-                  className="block border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
-                >
-                  <div className="helvetica-bold mb-1">BERTHA TRAINER APPLICATION</div>
-                  <div className="helvetica-regular text-sm text-gray-300">Specialized interview to become Bertha's trainer</div>
-                  <div className="helvetica-regular text-xs text-gray-500 mt-2">→ Opens in new window</div>
-                </Link>
+                <div className="space-y-4">
+                  <Link 
+                    href="https://eden-academy-flame.vercel.app/sites/bertha/interview"
+                    target="_blank"
+                    className="block border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
+                  >
+                    <div className="helvetica-bold mb-1">BERTHA TRAINER APPLICATION</div>
+                    <div className="helvetica-regular text-sm text-gray-300">Specialized interview to become Bertha's trainer</div>
+                    <div className="helvetica-regular text-xs text-gray-500 mt-2">→ Opens in new window • Experimental form</div>
+                  </Link>
+                  
+                  <div className="bg-gray-900 border border-white/20 p-4 text-left">
+                    <div className="helvetica-bold text-white mb-2">EXPERIMENTAL FORMS SUPPORTED</div>
+                    <div className="helvetica-regular text-sm text-gray-300 mb-3">
+                      The Registry now supports experimental application forms with flexible data fields that may not yet be in the canonical schema.
+                    </div>
+                    <ul className="helvetica-regular text-xs text-gray-400 space-y-1">
+                      <li>• Forms submit to /api/v1/applications/experimental endpoint</li>
+                      <li>• Flexible JSON payload validation</li>
+                      <li>• Automatic experimental flag for review process</li>
+                      <li>• Supports creative prototyping and specialized interviews</li>
+                    </ul>
+                  </div>
+                </div>
                 <div className="border border-dashed border-white/50 bg-black text-white/50 p-4 text-center">
                   <div className="helvetica-bold mb-1">MORE AGENT FORMS</div>
                   <div className="helvetica-regular text-sm text-gray-400">Additional specialized forms coming soon</div>

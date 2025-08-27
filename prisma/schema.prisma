@@ -29,10 +29,15 @@ enum Visibility {
 enum Role {
   ADMIN
   CURATOR
-  COLLECTOR
+  COLLECTOR  
   INVESTOR
   TRAINER
   GUEST
+  CREATOR      // For agent creators/artists
+  RESEARCHER   // For experimental roles
+  COMMUNITY    // For community coordination
+  EDUCATOR     // For educational roles
+  EXPERIMENTAL // For prototype roles not yet defined
 }
 
 enum TrainerRole {
