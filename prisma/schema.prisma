@@ -148,6 +148,7 @@ model Cohort {
 
 model Agent {
   id             String          @id @default(cuid())
+  agentNumber    Int             @unique @default(autoincrement()) // Sequential numbering system
   handle         String          @unique
   displayName    String
   role           Role            @default(GUEST)  // Use canonical Role enum

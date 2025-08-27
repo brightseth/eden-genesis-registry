@@ -1,38 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs/promises'
-import path from 'path'
+import { prisma } from '@/lib/db'
+import { logApiEvent } from '@/lib/audit'
 
-// Simple file-based storage for applications
-const APPLICATIONS_FILE = path.join(process.cwd(), 'data', 'applications.json')
-
-async function ensureDataDir() {
-  const dataDir = path.join(process.cwd(), 'data')
-  try {
-    await fs.access(dataDir)
-  } catch {
-    await fs.mkdir(dataDir, { recursive: true })
-  }
-}
-
-async function getApplications() {
-  await ensureDataDir()
-  try {
-    const data = await fs.readFile(APPLICATIONS_FILE, 'utf-8')
-    return JSON.parse(data)
-  } catch {
-    return []
-  }
-}
-
-async function saveApplications(applications: Record<string, unknown>[]) {
-  await ensureDataDir()
-  await fs.writeFile(APPLICATIONS_FILE, JSON.stringify(applications, null, 2))
-}
+// Simple applications now use Registry database for consistency
 
 // GET /api/v1/applications/simple
 export async function GET() {
   try {
-    const applications = await getApplications()
+    const applications = await prisma.application.findMany({
+      where: {
+        track: 'AGENT'
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+    
     return NextResponse.json({
       applications,
       total: applications.length
@@ -51,33 +34,34 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
-    // Basic validation
-    if (!body.applicantName || !body.payload?.name || !body.payload?.handle) {
+    // Basic validation - ensure required fields
+    if (!body.applicantName || !body.applicantEmail || !body.payload?.name || !body.payload?.handle) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields: applicantName, applicantEmail, payload.name, payload.handle' },
         { status: 400 }
       )
     }
     
-    // Create application
-    const application = {
-      id: `app_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      createdAt: new Date().toISOString(),
-      status: 'pending',
-      ...body
-    }
+    // Create application using Registry database - ensures consistency
+    const application = await prisma.application.create({
+      data: {
+        applicantEmail: body.applicantEmail,
+        applicantName: body.applicantName,
+        track: 'AGENT', // Use canonical ApplicationTrack enum
+        payload: body.payload, // Store as JSONB
+        status: 'DRAFT' // Use canonical ApplicationStatus enum
+      }
+    })
     
-    // Save to file
-    const applications = await getApplications()
-    applications.push(application)
-    await saveApplications(applications)
+    // Log event for audit trail
+    await logApiEvent('create', 'application', application.id, application)
     
-    // Log to console for monitoring
-    console.log('New Genesis application received:', {
-      name: application.payload.name,
-      handle: application.payload.handle,
-      role: application.payload.role,
-      id: application.id
+    // Log for monitoring
+    console.log('New simple application created in Registry:', {
+      id: application.id,
+      name: body.payload.name,
+      handle: body.payload.handle,
+      applicant: body.applicantName
     })
     
     return NextResponse.json(application, { status: 201 })
