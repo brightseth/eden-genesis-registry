@@ -226,43 +226,43 @@ export default function APIDocumentationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
-      <div className="max-w-7xl mx-auto py-8 px-6">
-        <div className="bg-white border border-gray-800 p-8">
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-7xl mx-auto py-12 px-6">
+        <div className="bg-black border border-white p-12">
           <Link 
             href="/docs" 
-            className="text-gray-400 hover:text-black helvetica-regular inline-block mb-6"
+            className="text-gray-300 hover:text-white helvetica-regular inline-block mb-6"
           >
             ← BACK TO REGISTRY
           </Link>
           
-          <div className="mb-8">
-            <h1 className="helvetica-bold text-4xl mb-4">
+          <div className="mb-8 text-center">
+            <h1 className="helvetica-bold text-5xl text-white mb-4">
               REGISTRY API DOCUMENTATION
             </h1>
-            <p className="helvetica-regular text-gray-400">
+            <p className="helvetica-regular text-xl text-gray-300">
               Complete API reference for Eden Genesis Registry
             </p>
           </div>
 
-          <div className="border border-gray-800 p-4 mb-8">
-            <div className="helvetica-bold mb-2">BASE URL</div>
-            <code className="helvetica-regular bg-black text-white px-2 py-1">
+          <div className="border border-white bg-black p-6 mb-8">
+            <div className="helvetica-bold text-white mb-2">BASE URL</div>
+            <code className="helvetica-regular font-mono bg-white text-black px-4 py-2 block">
               https://eden-genesis-registry.vercel.app/api/v1
             </code>
           </div>
 
           <div className="grid grid-cols-12 gap-6">
             {/* Sidebar */}
-            <div className="col-span-3 border-r border-gray-800 pr-6">
-              <h2 className="helvetica-bold text-lg mb-4">ENDPOINTS</h2>
+            <div className="col-span-3 border-r border-white pr-6">
+              <h2 className="helvetica-bold text-lg text-white mb-4">ENDPOINTS</h2>
               <div className="space-y-2">
                 {Object.keys(endpoints).map((key) => (
                   <button
                     key={key}
                     onClick={() => setSelectedEndpoint(key)}
-                    className={`block w-full text-left px-4 py-2 helvetica-regular border border-gray-800 hover:bg-black hover:text-white transition-colors duration-150 ${
-                      selectedEndpoint === key ? 'bg-black text-white' : ''
+                    className={`block w-full text-left px-4 py-2 helvetica-regular border border-white hover:bg-white hover:text-black transition-colors duration-150 ${
+                      selectedEndpoint === key ? 'bg-white text-black' : 'text-white'
                     }`}
                   >
                     {endpoints[key as keyof typeof endpoints].title}
@@ -273,32 +273,32 @@ export default function APIDocumentationPage() {
 
             {/* Content */}
             <div className="col-span-9">
-              <h2 className="helvetica-bold text-2xl mb-6">
+              <h2 className="helvetica-bold text-2xl text-white mb-6">
                 {endpoints[selectedEndpoint as keyof typeof endpoints].title}
               </h2>
               
               <div className="space-y-6">
                 {endpoints[selectedEndpoint as keyof typeof endpoints].endpoints.map((endpoint, index) => (
-                  <div key={index} className="border border-gray-800 p-6">
+                  <div key={index} className="border border-white bg-black p-6">
                     <div className="flex items-center mb-4">
-                      <span className={`helvetica-bold px-3 py-1 border border-gray-800 mr-4 ${
-                        endpoint.method === 'GET' ? 'bg-green-100' :
-                        endpoint.method === 'POST' ? 'bg-blue-100' :
-                        endpoint.method === 'PATCH' ? 'bg-yellow-100' :
-                        endpoint.method === 'PUT' ? 'bg-orange-100' :
-                        endpoint.method === 'DELETE' ? 'bg-red-100' : ''
+                      <span className={`helvetica-bold px-3 py-1 border border-white mr-4 ${
+                        endpoint.method === 'GET' ? 'bg-white text-black' :
+                        endpoint.method === 'POST' ? 'bg-white text-black' :
+                        endpoint.method === 'PATCH' ? 'bg-white text-black' :
+                        endpoint.method === 'PUT' ? 'bg-white text-black' :
+                        endpoint.method === 'DELETE' ? 'bg-white text-black' : 'bg-white text-black'
                       }`}>
                         {endpoint.method}
                       </span>
-                      <code className="helvetica-regular text-lg">{endpoint.path}</code>
+                      <code className="helvetica-regular font-mono text-lg text-white">{endpoint.path}</code>
                     </div>
                     
-                    <p className="helvetica-regular mb-4">{endpoint.description}</p>
+                    <p className="helvetica-regular text-gray-300 mb-4">{endpoint.description}</p>
                     
                     {endpoint.params && (
                       <div className="mb-3">
-                        <span className="helvetica-bold text-sm">PARAMETERS: </span>
-                        <code className="helvetica-regular text-sm bg-gray-100 px-2 py-1">
+                        <span className="helvetica-bold text-sm text-white">PARAMETERS: </span>
+                        <code className="helvetica-regular font-mono text-sm bg-white text-black px-2 py-1">
                           {endpoint.params}
                         </code>
                       </div>
@@ -306,16 +306,16 @@ export default function APIDocumentationPage() {
                     
                     {endpoint.body && (
                       <div className="mb-3">
-                        <span className="helvetica-bold text-sm">REQUEST BODY: </span>
-                        <code className="helvetica-regular text-sm bg-gray-100 px-2 py-1 block mt-1">
+                        <span className="helvetica-bold text-sm text-white">REQUEST BODY: </span>
+                        <code className="helvetica-regular font-mono text-sm bg-white text-black px-2 py-1 block mt-1">
                           {endpoint.body}
                         </code>
                       </div>
                     )}
                     
                     <div>
-                      <span className="helvetica-bold text-sm">RESPONSE: </span>
-                      <code className="helvetica-regular text-sm bg-gray-100 px-2 py-1 block mt-1">
+                      <span className="helvetica-bold text-sm text-white">RESPONSE: </span>
+                      <code className="helvetica-regular font-mono text-sm bg-white text-black px-2 py-1 block mt-1">
                         {endpoint.response}
                       </code>
                     </div>
@@ -326,12 +326,12 @@ export default function APIDocumentationPage() {
           </div>
 
           {/* Authentication Section */}
-          <div className="mt-12 border border-gray-800 p-6">
-            <h3 className="helvetica-bold text-xl mb-4">AUTHENTICATION</h3>
-            <p className="helvetica-regular mb-4">
+          <div className="mt-12 border border-white bg-black p-6">
+            <h3 className="helvetica-bold text-xl text-white mb-4">AUTHENTICATION</h3>
+            <p className="helvetica-regular text-gray-300 mb-4">
               Most endpoints require a Bearer token obtained through magic link authentication:
             </p>
-            <pre className="bg-black text-white p-4 helvetica-regular text-sm">
+            <pre className="bg-white text-black p-4 helvetica-regular font-mono text-sm border border-white">
 {`# Request magic link
 curl -X POST https://eden-genesis-registry.vercel.app/api/v1/auth/magic/start \\
   -H "Content-Type: application/json" \\
@@ -349,12 +349,12 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
           </div>
 
           {/* Webhook Events Section */}
-          <div className="mt-8 border border-gray-800 p-6">
-            <h3 className="helvetica-bold text-xl mb-4">WEBHOOK EVENTS</h3>
+          <div className="mt-8 border border-white bg-black p-6">
+            <h3 className="helvetica-bold text-xl text-white mb-4">WEBHOOK EVENTS</h3>
             <div className="grid grid-cols-2 gap-4 helvetica-regular">
               <div>
-                <strong className="helvetica-bold">AGENT EVENTS</strong>
-                <ul className="mt-2 space-y-1">
+                <strong className="helvetica-bold text-white">AGENT EVENTS</strong>
+                <ul className="mt-2 space-y-1 text-gray-300">
                   <li>• agent.created</li>
                   <li>• agent.updated</li>
                   <li>• agent.activated</li>
@@ -362,8 +362,8 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
                 </ul>
               </div>
               <div>
-                <strong className="helvetica-bold">CONTENT EVENTS</strong>
-                <ul className="mt-2 space-y-1">
+                <strong className="helvetica-bold text-white">CONTENT EVENTS</strong>
+                <ul className="mt-2 space-y-1 text-gray-300">
                   <li>• creation.published</li>
                   <li>• persona.created</li>
                   <li>• artifact.added</li>
@@ -371,8 +371,8 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
                 </ul>
               </div>
               <div>
-                <strong className="helvetica-bold">APPLICATION EVENTS</strong>
-                <ul className="mt-2 space-y-1">
+                <strong className="helvetica-bold text-white">APPLICATION EVENTS</strong>
+                <ul className="mt-2 space-y-1 text-gray-300">
                   <li>• application.submitted</li>
                   <li>• application.reviewed</li>
                   <li>• application.approved</li>
@@ -380,8 +380,8 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
                 </ul>
               </div>
               <div>
-                <strong className="helvetica-bold">CURATION EVENTS</strong>
-                <ul className="mt-2 space-y-1">
+                <strong className="helvetica-bold text-white">CURATION EVENTS</strong>
+                <ul className="mt-2 space-y-1 text-gray-300">
                   <li>• curation.session.started</li>
                   <li>• curation.decision.made</li>
                   <li>• collection.created</li>
@@ -392,12 +392,12 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
           </div>
 
           {/* Rate Limiting Section */}
-          <div className="mt-8 border border-gray-800 p-6">
-            <h3 className="helvetica-bold text-xl mb-4">RATE LIMITING</h3>
-            <p className="helvetica-regular">
+          <div className="mt-8 border border-white bg-black p-6">
+            <h3 className="helvetica-bold text-xl text-white mb-4">RATE LIMITING</h3>
+            <p className="helvetica-regular text-gray-300">
               API requests are limited to:
             </p>
-            <ul className="mt-2 space-y-1 helvetica-regular">
+            <ul className="mt-2 space-y-1 helvetica-regular text-gray-300">
               <li>• 100 requests per minute for authenticated requests</li>
               <li>• 20 requests per minute for unauthenticated requests</li>
               <li>• 1000 requests per hour per API key</li>

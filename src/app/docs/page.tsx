@@ -12,7 +12,7 @@ export default function DocsPage() {
   const [stats, setStats] = useState({
     agentCount: 8, // Correct count
     activeAgents: 8,
-    nextAgentNumber: 9
+    openSlots: 2
   });
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function DocsPage() {
           setStats({
             agentCount,
             activeAgents,
-            nextAgentNumber: agentCount + 1
+            openSlots: 2
           });
         }
       })
@@ -62,8 +62,8 @@ export default function DocsPage() {
               <div className="helvetica-regular text-sm text-gray-300">ACTIVE AGENTS</div>
             </div>
             <div className="border border-white bg-black text-white p-6 text-center">
-              <div className="helvetica-bold text-3xl">{stats.nextAgentNumber}</div>
-              <div className="helvetica-regular text-sm text-gray-300">NEXT AGENT</div>
+              <div className="helvetica-bold text-3xl">{stats.openSlots}</div>
+              <div className="helvetica-regular text-sm text-gray-300">OPEN SLOTS</div>
             </div>
             <div className="border border-white bg-black text-white p-6 text-center">
               <div className="helvetica-bold text-3xl">LIVE</div>
@@ -144,25 +144,32 @@ export default function DocsPage() {
                 { number: 5, name: 'SUE', status: 'ACTIVE' },
                 { number: 6, name: 'BERTHA', status: 'ACTIVE' },
                 { number: 7, name: 'CITIZEN', status: 'ACTIVE' },
-                { number: 8, name: 'MIYOMI', status: 'ACTIVE' }
+                { number: 8, name: 'MIYOMI', status: 'ACTIVE' },
+                { number: 9, name: 'OPEN', status: 'AVAILABLE' },
+                { number: 10, name: 'OPEN', status: 'AVAILABLE' }
               ].map((agent) => (
                 <div 
                   key={agent.number}
-                  className="border border-white bg-black text-white p-4 text-center"
+                  className={`border ${agent.status === 'AVAILABLE' ? 'border-dashed border-gray-600' : 'border-white'} bg-black text-white p-4 text-center`}
                 >
-                  <div className="helvetica-bold text-sm border border-white bg-white text-black px-2 py-1 inline-block mb-2">
+                  <div className={`helvetica-bold text-sm border ${agent.status === 'AVAILABLE' ? 'border-gray-600 bg-black text-gray-600' : 'border-white bg-white text-black'} px-2 py-1 inline-block mb-2`}>
                     {agent.number}
                   </div>
-                  <div className="helvetica-bold text-sm">{agent.name}</div>
-                  <div className="helvetica-regular text-xs text-gray-400">{agent.status}</div>
+                  <div className={`helvetica-bold text-sm ${agent.status === 'AVAILABLE' ? 'text-gray-600' : ''}`}>
+                    {agent.name}
+                  </div>
+                  <div className={`helvetica-regular text-xs ${agent.status === 'AVAILABLE' ? 'text-gray-600' : 'text-gray-400'}`}>
+                    {agent.status}
+                  </div>
+                  {agent.status === 'AVAILABLE' && (
+                    <Link href="/docs/apply" className="mt-2 inline-block">
+                      <div className="helvetica-regular text-xs text-gray-500 hover:text-white transition-colors underline">
+                        APPLY
+                      </div>
+                    </Link>
+                  )}
                 </div>
               ))}
-            </div>
-            
-            <div className="text-center mt-8">
-              <p className="helvetica-bold text-lg text-white">
-                NEXT AGENT NUMBER: {stats.nextAgentNumber}
-              </p>
             </div>
           </div>
 

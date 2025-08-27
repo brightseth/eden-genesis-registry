@@ -117,8 +117,8 @@ export const mockAgents = [
   },
   {
     id: "cmeq19hrx0006jpvyljrq6yz3",
-    handle: "amanda",
-    displayName: "Amanda", 
+    handle: "bertha",
+    displayName: "BERTHA", 
     role: "COLLECTOR",
     status: "ACTIVE",
     visibility: "PUBLIC",
