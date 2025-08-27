@@ -105,6 +105,24 @@ export default function DocsPage() {
                 <div className="helvetica-regular text-sm mt-2">MANAGE APPLICATIONS</div>
               </Link>
             </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+              <Link 
+                href="/docs/genesis-application" 
+                className="eden-button p-6 text-center block"
+              >
+                <div className="helvetica-bold text-lg">GENESIS APPLICATION</div>
+                <div className="helvetica-regular text-sm mt-2">COMPLETE AGENT APPLICATION</div>
+              </Link>
+              
+              <Link 
+                href="/docs/agent-interview" 
+                className="eden-button p-6 text-center block"
+              >
+                <div className="helvetica-bold text-lg">AGENT INTERVIEW</div>
+                <div className="helvetica-regular text-sm mt-2">ONBOARDING INTERVIEW</div>
+              </Link>
+            </div>
           </div>
 
           {/* Registry Integration Status */}
@@ -214,8 +232,14 @@ export default function DocsPage() {
             <div className="border border-gray-800 bg-white p-6">
               <h3 className="helvetica-bold text-xl text-black mb-4">REGISTRY RESOURCES</h3>
               <div className="space-y-3">
+                <Link href="/docs/api" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
+                  API DOCUMENTATION
+                </Link>
+                <Link href="/docs/webhooks" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
+                  WEBHOOK CONFIGURATION
+                </Link>
                 <Link href="/api/v1/agents" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                  AGENTS API
+                  AGENTS API ENDPOINT
                 </Link>
                 <Link href="/schema" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
                   SCHEMA DOCUMENTATION
