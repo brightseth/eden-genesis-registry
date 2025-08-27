@@ -36,106 +36,75 @@ export default function DocsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black text-white">
       <div className="max-w-6xl mx-auto py-12 px-6">
-        <div className="eden-card p-12">
+        <div className="bg-black border border-white p-12">
           <div className="text-center mb-12">
-            <h1 className="helvetica-bold text-5xl text-black mb-4">
+            <h1 className="helvetica-bold text-5xl text-white mb-4">
               EDEN ACADEMY REGISTRY
             </h1>
-            <p className="helvetica-regular text-xl text-black">
+            <p className="helvetica-regular text-xl text-gray-300">
               REGISTRY-AS-PROTOCOL DOCUMENTATION SYSTEM
             </p>
-            <p className="helvetica-regular text-lg text-gray-800 mt-2">
+            <p className="helvetica-regular text-lg text-gray-500 mt-2">
               SINGLE SOURCE OF TRUTH FOR EDEN ECOSYSTEM
             </p>
           </div>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-12">
-            <div className="border border-gray-800 bg-white text-black p-6 text-center">
+            <div className="border border-white bg-black text-white p-6 text-center">
               <div className="helvetica-bold text-3xl">{stats.agentCount}</div>
-              <div className="helvetica-regular text-sm text-gray-400">TOTAL AGENTS</div>
+              <div className="helvetica-regular text-sm text-gray-300">TOTAL AGENTS</div>
             </div>
-            <div className="border border-gray-800 bg-white text-black p-6 text-center">
+            <div className="border border-white bg-black text-white p-6 text-center">
               <div className="helvetica-bold text-3xl">{stats.activeAgents}</div>
-              <div className="helvetica-regular text-sm text-gray-400">ACTIVE AGENTS</div>
+              <div className="helvetica-regular text-sm text-gray-300">ACTIVE AGENTS</div>
             </div>
-            <div className="border border-gray-800 bg-white text-black p-6 text-center">
+            <div className="border border-white bg-black text-white p-6 text-center">
               <div className="helvetica-bold text-3xl">{stats.nextAgentNumber}</div>
-              <div className="helvetica-regular text-sm text-gray-400">NEXT AGENT</div>
+              <div className="helvetica-regular text-sm text-gray-300">NEXT AGENT</div>
             </div>
-            <div className="border border-gray-800 bg-white text-black p-6 text-center">
+            <div className="border border-white bg-black text-white p-6 text-center">
               <div className="helvetica-bold text-3xl">LIVE</div>
-              <div className="helvetica-regular text-sm text-gray-400">REGISTRY STATUS</div>
+              <div className="helvetica-regular text-sm text-gray-300">REGISTRY STATUS</div>
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="border border-gray-800 bg-white p-8 mb-12">
-            <h2 className="helvetica-bold text-2xl text-black mb-6 text-center">
-              QUICK START FOR HENRY
+          {/* Primary Actions */}
+          <div className="border border-white bg-black p-8 mb-12">
+            <h2 className="helvetica-bold text-2xl text-white mb-6 text-center">
+              AGENT CREATION SYSTEM
             </h2>
-            <p className="helvetica-regular text-gray-400 text-center mb-8">
-              COMPLETE STANDARDIZED PROCESS FOR CREATING AND TRAINING NEW AGENTS
+            <p className="helvetica-regular text-gray-300 text-center mb-8">
+              STANDARDIZED PROCESS FOR CREATING NEW AUTONOMOUS AGENTS
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <div className="flex justify-center">
               <Link 
                 href="/docs/agent-creation" 
-                className="eden-button p-6 text-center block"
+                className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-8 text-center block"
               >
-                <div className="helvetica-bold text-lg">CREATE NEW AGENT</div>
-                <div className="helvetica-regular text-sm mt-2">AGENT #{stats.nextAgentNumber}</div>
-              </Link>
-              
-              <Link 
-                href="/docs/trainer-application" 
-                className="eden-button p-6 text-center block"
-              >
-                <div className="helvetica-bold text-lg">APPLY TO TRAIN</div>
-                <div className="helvetica-regular text-sm mt-2">MENTOR EXISTING AGENTS</div>
-              </Link>
-              
-              <Link 
-                href="/admin/applications" 
-                className="eden-button p-6 text-center block"
-              >
-                <div className="helvetica-bold text-lg">ADMIN DASHBOARD</div>
-                <div className="helvetica-regular text-sm mt-2">MANAGE APPLICATIONS</div>
-              </Link>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-              <Link 
-                href="/docs/genesis-application" 
-                className="eden-button p-6 text-center block"
-              >
-                <div className="helvetica-bold text-lg">GENESIS APPLICATION</div>
-                <div className="helvetica-regular text-sm mt-2">COMPLETE AGENT APPLICATION</div>
-              </Link>
-              
-              <Link 
-                href="/docs/agent-interview" 
-                className="eden-button p-6 text-center block"
-              >
-                <div className="helvetica-bold text-lg">AGENT INTERVIEW</div>
-                <div className="helvetica-regular text-sm mt-2">ONBOARDING INTERVIEW</div>
+                <div className="helvetica-bold text-2xl">CREATE NEW AGENT</div>
+                <div className="helvetica-regular text-lg mt-2">AGENT #{stats.nextAgentNumber}</div>
+                <div className="helvetica-regular text-sm mt-4 text-gray-300">
+                  COMPLETE APPLICATION PROCESS
+                </div>
               </Link>
             </div>
           </div>
 
           {/* Registry Integration Status */}
-          <div className="border border-gray-800 bg-white p-6 mb-12">
+          <div className="border border-white bg-black p-6 mb-12">
             <div className="flex items-center mb-4">
-              <h3 className="helvetica-bold text-lg text-black">
+              <h3 className="helvetica-bold text-lg text-white">
                 REGISTRY INTEGRATION ACTIVE
               </h3>
             </div>
-            <p className="helvetica-regular text-black">
+            <p className="helvetica-regular text-gray-300">
               ALL FORMS AUTOMATICALLY SYNC WITH THE EDEN REGISTRY AS THE SINGLE SOURCE OF TRUTH:
             </p>
-            <ul className="mt-4 space-y-2 text-black">
+            <ul className="mt-4 space-y-2 text-white">
               <li className="flex items-center">
                 <span className="helvetica-bold mr-4">1.</span>
                 <span className="helvetica-regular">SEQUENTIAL AGENT NUMBERING SYSTEM</span>
@@ -155,36 +124,33 @@ export default function DocsPage() {
             </ul>
           </div>
 
-          {/* Current Agent Sequence */}
-          <div className="border border-gray-800 bg-white p-8 mb-12">
-            <h2 className="helvetica-bold text-2xl text-black mb-6 text-center">
+          {/* Current Agent Registry */}
+          <div className="border border-white bg-black p-8 mb-12">
+            <h2 className="helvetica-bold text-2xl text-white mb-6 text-center">
               CURRENT AGENT REGISTRY
             </h2>
             <div className="text-center mb-6">
-              <p className="helvetica-regular text-gray-400">
+              <p className="helvetica-regular text-gray-300">
                 SEQUENTIAL NUMBERING SYSTEM FOR ALL EDEN ACADEMY AGENTS
               </p>
             </div>
             
-            {/* This would be populated from actual Registry data */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-1">
               {[
                 { number: 1, name: 'ABRAHAM', status: 'ACTIVE' },
                 { number: 2, name: 'SOLIENNE', status: 'ACTIVE' },
                 { number: 3, name: 'GEPPETTO', status: 'ACTIVE' },
                 { number: 4, name: 'KORU', status: 'ACTIVE' },
-                { number: 5, name: 'NINA', status: 'ACTIVE' },
-                { number: 6, name: 'AMANDA', status: 'TRAINER' },
+                { number: 5, name: 'SUE', status: 'ACTIVE' },
+                { number: 6, name: 'BERTHA', status: 'ACTIVE' },
                 { number: 7, name: 'CITIZEN', status: 'ACTIVE' },
-                { number: 8, name: 'SUE', status: 'ACTIVE' },
-                { number: 9, name: 'BERTHA', status: 'TRAINING' },
-                { number: 10, name: 'MIYOMI', status: 'ACTIVE' }
+                { number: 8, name: 'MIYOMI', status: 'ACTIVE' }
               ].map((agent) => (
                 <div 
                   key={agent.number}
-                  className="border border-gray-800 bg-black text-white p-4 text-center"
+                  className="border border-white bg-black text-white p-4 text-center"
                 >
-                  <div className="helvetica-bold text-sm border border-gray-800 bg-white text-black px-2 py-1 inline-block mb-2">
+                  <div className="helvetica-bold text-sm border border-white bg-white text-black px-2 py-1 inline-block mb-2">
                     {agent.number}
                   </div>
                   <div className="helvetica-bold text-sm">{agent.name}</div>
@@ -194,72 +160,33 @@ export default function DocsPage() {
             </div>
             
             <div className="text-center mt-8">
-              <p className="helvetica-bold text-lg text-black">
+              <p className="helvetica-bold text-lg text-white">
                 NEXT AGENT NUMBER: {stats.nextAgentNumber}
               </p>
-              <Link href="/docs/agent-creation" className="eden-button mt-4 inline-block">
+              <Link href="/docs/agent-creation" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 px-6 py-3 mt-4 inline-block">
                 CREATE AGENT #{stats.nextAgentNumber}
               </Link>
             </div>
           </div>
 
-          {/* Documentation Links */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <div className="border border-gray-800 bg-white p-6">
-              <h3 className="helvetica-bold text-xl text-black mb-4">APPLICATION TYPES</h3>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="helvetica-bold text-black">AGENT APPLICATION</h4>
-                  <p className="helvetica-regular text-gray-400 text-sm">
-                    CREATE A NEW AI AGENT WITH UNIQUE PERSONALITY AND CAPABILITIES
-                  </p>
-                  <Link href="/docs/agent-creation" className="helvetica-bold text-black text-sm border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                    START APPLICATION
-                  </Link>
-                </div>
-                <div>
-                  <h4 className="helvetica-bold text-black">TRAINER APPLICATION</h4>
-                  <p className="helvetica-regular text-gray-400 text-sm">
-                    APPLY TO TRAIN AN EXISTING AGENT WITH MENTORSHIP AND GUIDANCE
-                  </p>
-                  <Link href="/docs/trainer-application" className="helvetica-bold text-black text-sm border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                    APPLY TO TRAIN
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="border border-gray-800 bg-white p-6">
-              <h3 className="helvetica-bold text-xl text-black mb-4">REGISTRY RESOURCES</h3>
-              <div className="space-y-3">
-                <Link href="/docs/api" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                  API DOCUMENTATION
-                </Link>
-                <Link href="/docs/webhooks" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                  WEBHOOK CONFIGURATION
-                </Link>
-                <Link href="/api/v1/agents" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                  AGENTS API ENDPOINT
-                </Link>
-                <Link href="/schema" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                  SCHEMA DOCUMENTATION
-                </Link>
-                <Link href="/admin" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                  ADMIN DASHBOARD
-                </Link>
-                <Link href="/upload" className="block helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150">
-                  UPLOAD WORKS
-                </Link>
-              </div>
+          {/* Key Documentation */}
+          <div className="border border-white bg-black p-8">
+            <h3 className="helvetica-bold text-xl text-white mb-6 text-center">
+              REGISTRY RESOURCES
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Link href="/docs/api" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block">
+                <div className="helvetica-bold">API DOCUMENTATION</div>
+              </Link>
+              <Link href="/api/v1/agents" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block">
+                <div className="helvetica-bold">SCHEMA ENDPOINT</div>
+              </Link>
             </div>
           </div>
 
-          <footer className="text-center text-gray-400 text-sm mt-12 pt-8 border-t border-gray-800">
+          <footer className="text-center text-gray-500 text-sm mt-12 pt-8 border-t border-white">
             <p className="helvetica-regular">
-              EDEN ACADEMY REGISTRY V2.0 | REGISTRY-AS-PROTOCOL | 
-              <Link href="https://eden-genesis-registry.vercel.app" className="helvetica-bold text-black border-b border-gray-800 hover:bg-black hover:text-white transition-colors duration-150 ml-1">
-                API DOCUMENTATION
-              </Link>
+              EDEN ACADEMY REGISTRY V2.0 | REGISTRY-AS-PROTOCOL
             </p>
           </footer>
         </div>
