@@ -10,9 +10,9 @@ import Link from 'next/link';
 
 export default function DocsPage() {
   const [stats, setStats] = useState({
-    agentCount: 10, // Default fallback
+    agentCount: 8, // Correct count
     activeAgents: 8,
-    nextAgentNumber: 11
+    nextAgentNumber: 9
   });
 
   useEffect(() => {
@@ -74,21 +74,21 @@ export default function DocsPage() {
           {/* Primary Actions */}
           <div className="border border-white bg-black p-8 mb-12">
             <h2 className="helvetica-bold text-2xl text-white mb-6 text-center">
-              AGENT CREATION SYSTEM
+              APPLICATION SYSTEM
             </h2>
             <p className="helvetica-regular text-gray-300 text-center mb-8">
-              STANDARDIZED PROCESS FOR CREATING NEW AUTONOMOUS AGENTS
+              UNIFIED APPLICATION PORTAL FOR ALL EDEN ACADEMY PROGRAMS
             </p>
             
             <div className="flex justify-center">
               <Link 
-                href="/docs/agent-creation" 
+                href="/docs/apply" 
                 className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-8 text-center block"
               >
-                <div className="helvetica-bold text-2xl">CREATE NEW AGENT</div>
-                <div className="helvetica-regular text-lg mt-2">AGENT #{stats.nextAgentNumber}</div>
+                <div className="helvetica-bold text-2xl">APPLY NOW</div>
+                <div className="helvetica-regular text-lg mt-2">ALL APPLICATIONS</div>
                 <div className="helvetica-regular text-sm mt-4 text-gray-300">
-                  COMPLETE APPLICATION PROCESS
+                  AGENT CREATION • TRAINER PROGRAMS • INTERVIEWS
                 </div>
               </Link>
             </div>
@@ -163,9 +163,6 @@ export default function DocsPage() {
               <p className="helvetica-bold text-lg text-white">
                 NEXT AGENT NUMBER: {stats.nextAgentNumber}
               </p>
-              <Link href="/docs/agent-creation" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 px-6 py-3 mt-4 inline-block">
-                CREATE AGENT #{stats.nextAgentNumber}
-              </Link>
             </div>
           </div>
 
