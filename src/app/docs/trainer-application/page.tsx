@@ -3,26 +3,32 @@
  * Connects directly to Registry to show available agents and submit applications
  */
 
-import React from 'react';
-import Link from 'next/link';
-import { prisma } from '@/lib/db';
+'use client';
 
-export default async function TrainerApplicationPage() {
-  // Get available agents from Registry for selection
-  const availableAgents = await prisma.agent.findMany({
-    where: {
-      status: 'ACTIVE',
-      role: { in: ['CURATOR', 'COLLECTOR'] } // Agents that can be trained
-    },
-    select: {
-      id: true,
-      handle: true,
-      displayName: true,
-      role: true,
-      agentNumber: true
-    },
-    orderBy: { agentNumber: 'asc' }
-  });
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+export default function TrainerApplicationPage() {
+  const [availableAgents, setAvailableAgents] = useState([]);
+  
+  useEffect(() => {
+    // Fetch available agents from Registry API
+    fetch('/api/v1/agents')
+      .then(res => res.json())
+      .then(data => {
+        if (data.agents) {
+          // Filter agents that can be trained
+          const trainableAgents = data.agents.filter(agent => 
+            agent.status === 'ACTIVE' && 
+            ['CURATOR', 'COLLECTOR'].includes(agent.role)
+          );
+          setAvailableAgents(trainableAgents);
+        }
+      })
+      .catch(error => {
+        console.warn('Failed to fetch available agents:', error);
+      });
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-600 to-red-800">

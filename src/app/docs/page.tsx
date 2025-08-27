@@ -3,20 +3,37 @@
  * Consolidated documentation system integrated with Registry
  */
 
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
 
-export default async function DocsPage() {
-  // Get current Registry stats
-  const [agentCount, activeAgents] = await Promise.all([
-    prisma.agent.count(),
-    prisma.agent.count({ 
-      where: { status: 'ACTIVE' } 
-    })
-  ]);
+export default function DocsPage() {
+  const [stats, setStats] = useState({
+    agentCount: 10, // Default fallback
+    activeAgents: 8,
+    nextAgentNumber: 11
+  });
 
-  const nextAgentNumber = agentCount + 1;
+  useEffect(() => {
+    // Fetch live stats from API
+    fetch('/api/v1/agents')
+      .then(res => res.json())
+      .then(data => {
+        if (data.agents) {
+          const agentCount = data.agents.length;
+          const activeAgents = data.agents.filter(a => a.status === 'ACTIVE').length;
+          setStats({
+            agentCount,
+            activeAgents,
+            nextAgentNumber: agentCount + 1
+          });
+        }
+      })
+      .catch(error => {
+        console.warn('Failed to fetch live stats, using defaults:', error);
+      });
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-purple-800">

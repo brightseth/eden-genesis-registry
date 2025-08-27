@@ -3,15 +3,28 @@
  * Uses Registry database directly for agent creation
  */
 
-import React from 'react';
-import Link from 'next/link';
-import { prisma } from '@/lib/db';
-import { Role } from '@prisma/client';
+'use client';
 
-export default async function AgentCreationPage() {
-  // Get next agent number from Registry
-  const agentCount = await prisma.agent.count();
-  const nextAgentNumber = agentCount + 1;
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+export default function AgentCreationPage() {
+  const [nextAgentNumber, setNextAgentNumber] = useState(11); // Default fallback
+  
+  useEffect(() => {
+    // Fetch live agent count from API
+    fetch('/api/v1/agents')
+      .then(res => res.json())
+      .then(data => {
+        if (data.agents) {
+          const agentCount = data.agents.length;
+          setNextAgentNumber(agentCount + 1);
+        }
+      })
+      .catch(error => {
+        console.warn('Failed to fetch agent count, using default:', error);
+      });
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-purple-800">
