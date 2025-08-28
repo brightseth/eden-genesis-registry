@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useCallback } from 'react'
-import { ChevronDown, ChevronRight, Upload, X } from 'lucide-react'
+import { ChevronDown, ChevronRight, Upload, X, Plus } from 'lucide-react'
 
 export default function TrainerApplicationPage() {
   const [formState, setFormState] = useState({
