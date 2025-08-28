@@ -242,7 +242,7 @@ export default function GenesisApplicationPage() {
     try {
       // Test API connectivity first
       try {
-        const testResponse = await fetch('https://registry.eden-academy.xyz/api/spirit/apply', {
+        const testResponse = await fetch('https://registry.eden-academy.xyz/api/spirits/apply', {
           method: 'OPTIONS',
           mode: 'cors'
         })
@@ -301,7 +301,7 @@ export default function GenesisApplicationPage() {
       
       console.log('Starting POST request...')
       
-      const response = await fetch('https://registry.eden-academy.xyz/api/spirit/apply', {
+      const response = await fetch('https://registry.eden-academy.xyz/api/spirits/apply', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
