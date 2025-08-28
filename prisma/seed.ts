@@ -269,6 +269,9 @@ async function main() {
         update: {
           statement: agentData.profile.statement || '',
           tags: agentData.profile.tags || [],
+          economicData: null,
+          launchDate: null,
+          launchStatus: 'PLANNED',
           links: {
             ...(agentData.profile.specialty ? { specialty: agentData.profile.specialty } : {}),
             ...(agentData.profile.personality ? { personality: agentData.profile.personality } : {}),
@@ -283,6 +286,9 @@ async function main() {
           agentId: agent.id,
           statement: agentData.profile.statement || '',
           tags: agentData.profile.tags || [],
+          economicData: null,
+          launchDate: null,
+          launchStatus: 'PLANNED',
           links: {
             ...(agentData.profile.specialty ? { specialty: agentData.profile.specialty } : {}),
             ...(agentData.profile.personality ? { personality: agentData.profile.personality } : {}),

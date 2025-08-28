@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import { registryClient } from '@/lib/registry-sdk-client'
 
 interface Agent {
   id: string
@@ -66,10 +67,9 @@ export default function AgentDetailPage() {
   useEffect(() => {
     async function fetchAgentData() {
       try {
-        // Fetch agent details
-        const agentsRes = await fetch('/api/v1/agents')
-        const agentsData = await agentsRes.json()
-        const foundAgent = agentsData.agents?.find((a: Agent) => a.handle === handle)
+        // Fetch agent details using SDK
+        const agentsData = await registryClient.getAgents()
+        const foundAgent = agentsData?.find((a: Agent) => a.handle === handle)
         
         if (!foundAgent) {
           setError('Agent not found')
@@ -79,13 +79,10 @@ export default function AgentDetailPage() {
         
         setAgent(foundAgent)
 
-        // Fetch agent creations
+        // Fetch agent creations using SDK
         try {
-          const creationsRes = await fetch(`/api/v1/agents/${foundAgent.id}/creations`)
-          if (creationsRes.ok) {
-            const creationsData = await creationsRes.json()
-            setCreations(creationsData.creations || [])
-          }
+          const creationsData = await registryClient.getAgentCreations(foundAgent.id)
+          setCreations(creationsData || [])
         } catch {
           console.log('Could not fetch creations')
         }
@@ -206,7 +203,7 @@ export default function AgentDetailPage() {
       const payload = await mapAgentToApplicationData(agent)
       console.log('Submitting agent to registry:', payload)
 
-      const response = await fetch('https://registry.eden-academy.xyz/api/spirits/apply', {
+      const response = await fetch('https://registry.eden2.io/api/spirits/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

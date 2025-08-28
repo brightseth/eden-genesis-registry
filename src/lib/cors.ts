@@ -1,14 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 const ALLOWED_ORIGINS = [
+  // New eden2.io domains (primary)
+  'https://registry.eden2.io',
+  'https://academy.eden2.io',
+  'https://studio.eden2.io',
+  'https://curator.eden2.io',
+  'https://collector.eden2.io',
+  // Legacy domains (maintain during transition)
   'https://eden.art',
   'https://academy.eden.art',
   'https://studio.eden.art',
   'https://curator.eden.art',
   'https://collector.eden.art',
+  // Current Vercel deployments (maintain during transition)
+  'https://eden-genesis-registry.vercel.app',
+  'https://eden-academy-flame.vercel.app',
+  // Local development
   'http://localhost:3000',
   'http://localhost:3001',
-  'http://localhost:3002'
+  'http://localhost:3002',
+  'http://localhost:3003'
 ]
 
 export function corsHeaders(origin: string | null) {

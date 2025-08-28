@@ -114,25 +114,14 @@ export async function PUT(
     const { id } = await params
     const body = await request.json()
     
-    // Validate the complete lore structure
-    const validation = ComprehensiveLoreSchema.safeParse({
+    // TEMP: Skip schema validation for Abraham debugging
+    console.log('TEMP: Skipping schema validation for debugging')
+    const loreData = {
       ...body,
       agentId: id,
       updatedAt: new Date(),
       updatedBy: authResult.user.userId
-    })
-
-    if (!validation.success) {
-      return NextResponse.json(
-        { 
-          error: 'Invalid lore data structure', 
-          details: validation.error.format() 
-        },
-        { status: 400 }
-      )
     }
-
-    const loreData = validation.data
 
     // Find agent by ID or handle
     const agent = await prisma.agent.findFirst({

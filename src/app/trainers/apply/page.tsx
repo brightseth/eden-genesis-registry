@@ -186,7 +186,7 @@ export default function TrainerApplicationPage() {
 
       console.log('Submitting trainer application:', payload)
 
-      const response = await fetch('https://registry.eden-academy.xyz/api/trainers/apply', {
+      const response = await fetch('https://registry.eden2.io/api/trainers/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

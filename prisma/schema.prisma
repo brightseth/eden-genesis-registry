@@ -180,17 +180,6 @@ model Agent {
   @@index([status])
 }
 
-model Trainer {
-  id          String         @id @default(cuid())
-  userId      String         @unique
-  user        User           @relation(fields: [userId], references: [id])
-  role        TrainerRole
-  bio         String?
-  socials     Json?          // JSONB for social links
-  agents      AgentTrainer[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-}
 
 model AgentTrainer {
   agentId       String
@@ -221,6 +210,38 @@ model User {
 
   @@index([email])
   @@index([role])
+}
+
+model Trainer {
+  id            String      @id @default(cuid())
+  userId        String      @unique
+  user          User        @relation(fields: [userId], references: [id])
+  
+  // Trainer Identity
+  displayName   String      // "Gene Kogan", "Henry (Bright Moments)"
+  handle        String?     @unique // "gene-kogan", "henry-bright-moments"
+  role          TrainerRole @default(ASSISTANT) // Add the role field from the first model
+  
+  // Professional Information
+  specialization String[]   // ["art", "economics", "curation", "governance"]
+  bio            String?
+  website        String?
+  
+  // Contact & Social
+  contactInfo    Json?      // { email, twitter, farcaster, etc }
+  
+  // Trainer Status
+  verified       Boolean    @default(false)
+  active         Boolean    @default(true)
+  
+  // Relationships
+  agents         AgentTrainer[]
+  
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  
+  @@index([handle])
+  @@index([active])
 }
 
 model Invitation {
@@ -268,6 +289,14 @@ model Profile {
   manifesto String?  // Markdown
   tags      String[]
   links     Json?    // JSONB for links
+  
+  // Economic Data (moved from static mappings)
+  economicData Json?  // { monthlyRevenue: number; outputRate: number; launchDate: string }
+  
+  // Launch Information
+  launchDate   DateTime?
+  launchStatus String?   @default("PLANNED") // PLANNED, LAUNCHED, ACTIVE, GRADUATED
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
