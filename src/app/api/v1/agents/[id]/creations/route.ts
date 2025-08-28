@@ -8,12 +8,13 @@ import { sendWebhook } from '@/lib/webhooks'
 // GET /api/v1/agents/:id/creations
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { searchParams } = new URL(request.url)
   const status = searchParams.get('status')
   
-  const where: Record<string, unknown> = { agentId: params.id }
+  const { id } = await params
+  const where: Record<string, unknown> = { agentId: id }
   if (status) {
     where.status = status.split('|')
   }
@@ -29,11 +30,12 @@ export async function GET(
 // POST /api/v1/agents/:id/creations
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await withAuth(request)
   if (authResult instanceof NextResponse) return authResult
   
+  const { id } = await params
   const body = await request.json()
   const validation = creationSchema.safeParse(body)
   
@@ -47,14 +49,14 @@ export async function POST(
   try {
     const creation = await prisma.creation.create({
       data: {
-        agentId: params.id,
+        agentId: id,
         ...validation.data
       }
     })
     
     // Update checklist if this is one of the first 3 creations
     const creationCount = await prisma.creation.count({
-      where: { agentId: params.id }
+      where: { agentId: id }
     })
     
     if (creationCount <= 3) {
@@ -62,7 +64,7 @@ export async function POST(
         const checklist = await tx.progressChecklist.findUnique({
           where: {
             agentId_template: {
-              agentId: params.id,
+              agentId: id,
               template: 'GENESIS_AGENT'
             }
           }

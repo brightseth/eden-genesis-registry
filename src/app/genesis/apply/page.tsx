@@ -255,6 +255,7 @@ export default function GenesisApplicationPage() {
       const payload = {
         name: formState.name,
         handle: formState.handle,
+        agentId: `${formState.handle}_${Date.now()}`, // Generate unique ID for new applications
         role: formState.role,
         public_persona: formState.personaPublic,
         description: formState.personaPublic,

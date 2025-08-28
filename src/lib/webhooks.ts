@@ -7,6 +7,16 @@ interface WebhookPayload {
   timestamp: string
 }
 
+export const DOCUMENTATION_EVENTS = [
+  'documentation.adr.created',
+  'documentation.adr.updated', 
+  'documentation.api.updated',
+  'documentation.technical.updated',
+  'documentation.integration.updated'
+] as const
+
+export type DocumentationEvent = typeof DOCUMENTATION_EVENTS[number]
+
 export async function sendWebhook(eventType: string, data: Record<string, unknown>) {
   const subscriptions = await prisma.webhookSubscription.findMany({
     where: {

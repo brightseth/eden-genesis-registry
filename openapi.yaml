@@ -105,6 +105,48 @@ components:
         payload:
           type: object
 
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        category:
+          type: string
+          enum: [adr, api, technical, integration]
+        summary:
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [draft, published, archived]
+
+    DocumentContent:
+      allOf:
+        - $ref: '#/components/schemas/Document'
+        - type: object
+          properties:
+            content:
+              type: string
+            metadata:
+              type: object
+            tableOfContents:
+              type: array
+              items:
+                type: object
+                properties:
+                  level:
+                    type: number
+                  title:
+                    type: string
+                  anchor:
+                    type: string
+
 paths:
   /agents:
     get:
@@ -390,3 +432,72 @@ paths:
       responses:
         '201':
           description: Webhook registered
+
+  /docs:
+    get:
+      summary: List all documentation
+      responses:
+        '200':
+          description: List of available documentation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        slug:
+                          type: string
+                        count:
+                          type: number
+                  documents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
+
+  /docs/{category}:
+    get:
+      summary: List documents by category
+      parameters:
+        - name: category
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [adr, api, technical, integration]
+      responses:
+        '200':
+          description: Documents in category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+
+  /docs/{category}/{slug}:
+    get:
+      summary: Get specific document
+      parameters:
+        - name: category
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Document content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentContent'

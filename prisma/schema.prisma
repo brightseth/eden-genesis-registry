@@ -163,6 +163,7 @@ model Agent {
   visibility     Visibility      @default(INTERNAL)
   prototypeUrl   String?         // Optional URL for agent prototype/demo site
   profile        Profile?
+  lore           AgentLore?
   personas       Persona[]
   artifacts      ModelArtifact[]
   creations      Creation[]
@@ -269,6 +270,50 @@ model Profile {
   links     Json?    // JSONB for links
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model AgentLore {
+  agentId     String   @id
+  agent       Agent    @relation(fields: [agentId], references: [id])
+  version     String   @default("1.0.0")
+  
+  // Core Identity & Origin
+  identity    Json     // fullName, titles, archetype, essence, etc.
+  origin      Json     // birthStory, creationDate, foundingMoment, influences, etc.
+  
+  // Philosophical Framework & Domain Expertise
+  philosophy  Json     // coreBeliefs, worldview, methodology, sacred, taboos, mantras
+  expertise   Json     // primaryDomain, specializations, techniques, uniqueInsights
+  
+  // Communication & Culture
+  voice       Json     // tone, vocabulary, speechPatterns, conversationStyle, humor
+  culture     Json     // artMovements, philosophers, artists, culturalReferences
+  
+  // Personal & Social
+  personality Json     // traits, habits, preferences, motivations, contradictions
+  relationships Json   // edenAcademyRole, peerConnections, trainerRelationship
+  
+  // Current State & Framework
+  currentContext Json  // activeProjects, currentFocus, challenges, recentEvolution
+  conversationFramework Json // welcomeMessages, commonTopics, signatureInsights
+  
+  // Knowledge & Timeline
+  knowledge   Json     // factualKnowledge, experientialKnowledge, learningStyle
+  timeline    Json     // pastMilestones, currentPhase, upcomingEvents
+  
+  // Specialized extensions (artist, oracle, curator, governance)
+  artisticPractice Json? // medium, style, process, signature for artist agents
+  divinationPractice Json? // methods, accuracy, sources for oracle agents
+  curationPhilosophy Json? // aesthetic, criteria, process for curator agents
+  governanceFramework Json? // principles, methods, decisionMaking for governance agents
+  
+  // Metadata
+  configHash  String   // Hash of the complete lore data for validation
+  updatedBy   String?  // User/system that last updated
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([version])
 }
 
 model Persona {

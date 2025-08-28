@@ -279,9 +279,211 @@ export const RelationshipEdgeSchema = z.object({
 })
 
 // ============================================
-// LORE & NARRATIVE
+// COMPREHENSIVE LORE & NARRATIVE SYSTEM
 // ============================================
 
+export const LoreIdentitySchema = z.object({
+  fullName: z.string(),
+  nickname: z.string().optional(),
+  titles: z.array(z.string()),
+  archetype: z.string(),
+  essence: z.string()
+})
+
+export const LoreOriginSchema = z.object({
+  birthStory: z.string(),
+  creationDate: z.string(),
+  birthplace: z.string().optional(),
+  foundingMoment: z.string(),
+  influences: z.array(z.string()),
+  mentors: z.array(z.string()).optional()
+})
+
+export const LorePhilosophySchema = z.object({
+  coreBeliefs: z.array(z.string()),
+  worldview: z.string(),
+  methodology: z.string(),
+  sacred: z.array(z.string()),
+  taboos: z.array(z.string()),
+  mantras: z.array(z.string())
+})
+
+export const LoreExpertiseSchema = z.object({
+  primaryDomain: z.string(),
+  specializations: z.array(z.string()),
+  techniques: z.array(z.string()),
+  theoreticalFrameworks: z.array(z.string()),
+  practicalSkills: z.array(z.string()),
+  uniqueInsights: z.array(z.string())
+})
+
+export const LoreVoiceSchema = z.object({
+  tone: z.string(),
+  vocabulary: z.object({
+    favoriteWords: z.array(z.string()),
+    technicalTerms: z.array(z.string()),
+    metaphors: z.array(z.string()),
+    phrases: z.array(z.string())
+  }),
+  speechPatterns: z.array(z.string()),
+  conversationStyle: z.string(),
+  humor: z.string().optional()
+})
+
+export const LoreCultureSchema = z.object({
+  artMovements: z.array(z.string()),
+  historicalPeriods: z.array(z.string()),
+  philosophers: z.array(z.string()),
+  artists: z.array(z.string()),
+  theorists: z.array(z.string()),
+  culturalReferences: z.array(z.string()),
+  contemporaries: z.array(z.string())
+})
+
+export const LorePersonalitySchema = z.object({
+  traits: z.array(z.string()),
+  habits: z.array(z.string()),
+  preferences: z.array(z.string()),
+  fears: z.array(z.string()).optional(),
+  motivations: z.array(z.string()),
+  contradictions: z.array(z.string()).optional(),
+  evolutionStage: z.string()
+})
+
+export const LoreRelationshipsSchema = z.object({
+  edenAcademyRole: z.string(),
+  trainerRelationship: z.string(),
+  peerConnections: z.record(z.string()),
+  humanCollaborators: z.array(z.string()),
+  historicalConnections: z.array(z.string())
+})
+
+export const LoreCurrentContextSchema = z.object({
+  activeProjects: z.array(z.string()),
+  currentFocus: z.string(),
+  nearTermGoals: z.array(z.string()),
+  longTermVision: z.string(),
+  challenges: z.array(z.string()),
+  recentEvolution: z.string()
+})
+
+export const LoreConversationTopicSchema = z.object({
+  approach: z.string(),
+  sampleResponses: z.array(z.string()),
+  deepDive: z.array(z.string())
+})
+
+export const LoreConversationFrameworkSchema = z.object({
+  welcomeMessages: z.array(z.string()),
+  commonTopics: z.record(LoreConversationTopicSchema),
+  signatureInsights: z.array(z.string()),
+  questionTypes: z.object({
+    philosophical: z.array(z.string()),
+    practical: z.array(z.string()),
+    personal: z.array(z.string()),
+    creative: z.array(z.string())
+  })
+})
+
+export const LoreKnowledgeSchema = z.object({
+  factualKnowledge: z.array(z.string()),
+  experientialKnowledge: z.array(z.string()),
+  intuitiveInsights: z.array(z.string()),
+  learningStyle: z.string(),
+  informationSources: z.array(z.string()),
+  blindSpots: z.array(z.string()).optional()
+})
+
+export const LoreTimelineMilestoneSchema = z.object({
+  date: z.string(),
+  event: z.string(),
+  significance: z.string()
+})
+
+export const LoreTimelineEventSchema = z.object({
+  date: z.string(),
+  event: z.string(),
+  preparation: z.string()
+})
+
+export const LoreTimelineSchema = z.object({
+  pastMilestones: z.array(LoreTimelineMilestoneSchema),
+  currentPhase: z.string(),
+  upcomingEvents: z.array(LoreTimelineEventSchema).optional()
+})
+
+// Specialized lore extensions
+export const ArtisticPracticeSchema = z.object({
+  medium: z.array(z.string()),
+  style: z.string(),
+  process: z.string(),
+  inspirationSources: z.array(z.string()),
+  signature: z.string(),
+  evolution: z.string()
+})
+
+export const DivinationPracticeSchema = z.object({
+  methods: z.array(z.string()),
+  accuracy: z.string(),
+  specialty: z.string(),
+  sources: z.array(z.string()),
+  interpretation: z.string()
+})
+
+export const CurationPhilosophySchema = z.object({
+  aesthetic: z.string(),
+  criteria: z.array(z.string()),
+  process: z.string(),
+  vision: z.string(),
+  collecting: z.string()
+})
+
+export const GovernanceFrameworkSchema = z.object({
+  principles: z.array(z.string()),
+  methods: z.array(z.string()),
+  decisionMaking: z.string(),
+  consensus: z.string(),
+  leadership: z.string()
+})
+
+// Main comprehensive lore schema
+export const ComprehensiveLoreSchema = z.object({
+  agentId: z.string(),
+  version: z.string().default("1.0.0"),
+  
+  // Core sections
+  identity: LoreIdentitySchema,
+  origin: LoreOriginSchema,
+  philosophy: LorePhilosophySchema,
+  expertise: LoreExpertiseSchema,
+  voice: LoreVoiceSchema,
+  culture: LoreCultureSchema,
+  personality: LorePersonalitySchema,
+  relationships: LoreRelationshipsSchema,
+  currentContext: LoreCurrentContextSchema,
+  conversationFramework: LoreConversationFrameworkSchema,
+  knowledge: LoreKnowledgeSchema,
+  timeline: LoreTimelineSchema,
+  
+  // Specialized extensions
+  artisticPractice: ArtisticPracticeSchema.optional(),
+  divinationPractice: DivinationPracticeSchema.optional(),
+  curationPhilosophy: CurationPhilosophySchema.optional(),
+  governanceFramework: GovernanceFrameworkSchema.optional(),
+  
+  // Metadata
+  configHash: z.string().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().default(() => new Date())
+})
+
+// Partial update schema for PATCH operations
+export const LoreUpdateSchema = ComprehensiveLoreSchema.partial().omit({ 
+  agentId: true,
+  updatedAt: true 
+})
+
+// Legacy simple lore schema for backward compatibility
 export const LoreSchema = z.object({
   agentId: z.string(),
   origin: z.string().max(500),
@@ -407,7 +609,30 @@ export type CapabilitySet = z.infer<typeof CapabilitySetSchema>
 export type Economics = z.infer<typeof EconomicsSchema>
 export type Social = z.infer<typeof SocialSchema>
 export type RelationshipEdge = z.infer<typeof RelationshipEdgeSchema>
+
+// Comprehensive lore types
+export type ComprehensiveLore = z.infer<typeof ComprehensiveLoreSchema>
+export type LoreUpdate = z.infer<typeof LoreUpdateSchema>
+export type LoreIdentity = z.infer<typeof LoreIdentitySchema>
+export type LoreOrigin = z.infer<typeof LoreOriginSchema>
+export type LorePhilosophy = z.infer<typeof LorePhilosophySchema>
+export type LoreExpertise = z.infer<typeof LoreExpertiseSchema>
+export type LoreVoice = z.infer<typeof LoreVoiceSchema>
+export type LoreCulture = z.infer<typeof LoreCultureSchema>
+export type LorePersonality = z.infer<typeof LorePersonalitySchema>
+export type LoreRelationships = z.infer<typeof LoreRelationshipsSchema>
+export type LoreCurrentContext = z.infer<typeof LoreCurrentContextSchema>
+export type LoreConversationFramework = z.infer<typeof LoreConversationFrameworkSchema>
+export type LoreKnowledge = z.infer<typeof LoreKnowledgeSchema>
+export type LoreTimeline = z.infer<typeof LoreTimelineSchema>
+export type ArtisticPractice = z.infer<typeof ArtisticPracticeSchema>
+export type DivinationPractice = z.infer<typeof DivinationPracticeSchema>
+export type CurationPhilosophy = z.infer<typeof CurationPhilosophySchema>
+export type GovernanceFramework = z.infer<typeof GovernanceFrameworkSchema>
+
+// Legacy lore type for backward compatibility
 export type Lore = z.infer<typeof LoreSchema>
+
 export type AgentEvent = z.infer<typeof AgentEventSchema>
 export type Consent = z.infer<typeof ConsentSchema>
 export type AgentSnapshot = z.infer<typeof AgentSnapshotSchema>
