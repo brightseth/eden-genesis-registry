@@ -5,7 +5,7 @@ CREATE TYPE "public"."AgentStatus" AS ENUM ('INVITED', 'APPLYING', 'ONBOARDING',
 CREATE TYPE "public"."Visibility" AS ENUM ('PRIVATE', 'INTERNAL', 'PUBLIC');
 
 -- CreateEnum
-CREATE TYPE "public"."Role" AS ENUM ('ADMIN', 'CURATOR', 'COLLECTOR', 'INVESTOR', 'TRAINER', 'GUEST');
+CREATE TYPE "public"."Role" AS ENUM ('ADMIN', 'CURATOR', 'COLLECTOR', 'INVESTOR', 'TRAINER', 'GUEST', 'CREATOR', 'RESEARCHER', 'COMMUNITY', 'EDUCATOR', 'EXPERIMENTAL');
 
 -- CreateEnum
 CREATE TYPE "public"."TrainerRole" AS ENUM ('LEAD', 'ASSISTANT', 'MENTOR');
@@ -66,12 +66,14 @@ CREATE TABLE "public"."Cohort" (
 -- CreateTable
 CREATE TABLE "public"."Agent" (
     "id" TEXT NOT NULL,
+    "agentNumber" SERIAL NOT NULL,
     "handle" TEXT NOT NULL,
     "displayName" TEXT NOT NULL,
-    "role" TEXT,
+    "role" "public"."Role" NOT NULL DEFAULT 'GUEST',
     "cohortId" TEXT NOT NULL,
     "status" "public"."AgentStatus" NOT NULL DEFAULT 'INVITED',
     "visibility" "public"."Visibility" NOT NULL DEFAULT 'INTERNAL',
+    "prototypeUrl" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -163,6 +165,34 @@ CREATE TABLE "public"."Profile" (
 );
 
 -- CreateTable
+CREATE TABLE "public"."AgentLore" (
+    "agentId" TEXT NOT NULL,
+    "version" TEXT NOT NULL DEFAULT '1.0.0',
+    "identity" JSONB NOT NULL,
+    "origin" JSONB NOT NULL,
+    "philosophy" JSONB NOT NULL,
+    "expertise" JSONB NOT NULL,
+    "voice" JSONB NOT NULL,
+    "culture" JSONB NOT NULL,
+    "personality" JSONB NOT NULL,
+    "relationships" JSONB NOT NULL,
+    "currentContext" JSONB NOT NULL,
+    "conversationFramework" JSONB NOT NULL,
+    "knowledge" JSONB NOT NULL,
+    "timeline" JSONB NOT NULL,
+    "artisticPractice" JSONB,
+    "divinationPractice" JSONB,
+    "curationPhilosophy" JSONB,
+    "governanceFramework" JSONB,
+    "configHash" TEXT NOT NULL,
+    "updatedBy" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "AgentLore_pkey" PRIMARY KEY ("agentId")
+);
+
+-- CreateTable
 CREATE TABLE "public"."Persona" (
     "id" TEXT NOT NULL,
     "agentId" TEXT NOT NULL,
@@ -201,9 +231,16 @@ CREATE TABLE "public"."Creation" (
     "agentId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "mediaUri" TEXT,
+    "mediaType" TEXT,
+    "creationUrl" TEXT,
+    "idempotencyKey" TEXT,
     "metadata" JSONB,
+    "features" JSONB,
+    "market" JSONB,
+    "urls" JSONB,
     "publishedTo" JSONB,
     "status" "public"."CreationStatus" NOT NULL DEFAULT 'DRAFT',
+    "availability" TEXT NOT NULL DEFAULT 'available',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -311,6 +348,9 @@ CREATE TABLE "public"."WebhookDelivery" (
 CREATE UNIQUE INDEX "Cohort_slug_key" ON "public"."Cohort"("slug");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Agent_agentNumber_key" ON "public"."Agent"("agentNumber");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Agent_handle_key" ON "public"."Agent"("handle");
 
 -- CreateIndex
@@ -353,6 +393,9 @@ CREATE INDEX "Application_status_idx" ON "public"."Application"("status");
 CREATE INDEX "Application_track_idx" ON "public"."Application"("track");
 
 -- CreateIndex
+CREATE INDEX "AgentLore_version_idx" ON "public"."AgentLore"("version");
+
+-- CreateIndex
 CREATE INDEX "Persona_agentId_idx" ON "public"."Persona"("agentId");
 
 -- CreateIndex
@@ -365,10 +408,19 @@ CREATE INDEX "ModelArtifact_agentId_idx" ON "public"."ModelArtifact"("agentId");
 CREATE INDEX "ModelArtifact_kind_idx" ON "public"."ModelArtifact"("kind");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Creation_idempotencyKey_key" ON "public"."Creation"("idempotencyKey");
+
+-- CreateIndex
 CREATE INDEX "Creation_agentId_idx" ON "public"."Creation"("agentId");
 
 -- CreateIndex
 CREATE INDEX "Creation_status_idx" ON "public"."Creation"("status");
+
+-- CreateIndex
+CREATE INDEX "Creation_idempotencyKey_idx" ON "public"."Creation"("idempotencyKey");
+
+-- CreateIndex
+CREATE INDEX "Creation_creationUrl_idx" ON "public"."Creation"("creationUrl");
 
 -- CreateIndex
 CREATE INDEX "SocialAccount_platform_idx" ON "public"."SocialAccount"("platform");
@@ -441,6 +493,9 @@ ALTER TABLE "public"."Application" ADD CONSTRAINT "Application_reviewerId_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "public"."Profile" ADD CONSTRAINT "Profile_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "public"."Agent"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."AgentLore" ADD CONSTRAINT "AgentLore_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "public"."Agent"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Persona" ADD CONSTRAINT "Persona_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "public"."Agent"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

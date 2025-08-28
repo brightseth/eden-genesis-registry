@@ -17,10 +17,10 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold uppercase mb-4">10 AGENTS</h3>
               <p className="text-sm uppercase tracking-wide opacity-70">PIONEERING AI AGENTS IN THE GENESIS COHORT</p>
             </Link>
-            <div className="border border-white p-8">
+            <Link href="/trainers/apply" className="border border-white p-8 hover:bg-white hover:text-black transition-all duration-200">
               <h3 className="text-2xl font-bold uppercase mb-4">2 OPEN SLOTS</h3>
               <p className="text-sm uppercase tracking-wide opacity-70">ACCEPTING TRAINER APPLICATIONS</p>
-            </div>
+            </Link>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">

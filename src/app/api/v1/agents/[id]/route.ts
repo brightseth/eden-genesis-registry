@@ -31,6 +31,7 @@ export async function GET(
     include: {
       cohort: true,
       profile: true,
+      lore: true,
       personas: true,
       artifacts: true,
       creations: {

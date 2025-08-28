@@ -206,7 +206,7 @@ export default function AgentDetailPage() {
       const payload = await mapAgentToApplicationData(agent)
       console.log('Submitting agent to registry:', payload)
 
-      const response = await fetch('https://registry.eden-academy.xyz/api/apply', {
+      const response = await fetch('https://registry.eden-academy.xyz/api/spirit/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
