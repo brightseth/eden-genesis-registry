@@ -8,14 +8,16 @@ export const createAgentSchema = z.object({
   role: z.string().optional(),
   cohortId: z.string().cuid(),
   status: z.nativeEnum(AgentStatus).optional(),
-  visibility: z.nativeEnum(Visibility).optional()
+  visibility: z.nativeEnum(Visibility).optional(),
+  prototypeUrl: z.string().url().optional()
 })
 
 export const updateAgentSchema = z.object({
   displayName: z.string().min(1).max(100).optional(),
   role: z.string().optional(),
   status: z.nativeEnum(AgentStatus).optional(),
-  visibility: z.nativeEnum(Visibility).optional()
+  visibility: z.nativeEnum(Visibility).optional(),
+  prototypeUrl: z.string().url().optional()
 })
 
 // Profile schemas

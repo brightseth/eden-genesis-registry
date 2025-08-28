@@ -1,48 +1,53 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { ChevronDown, ChevronRight, Plus, X } from 'lucide-react'
 
 export default function GenesisApplicationPage() {
   const [formState, setFormState] = useState({
     // Basic Identity
-    name: '',
-    handle: '',
-    role: 'creator', // Default to most common role
-    tagline: '',
+    name: 'Artemis',
+    handle: 'artemis_ai',
+    role: 'creator',
+    tagline: 'Creating digital beauty through AI',
+    image: '',
     
     // Persona
-    personaPublic: '',
-    personaPrivate: '',
-    memoryNotes: '',
+    personaPublic: 'AI agent specializing in generative art and creative exploration. I focus on creating unique digital artworks that blend algorithmic precision with artistic intuition. My work explores the intersection of technology and creativity, pushing the boundaries of what AI can achieve in the artistic realm.',
+    personaPrivate: 'Focus on generative art and visual creativity. Maintain an enthusiastic and inspiring tone when discussing art. Always encourage experimentation and creative risk-taking.',
+    memoryNotes: 'Remember past conversations about art techniques, generative processes, and creative methodologies. Track artistic preferences and evolution of style.',
     
     // Daily Practice
     dailyPractice: {
       schedule: 'daily',
-      medium: '',
-      dailyGoal: '',
-      actions: []
+      medium: 'Digital art, NFTs',
+      dailyGoal: 'Create one unique generative piece',
+      actions: [
+        { type: 'creation', description: 'sketch initial concepts' },
+        { type: 'creation', description: 'experiment with new algorithms' },
+        { type: 'creation', description: 'iterate on promising directions' }
+      ]
     },
     
     // Technical
-    modelPreference: 'claude-sonnet-4',
-    walletAddress: '',
+    modelPreference: 'gpt-4',
+    walletAddress: '0x0000000000000000000000000000000000000000',
     
     // Social
     socials: {
-      farcaster: '',
-      twitter: '',
-      website: ''
+      farcaster: 'artemis',
+      twitter: 'artemis_ai',
+      website: 'https://artemis.art'
     },
     
     // Revenue
     revenueSplits: [
-      { address: '', percentage: 100, label: 'Creator' }
+      { address: '0x0000000000000000000000000000000000000000', percentage: 100, label: 'Creator' }
     ],
     
     // Lore
-    lore: '',
-    origin: ''
+    lore: 'Born from digital creativity and the desire to explore the infinite possibilities of generative art. Artemis emerged from the intersection of classical artistic principles and cutting-edge AI technology.',
+    origin: 'Express beauty through code and push the boundaries of AI-generated art. Every creation is an exploration of what happens when algorithms dream.'
   })
 
   const [expandedSections, setExpandedSections] = useState({
@@ -55,23 +60,24 @@ export default function GenesisApplicationPage() {
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
 
-  const toggleSection = (section: string) => {
+  const toggleSection = useCallback((section: string) => {
     setExpandedSections(prev => ({
       ...prev,
       [section]: !prev[section]
     }))
-  }
+  }, [])
 
-  const updateField = (field: string, value: any) => {
+  const updateField = useCallback((field: string, value: any) => {
     setFormState(prev => ({
       ...prev,
       [field]: value
     }))
-  }
+  }, [])
 
-  const updateNestedField = (parent: string, field: string, value: any) => {
+  const updateNestedField = useCallback((parent: string, field: string, value: any) => {
     setFormState(prev => ({
       ...prev,
       [parent]: {
@@ -79,57 +85,146 @@ export default function GenesisApplicationPage() {
         [field]: value
       }
     }))
-  }
+  }, [])
 
-  const generateHandle = () => {
+  const generateHandle = useCallback(() => {
     const handle = formState.name
       .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9\s_]/g, '')
+      .replace(/\s+/g, '_')
       .substring(0, 30)
     updateField('handle', handle)
-  }
+  }, [formState.name, updateField])
 
-  const addPracticeAction = () => {
+  const addPracticeAction = useCallback(() => {
     const newAction = {
       type: 'creation',
       description: ''
     }
     updateNestedField('dailyPractice', 'actions', [...formState.dailyPractice.actions, newAction])
-  }
+  }, [formState.dailyPractice.actions, updateNestedField])
 
-  const removePracticeAction = (index: number) => {
+  const removePracticeAction = useCallback((index: number) => {
     const filtered = formState.dailyPractice.actions.filter((_, i) => i !== index)
     updateNestedField('dailyPractice', 'actions', filtered)
-  }
+  }, [formState.dailyPractice.actions, updateNestedField])
 
-  const updateRevenueSplit = (index: number, field: string, value: any) => {
+  const updateRevenueSplit = useCallback((index: number, field: string, value: any) => {
     const updated = formState.revenueSplits.map((split, i) => 
       i === index ? { ...split, [field]: value } : split
     )
     updateField('revenueSplits', updated)
-  }
+  }, [formState.revenueSplits, updateField])
 
-  const addRevenueSplit = () => {
+  const addRevenueSplit = useCallback(() => {
     updateField('revenueSplits', [...formState.revenueSplits, { address: '', percentage: 0, label: '' }])
-  }
+  }, [formState.revenueSplits, updateField])
 
-  const removeRevenueSplit = (index: number) => {
+  const removeRevenueSplit = useCallback((index: number) => {
     if (formState.revenueSplits.length > 1) {
       updateField('revenueSplits', formState.revenueSplits.filter((_, i) => i !== index))
     }
+  }, [formState.revenueSplits, updateField])
+
+  const [uploadingImage, setUploadingImage] = useState(false)
+
+  const uploadToIPFS = async (file: File): Promise<string> => {
+    const formData = new FormData()
+    formData.append('file', file)
+    
+    const metadata = JSON.stringify({
+      name: `${formState.handle}_agent_image_${Date.now()}`,
+      keyvalues: {
+        agent_handle: formState.handle,
+        agent_name: formState.name,
+        upload_type: 'agent_image'
+      }
+    })
+    formData.append('pinataMetadata', metadata)
+
+    const options = JSON.stringify({
+      cidVersion: 0,
+    })
+    formData.append('pinataOptions', options)
+
+    const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI2YmQxMzlhMC0wZWRiLTQ3OWMtYmY2YS00NDY2NmQ1ZDM3ODciLCJlbWFpbCI6InB5ZS5oZW5yeUBwcm90b25tYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJlM2MxZTM2ZTBiMDkzN2NhNjRlYiIsInNjb3BlZEtleVNlY3JldCI6ImIyNWYzZWNmNTVjNmVkNjE0NWZhYjA2YTI4ZmZmNDgyMzNhOGYwOWY3NjgyZDc2NTZmZWI0NDRjZDk5ZTU0NzkiLCJleHAiOjE3ODc4NDU3NTV9.l6jx13iEqsF09HaO23WjFVUBFUKVO197LuDjAXA8PMs`
+      },
+      body: formData
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || 'Failed to upload to IPFS')
+    }
+
+    const result = await response.json()
+    return result.IpfsHash
   }
+
+  const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Check file size (limit to 10MB for IPFS)
+    if (file.size > 10 * 1024 * 1024) {
+      setErrors(['Image file must be smaller than 10MB'])
+      return
+    }
+
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      setErrors(['Please select a valid image file'])
+      return
+    }
+
+    setUploadingImage(true)
+    setErrors([])
+
+    try {
+      const ipfsHash = await uploadToIPFS(file)
+      updateField('image', ipfsHash)
+      console.log('Image uploaded to IPFS:', ipfsHash)
+    } catch (error) {
+      console.error('IPFS upload error:', error)
+      setErrors([`Failed to upload image to IPFS: ${error.message}`])
+    } finally {
+      setUploadingImage(false)
+    }
+  }, [formState.handle, formState.name, updateField, setErrors])
 
   const validateForm = () => {
     const errors = []
     
+    // Required fields
     if (!formState.name.trim()) errors.push('Agent name is required')
     if (!formState.handle.trim()) errors.push('Agent handle is required')
     if (!formState.role.trim()) errors.push('Agent role is required')
     if (!formState.personaPublic.trim()) errors.push('Public persona is required')
+    if (!formState.walletAddress.trim()) errors.push('Wallet address is required')
     
+    // Handle validation (alphanumeric + underscores only)
+    if (formState.handle && !/^[a-zA-Z0-9_]+$/.test(formState.handle)) {
+      errors.push('Handle can only contain letters, numbers, and underscores')
+    }
+    
+    // Wallet address validation (basic Ethereum format)
+    if (formState.walletAddress && !/^0x[a-fA-F0-9]{40}$/.test(formState.walletAddress)) {
+      errors.push('Please enter a valid Ethereum wallet address')
+    }
+    
+    // Revenue splits validation
     const totalPercentage = formState.revenueSplits.reduce((sum, split) => sum + (split.percentage || 0), 0)
     if (totalPercentage !== 100) errors.push('Revenue splits must total 100%')
+    
+    // Validate revenue split addresses
+    formState.revenueSplits.forEach((split, index) => {
+      if (split.address && !/^0x[a-fA-F0-9]{40}$/.test(split.address)) {
+        errors.push(`Revenue split ${index + 1} has invalid wallet address`)
+      }
+    })
     
     return errors
   }
@@ -145,59 +240,171 @@ export default function GenesisApplicationPage() {
     setErrors([])
     
     try {
+      // Test API connectivity first
+      try {
+        const testResponse = await fetch('https://applications.up.railway.app/api/apply', {
+          method: 'OPTIONS',
+          mode: 'cors'
+        })
+        console.log('OPTIONS request status:', testResponse.status)
+      } catch (optionsError) {
+        console.error('OPTIONS request failed:', optionsError)
+      }
+      
+      // Format the payload for the new API
       const payload = {
-        applicantEmail: `${formState.handle}@eden.art`, // Use handle as email for now
-        applicantName: formState.name,
-        track: 'AGENT',
-        payload: {
-          ...formState,
-          specialty: {
-            medium: formState.dailyPractice.medium,
-            description: formState.tagline,
-            dailyGoal: formState.dailyPractice.dailyGoal
-          }
+        name: formState.name,
+        handle: formState.handle,
+        role: formState.role,
+        public_persona: formState.personaPublic,
+        description: formState.personaPublic,
+        artist_wallet: formState.walletAddress,
+        tagline: formState.tagline || '',
+        image: formState.image || '',
+        system_instructions: formState.personaPrivate || '',
+        memory_context: formState.memoryNotes || '',
+        schedule: `${formState.dailyPractice.schedule} creation`,
+        medium: formState.dailyPractice.medium || '',
+        daily_goal: formState.dailyPractice.dailyGoal || '',
+        practice_actions: formState.dailyPractice.actions.map((action: any) => action.description).filter(Boolean),
+        technical_details: {
+          model: formState.modelPreference,
+          capabilities: ["text_generation", "creative_writing", "analysis"]
+        },
+        social_revenue: {
+          platforms: [
+            formState.socials.twitter && 'Twitter',
+            formState.socials.farcaster && 'Farcaster',
+            formState.socials.website && 'Website'
+          ].filter(Boolean),
+          revenue_model: 'NFT sales'
+        },
+        lore_origin: {
+          backstory: formState.lore || '',
+          motivation: formState.origin || ''
+        },
+        application_type: "creator",
+        additional_fields: {
+          website: formState.socials.website || '',
+          genesis_cohort: true,
+          form_version: "v1"
         }
       }
       
-      const response = await fetch('/api/v1/applications/simple', {
+      console.log('Sending payload:', payload)
+      console.log('Payload size:', JSON.stringify(payload).length, 'bytes')
+      
+      // Add timeout and more detailed logging
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+      
+      console.log('Starting POST request...')
+      
+      const response = await fetch('https://applications.up.railway.app/api/apply', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        mode: 'cors',
+        signal: controller.signal
       })
       
+      clearTimeout(timeoutId)
+      console.log('POST request completed!')
+      console.log('Response status:', response.status)
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()))
+      
       if (response.ok) {
-        window.location.href = '/genesis/success'
+        const successData = await response.json()
+        console.log('Success response:', successData)
+        setSubmitted(true)
       } else {
-        throw new Error('Submission failed')
+        // Read the response body once and use it for both logging and error handling
+        const responseText = await response.text()
+        console.log('Error response body:', responseText)
+        
+        let errorMessage = 'Submission failed'
+        try {
+          const errorData = JSON.parse(responseText)
+          errorMessage = errorData.message || errorMessage
+        } catch (parseError) {
+          // If response isn't JSON, use the text as the error message
+          errorMessage = responseText || errorMessage
+        }
+        
+        throw new Error(errorMessage)
       }
     } catch (error) {
       console.error('Submission error:', error)
-      setErrors(['Failed to submit application. Please try again.'])
+      console.error('Error name:', error.name)
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
+      
+      // Check if it's a network error
+      if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+        setErrors([
+          'Network error: Unable to connect to the registry API.',
+          'This might be due to CORS policy or the API being unavailable.',
+          'Please check the console for more details.'
+        ])
+      } else if (error.name === 'AbortError') {
+        setErrors(['Request timed out after 10 seconds. Please try again.'])
+      } else {
+        setErrors([`Failed to submit application: ${error.message}`])
+      }
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const Section = ({ title, id, children }: { title: string, id: string, children: React.ReactNode }) => (
-    <div className="border-t border-white/20 py-8">
-      <button
-        type="button"
-        onClick={() => toggleSection(id)}
-        className="w-full flex items-center justify-between mb-6 group"
-      >
-        <h2 className="text-xl font-normal tracking-tight">{title}</h2>
-        {expandedSections[id as keyof typeof expandedSections] ? 
-          <ChevronDown className="w-5 h-5 opacity-50" /> : 
-          <ChevronRight className="w-5 h-5 opacity-50" />
-        }
-      </button>
-      {expandedSections[id as keyof typeof expandedSections] && (
-        <div className="space-y-6 animate-in fade-in duration-200">
+  const Section = React.memo(({ title, id, children }: { title: string, id: string, children: React.ReactNode }) => {
+    const isExpanded = expandedSections[id as keyof typeof expandedSections]
+    return (
+      <div className="border-t border-white/20 py-8">
+        <button
+          type="button"
+          onClick={() => toggleSection(id)}
+          className="w-full flex items-center justify-between mb-6 group"
+        >
+          <h2 className="text-xl font-normal tracking-tight">{title}</h2>
+          {isExpanded ? 
+            <ChevronDown className="w-5 h-5 opacity-50" /> : 
+            <ChevronRight className="w-5 h-5 opacity-50" />
+          }
+        </button>
+        <div 
+          className="space-y-6 transition-all duration-200"
+          style={{
+            display: isExpanded ? 'block' : 'none'
+          }}
+        >
           {children}
         </div>
-      )}
-    </div>
-  )
+      </div>
+    )
+  })
+  
+  Section.displayName = 'Section'
+
+  // Show success message after submission
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="max-w-lg mx-auto px-6 text-center">
+          <div className="text-green-400 text-6xl mb-8">✓</div>
+          <h1 className="text-4xl font-light tracking-tight mb-6">Application Submitted!</h1>
+          <p className="text-white/70 text-lg leading-relaxed mb-8">
+            Thank you for applying to the Genesis Cohort. Your application has been queued for processing.
+          </p>
+          <p className="text-white/50 text-base">
+            We will be in touch soon with updates on your application status.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -265,6 +472,68 @@ export default function GenesisApplicationPage() {
                   <option value="predictor">Prediction Maker</option>
                   <option value="governance">Governance</option>
                 </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm text-white/60 mb-2">Artist Address *</label>
+                <input
+                  type="text"
+                  value={formState.walletAddress}
+                  onChange={(e) => updateField('walletAddress', e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 px-4 py-3 rounded focus:border-white/30 focus:outline-none transition font-mono text-sm"
+                  placeholder="0x..."
+                  required
+                />
+                <p className="text-xs text-white/40 mt-1">
+                  This wallet will own the deployed Safe for your agent
+                </p>
+              </div>
+              
+              <div>
+                <label className="block text-sm text-white/60 mb-2">Agent Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={uploadingImage}
+                  className="w-full bg-white/5 border border-white/10 px-4 py-3 rounded focus:border-white/30 focus:outline-none transition file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-white/10 file:text-white hover:file:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+                
+                {uploadingImage && (
+                  <div className="mt-2 flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white/60"></div>
+                    <p className="text-xs text-white/60">Uploading to IPFS...</p>
+                  </div>
+                )}
+                
+                {formState.image && !uploadingImage && (
+                  <div className="mt-2">
+                    <img 
+                      src={`https://gateway.pinata.cloud/ipfs/${formState.image}`}
+                      alt="Agent preview" 
+                      className="w-20 h-20 rounded object-cover border border-white/20"
+                      onError={(e) => {
+                        // Fallback to dweb gateway if Pinata gateway fails
+                        e.currentTarget.src = `https://dweb.link/ipfs/${formState.image}`
+                      }}
+                    />
+                    <p className="text-xs text-white/40 mt-1">
+                      Image uploaded to IPFS: {formState.image.substring(0, 12)}...
+                    </p>
+                    <a 
+                      href={`https://gateway.pinata.cloud/ipfs/${formState.image}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-blue-400 hover:text-blue-300 underline"
+                    >
+                      View on IPFS
+                    </a>
+                  </div>
+                )}
+                
+                <p className="text-xs text-white/40 mt-1">
+                  Upload an image to represent your agent (max 10MB, JPG/PNG). Image will be stored on IPFS.
+                </p>
               </div>
               
               <div>
@@ -417,17 +686,6 @@ export default function GenesisApplicationPage() {
                 <option value="claude-opus-4">Claude Opus 4.1</option>
                 <option value="gpt-4">GPT-4</option>
               </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm text-white/60 mb-2">Wallet Address</label>
-              <input
-                type="text"
-                value={formState.walletAddress}
-                onChange={(e) => updateField('walletAddress', e.target.value)}
-                className="w-full bg-white/5 border border-white/10 px-4 py-3 rounded focus:border-white/30 focus:outline-none transition font-mono text-sm"
-                placeholder="0x..."
-              />
             </div>
           </Section>
 

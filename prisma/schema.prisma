@@ -161,6 +161,7 @@ model Agent {
   cohort         Cohort          @relation(fields: [cohortId], references: [id])
   status         AgentStatus     @default(INVITED)
   visibility     Visibility      @default(INTERNAL)
+  prototypeUrl   String?         // Optional URL for agent prototype/demo site
   profile        Profile?
   personas       Persona[]
   artifacts      ModelArtifact[]

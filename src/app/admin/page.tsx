@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import AgentMigration from '@/components/admin/agent-migration'
 
 interface Agent {
   id: string
@@ -179,6 +180,11 @@ export default function AdminDashboard() {
             <div className="text-2xl font-bold">{Math.round(summary?.averageProgress || 0)}%</div>
             <div className="text-gray-600">Avg Progress</div>
           </div>
+        </div>
+
+        {/* Agent Migration Section */}
+        <div className="mb-8">
+          <AgentMigration />
         </div>
 
         {/* Agents Grid */}

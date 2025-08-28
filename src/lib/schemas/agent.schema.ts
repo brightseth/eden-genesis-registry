@@ -52,6 +52,7 @@ export const AgentSchema = z.object({
   pronouns: z.enum(['they/them', 'she/her', 'he/him', 'it/its']).optional(),
   timezone: z.string().regex(/^[A-Za-z_]+\/[A-Za-z_]+$/), // IANA format
   languages: z.array(z.string().regex(/^[a-z]{2}(-[A-Z]{2})?$/)).default(['en']), // BCP-47
+  prototypeUrl: z.string().url().optional(), // Optional URL for agent prototype/demo site
   
   createdAt: z.date().default(() => new Date()),
   activatedAt: z.date().optional(),

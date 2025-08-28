@@ -34,6 +34,11 @@ components:
           enum: [PRIVATE, INTERNAL, PUBLIC]
         cohortId:
           type: string
+        prototypeUrl:
+          type: string
+          format: uri
+          nullable: true
+          description: Optional URL for agent prototype/demo site
         createdAt:
           type: string
           format: date-time
