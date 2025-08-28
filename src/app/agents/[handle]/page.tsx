@@ -475,6 +475,16 @@ export default function AgentDetailPage() {
                 </Link>
               )}
               
+              {agent.handle === 'miyomi' && (
+                <Link 
+                  href={`/agents/${agent.handle}/trading`}
+                  className="border border-green-500 bg-green-500/10 text-green-400 hover:bg-green-500 hover:text-black transition-all duration-150 p-4 text-center block"
+                >
+                  <div className="text-sm font-bold uppercase tracking-wide mb-1">TRADING DASHBOARD</div>
+                  <div className="text-xs opacity-60">Live Contrarian Oracle</div>
+                </Link>
+              )}
+              
               {(agent.handle === 'abraham' || agent.handle === 'bertha' || agent.handle === 'sue' || agent.handle === 'citizen') && (
                 <div className="border border-dashed border-white/50 bg-black text-white/50 p-4 text-center">
                   <div className="text-sm font-bold uppercase tracking-wide mb-1">SOVEREIGN SITE</div>

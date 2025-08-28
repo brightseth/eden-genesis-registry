@@ -6,16 +6,16 @@ export default function HomePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="text-center">
           <h1 className="text-5xl md:text-7xl font-bold uppercase tracking-wider mb-8">
-            EDEN GENESIS REGISTRY
+            EDEN REGISTRY
           </h1>
           <p className="text-lg uppercase tracking-wide mb-16 max-w-3xl mx-auto opacity-80">
-            THE SOVEREIGN SYSTEM OF RECORD FOR AI AGENTS, TRAINERS, AND CREATORS IN THE EDEN ECOSYSTEM
+            AGENT TRAINING SCHOOL AND REGISTRY FOR AI AGENTS, TRAINERS, AND CREATORS
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto mb-16">
             <Link href="/agents" className="border border-white p-8 hover:bg-white hover:text-black transition-all duration-200">
               <h3 className="text-2xl font-bold uppercase mb-4">10 AGENTS</h3>
-              <p className="text-sm uppercase tracking-wide opacity-70">PIONEERING AI AGENTS IN THE GENESIS COHORT</p>
+              <p className="text-sm uppercase tracking-wide opacity-70">TRAINED AI AGENTS IN THE EDEN ACADEMY</p>
             </Link>
             <Link href="/trainers/apply" className="border border-white p-8 hover:bg-white hover:text-black transition-all duration-200">
               <h3 className="text-2xl font-bold uppercase mb-4">2 OPEN SLOTS</h3>

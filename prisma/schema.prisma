@@ -173,6 +173,13 @@ model Agent {
   checklists     ProgressChecklist[]
   invitations    Invitation[]
   applications   Application[]
+  
+  // Trading relations (for MIYOMI and future trading agents)
+  tradingPositions TradingPosition[] @relation("AgentTradingPositions")
+  tradingSignals   TradingSignal[]   @relation("AgentTradingSignals") 
+  marketSentiment  MarketSentiment[] @relation("AgentMarketSentiment")
+  tradingMetrics   TradingMetrics[]  @relation("AgentTradingMetrics")
+  
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
 
@@ -505,4 +512,89 @@ model WebhookDelivery {
   @@index([subscriptionId])
   @@index([status])
   @@index([createdAt])
+}
+
+// Trading Models for MIYOMI Live Trading
+
+model TradingPosition {
+  id           String    @id @default(cuid())
+  agentId      String
+  agent        Agent     @relation("AgentTradingPositions", fields: [agentId], references: [id], onDelete: Cascade)
+  symbol       String
+  side         String    // "LONG" | "SHORT"
+  quantity     Decimal
+  entryPrice   Decimal
+  currentPrice Decimal?
+  pnl          Decimal   @default(0)
+  pnlPercent   Decimal   @default(0)
+  status       String    @default("OPEN") // "OPEN" | "CLOSED" | "LIQUIDATED"
+  openedAt     DateTime  @default(now())
+  closedAt     DateTime?
+  metadata     Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([agentId, status])
+  @@index([symbol])
+}
+
+model TradingSignal {
+  id          String    @id @default(cuid())
+  agentId     String
+  agent       Agent     @relation("AgentTradingSignals", fields: [agentId], references: [id], onDelete: Cascade)
+  symbol      String
+  signal      String    // "BUY" | "SELL" | "HOLD"
+  confidence  Decimal
+  reasoning   String?
+  targetPrice Decimal?
+  stopLoss    Decimal?
+  timeframe   String?   // "1H" | "4H" | "1D" | "1W"
+  status      String    @default("ACTIVE") // "ACTIVE" | "FILLED" | "EXPIRED"
+  performance Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([agentId, status])
+  @@index([symbol, createdAt])
+}
+
+model MarketSentiment {
+  id              String   @id @default(cuid())
+  agentId         String
+  agent           Agent    @relation("AgentMarketSentiment", fields: [agentId], references: [id], onDelete: Cascade)
+  symbol          String?
+  sentiment       String   // "EXTREME_FEAR" | "FEAR" | "NEUTRAL" | "GREED" | "EXTREME_GREED"
+  score           Decimal
+  contrarian_signal String?
+  data_sources    Json?
+  analysis        String?
+  createdAt       DateTime @default(now())
+
+  @@index([agentId, createdAt])
+}
+
+model TradingMetrics {
+  id              String   @id @default(cuid())
+  agentId         String
+  agent           Agent    @relation("AgentTradingMetrics", fields: [agentId], references: [id], onDelete: Cascade)
+  period          String   // "DAILY" | "WEEKLY" | "MONTHLY" | "ALL_TIME"
+  startDate       DateTime
+  endDate         DateTime
+  totalTrades     Int      @default(0)
+  winningTrades   Int      @default(0)
+  losingTrades    Int      @default(0)
+  winRate         Decimal  @default(0)
+  totalPnl        Decimal  @default(0)
+  totalPnlPercent Decimal  @default(0)
+  averageWin      Decimal  @default(0)
+  averageLoss     Decimal  @default(0)
+  profitFactor    Decimal  @default(0)
+  sharpeRatio     Decimal?
+  maxDrawdown     Decimal?
+  volume          Decimal  @default(0)
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([agentId, period])
 }
