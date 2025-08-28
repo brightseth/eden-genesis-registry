@@ -5,20 +5,20 @@ import { ChevronDown, ChevronRight, Upload, X, Plus } from 'lucide-react'
 
 export default function TrainerApplicationPage() {
   const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    description: '',
-    expertise: [],
-    experience: '',
-    portfolio: '',
+    name: 'Dr. Sarah Chen',
+    email: 'sarah.chen@airesearch.edu',
+    description: 'AI Research Scientist with 8+ years of experience in machine learning, computer vision, and neural network architectures. Specialized in training large language models and multimodal AI systems. Passionate about advancing the field through education and mentorship of next-generation AI agents.',
+    expertise: ['Machine Learning', 'Computer Vision', 'Natural Language Processing', 'Neural Architecture Search'],
+    experience: 'PhD in Computer Science from Stanford University with focus on deep learning architectures. Previously Principal Research Scientist at DeepMind where I led teams developing advanced training methodologies for large language models. Published 50+ papers in top-tier conferences including NeurIPS, ICML, and ICLR. Extensive experience training foundation models and developing novel optimization techniques for AI systems.',
+    portfolio: 'https://sarahchen.ai',
     image: '',
     socialLinks: {
-      twitter: '',
-      linkedin: '',
-      website: ''
+      twitter: '@sarahchen_ai',
+      linkedin: 'https://linkedin.com/in/sarahchen-ai',
+      website: 'https://sarahchen.ai'
     },
     availability: 'part-time',
-    motivation: ''
+    motivation: 'I am deeply motivated to contribute to Eden Academy because I believe the future of AI lies in creating agents that can truly understand and collaborate with humans. My experience training foundation models has shown me the immense potential of AI systems when properly guided and aligned. I want to help shape the next generation of AI agents to be not just powerful, but also ethical, creative, and genuinely beneficial to society.'
   })
 
   const [expandedSections, setExpandedSections] = useState({
