@@ -135,6 +135,10 @@ export default function DocsPage() {
                 REGISTRY RESOURCES
               </h3>
               <div className="space-y-4">
+                <Link href="/docs/browse" className="border border-green-500 bg-green-500/10 text-green-400 hover:bg-green-500 hover:text-black transition-all duration-150 p-4 text-center block">
+                  <div className="helvetica-bold">BROWSE DOCUMENTATION</div>
+                  <div className="text-xs opacity-60 mt-1">Interactive Document Browser</div>
+                </Link>
                 <Link href="/docs/api" className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block">
                   <div className="helvetica-bold">API DOCUMENTATION</div>
                 </Link>

@@ -193,16 +193,16 @@ export async function PUT(
       }
     })
 
-    // Log the event
-    await logApiEvent('update', 'agent_lore', agent.id, { version: loreData.version }, authResult.user.userId)
+    // TEMP: Skip audit logging for Abraham sync debugging
+    // await logApiEvent('update', 'agent_lore', agent.id, { version: loreData.version }, authResult.user.userId)
 
-    // Send webhook notification
-    await sendWebhook('agent.lore.updated', {
-      agentId: agent.id,
-      handle: agent.handle,
-      version: loreData.version,
-      updatedBy: authResult.user.userId
-    })
+    // TEMP: Skip webhook notification for Abraham sync debugging
+    // await sendWebhook('agent.lore.updated', {
+    //   agentId: agent.id,
+    //   handle: agent.handle,
+    //   version: loreData.version,
+    //   updatedBy: authResult.user.userId
+    // })
 
     const response = NextResponse.json({
       agentId: agent.id,
