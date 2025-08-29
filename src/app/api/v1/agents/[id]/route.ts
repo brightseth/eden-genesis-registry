@@ -16,17 +16,19 @@ export async function OPTIONS(request: NextRequest) {
 // GET /api/v1/agents/:id (accepts both ID and handle)
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const corsResponse = handleCors(request)
   if (corsResponse) return corsResponse
 
+  const { id } = await params
+  
   // Try to find by ID first, then by handle
   const agent = await prisma.agent.findFirst({
     where: {
       OR: [
-        { id: params.id },
-        { handle: params.id }
+        { id },
+        { handle: id }
       ]
     },
     include: {
@@ -73,8 +75,9 @@ export async function GET(
 // PATCH /api/v1/agents/:id
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const authResult = await withAuth(request)
   if (authResult instanceof NextResponse) return authResult
   
@@ -95,7 +98,7 @@ export async function PATCH(
       assertWritePermission('agent_status', WriteOperation.UPDATE, {
         userId: authResult.user.userId,
         userRole: authResult.user.role as Role,
-        agentId: params.id,
+        agentId: id,
         operation: WriteOperation.UPDATE,
         collection: 'agent_status'
       })
@@ -104,7 +107,7 @@ export async function PATCH(
       assertWritePermission('agent', WriteOperation.UPDATE, {
         userId: authResult.user.userId,
         userRole: authResult.user.role as Role,
-        agentId: params.id,
+        agentId: id,
         operation: WriteOperation.UPDATE,
         collection: 'agent'
       })
@@ -121,7 +124,7 @@ export async function PATCH(
   
   try {
     const agent = await prisma.agent.update({
-      where: { id: params.id },
+      where: { id },
       data: validation.data,
       include: {
         cohort: true,
@@ -157,21 +160,28 @@ export async function PATCH(
 // DELETE /api/v1/agents/:id (admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const authResult = await withAuth(request, Role.ADMIN)
   if (authResult instanceof NextResponse) return authResult
   
   try {
     await prisma.agent.delete({
-      where: { id: params.id }
+      where: { id }
     })
     
     // Log event
-    await logApiEvent('delete', 'agent', params.id, null, authResult.user.userId)
+    await logApiEvent('delete', 'agent', id, null, authResult.user.userId)
     
     // Send webhook
-    await sendWebhook('agent.deleted', { id: params.id })
+    await sendRegistryWebhook('registry:agent.deleted', {
+      agentId: id,
+      operation: 'delete',
+      collection: 'agent',
+      userId: authResult.user.userId,
+      timestamp: new Date().toISOString()
+    })
     
     return NextResponse.json({ success: true })
   } catch (error) {

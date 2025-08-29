@@ -216,7 +216,7 @@ export default function UnifiedApplicationPage() {
               <div className="space-y-4 mb-8">
                 <div className="space-y-4">
                   <Link 
-                    href="https://eden-academy-flame.vercel.app/sites/bertha/interview"
+                    href="https://academy.eden2.io/sites/bertha/interview"
                     target="_blank"
                     className="block border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center"
                   >

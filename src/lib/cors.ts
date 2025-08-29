@@ -17,9 +17,9 @@ const ALLOWED_ORIGINS = [
   'https://koru.eden2.io',
   'https://sue.eden2.io',
   'https://bart.eden2.io',
-  // Current Vercel deployments (transition period)
-  'https://eden-genesis-registry.vercel.app',
-  'https://eden-academy-flame.vercel.app',
+  // Eden2.io federation (production)
+  'https://registry.eden2.io',
+  'https://academy.eden2.io',
   // Local development
   'http://localhost:3000',
   'http://localhost:3001',

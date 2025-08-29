@@ -248,7 +248,7 @@ export default function APIDocumentationPage() {
           <div className="border border-white bg-black p-6 mb-8">
             <div className="helvetica-bold text-white mb-2">BASE URL</div>
             <code className="helvetica-regular font-mono bg-white text-black px-4 py-2 block">
-              https://eden-genesis-registry.vercel.app/api/v1
+              https://registry.eden2.io/api/v1
             </code>
           </div>
 
@@ -333,18 +333,18 @@ export default function APIDocumentationPage() {
             </p>
             <pre className="bg-white text-black p-4 helvetica-regular font-mono text-sm border border-white">
 {`# Request magic link
-curl -X POST https://eden-genesis-registry.vercel.app/api/v1/auth/magic/start \\
+curl -X POST https://registry.eden2.io/api/v1/auth/magic/start \\
   -H "Content-Type: application/json" \\
   -d '{"email": "user@example.com"}'
 
 # Complete authentication
-curl -X POST https://eden-genesis-registry.vercel.app/api/v1/auth/magic/complete \\
+curl -X POST https://registry.eden2.io/api/v1/auth/magic/complete \\
   -H "Content-Type: application/json" \\
   -d '{"token": "magic-link-token"}'
 
 # Use token in requests
 curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
-  https://eden-genesis-registry.vercel.app/api/v1/agents`}
+  https://registry.eden2.io/api/v1/agents`}
             </pre>
           </div>
 

@@ -14,12 +14,17 @@ export async function GET(request: NextRequest) {
 
   try {
     // Test database connection and get comprehensive counts
-    const [agentCount, cohortCount, genesisAgents, activeAgents] = await Promise.all([
+    const [agentCount, cohortCount, activeAgents, firstCohort] = await Promise.all([
       prisma.agent.count(),
       prisma.cohort.count(),
-      prisma.agent.count({ where: { cohort: { slug: 'genesis' } } }),
-      prisma.agent.count({ where: { status: 'ACTIVE' } })
+      prisma.agent.count({ where: { status: 'ACTIVE' } }),
+      prisma.cohort.findFirst({ orderBy: { createdAt: 'asc' } })
     ])
+
+    // Get count for the first/primary cohort (typically Genesis)
+    const primaryCohortAgents = firstCohort 
+      ? await prisma.agent.count({ where: { cohortId: firstCohort.id } })
+      : 0
 
     const response = NextResponse.json({
       status: 'healthy',
@@ -28,7 +33,8 @@ export async function GET(request: NextRequest) {
       database: 'connected',
       agentCount,
       cohortCount,
-      genesisAgents,
+      primaryCohortAgents,
+      primaryCohort: firstCohort?.slug || null,
       activeAgents,
       environment: process.env.NODE_ENV || 'development',
       seeded: agentCount >= 10 ? 'complete' : 'incomplete'

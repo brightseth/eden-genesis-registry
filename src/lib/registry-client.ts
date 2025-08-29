@@ -337,7 +337,7 @@ export class RegistryClient {
 
 // Default client instance
 const defaultClient = new RegistryClient({
-  baseURL: process.env.REGISTRY_BASE_URL || 'https://registry.eden2.io/api/v1',
+  baseURL: process.env.REGISTRY_BASE_URL || 'https://registry.eden2.io',
   apiKey: process.env.REGISTRY_API_KEY
 });
 

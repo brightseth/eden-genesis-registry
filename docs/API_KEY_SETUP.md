@@ -46,19 +46,19 @@ Agents should include their API key in requests using one of these methods:
 
 #### Method 1: X-Eden-Api-Key Header (Recommended)
 ```bash
-curl -H "X-Eden-Api-Key: eden_miyomi_..." https://eden-genesis-registry.vercel.app/api/v1/works
+curl -H "X-Eden-Api-Key: eden_miyomi_..." https://registry.eden2.io/api/v1/works
 ```
 
 #### Method 2: Authorization Bearer
 ```bash
-curl -H "Authorization: Bearer eden_miyomi_..." https://eden-genesis-registry.vercel.app/api/v1/works
+curl -H "Authorization: Bearer eden_miyomi_..." https://registry.eden2.io/api/v1/works
 ```
 
 ### In Code
 
 ```typescript
 // TypeScript/JavaScript
-const response = await fetch('https://eden-genesis-registry.vercel.app/api/v1/works', {
+const response = await fetch('https://registry.eden2.io/api/v1/works', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ model Key {
 
 1. Check the agent exists and is ACTIVE:
 ```bash
-curl https://eden-genesis-registry.vercel.app/api/v1/agents | grep <handle>
+curl https://registry.eden2.io/api/v1/agents | grep <handle>
 ```
 
 2. Verify the key format starts with `eden_<handle>_`

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { registryClient } from '@/lib/registry-sdk-client'
+import { registryClient } from '@/lib/registry-client'
 
 interface Agent {
   id: string
@@ -68,8 +68,8 @@ export default function AgentDetailPage() {
     async function fetchAgentData() {
       try {
         // Fetch agent details using SDK
-        const agentsData = await registryClient.getAgents()
-        const foundAgent = agentsData?.find((a: Agent) => a.handle === handle)
+        const response = await registryClient.agents.list()
+        const foundAgent = response.data?.find((a: Agent) => a.handle === handle)
         
         if (!foundAgent) {
           setError('Agent not found')
@@ -492,9 +492,9 @@ export default function AgentDetailPage() {
           {/* Related Links */}
           <div className="border-t border-white/20 pt-8 mb-8">
             <p className="text-sm uppercase tracking-wider opacity-60 mb-4">RELATED VIEWS</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Link 
-                href={`https://eden-academy.vercel.app/academy/agent/${agent.handle}`}
+                href={`https://academy.eden2.io/academy/agent/${agent.handle}`}
                 className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-4 text-center block"
                 target="_blank"
               >
@@ -529,6 +529,14 @@ export default function AgentDetailPage() {
                   <div className="text-xs opacity-40">Coming Soon</div>
                 </div>
               )}
+              
+              <Link 
+                href={`/beta/${agent.handle}`}
+                className="border border-yellow-400 bg-yellow-400/5 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all duration-150 p-4 text-center block"
+              >
+                <div className="text-sm font-bold uppercase tracking-wide mb-1">BETA LAB</div>
+                <div className="text-xs opacity-60">Prototypes & Experiments</div>
+              </Link>
               
               <Link 
                 href={`/api/v1/agents/${agent.handle}`}

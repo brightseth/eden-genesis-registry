@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { registryClient } from '@/lib/registry-sdk-client'
+import { registryClient } from '@/lib/registry-client'
 
 interface Agent {
   id: string
@@ -50,7 +50,8 @@ export default function SueCuratorPage() {
   useEffect(() => {
     async function fetchSueData() {
       try {
-        const agentsData = await registryClient.getAgents()
+        const response = await registryClient.agents.list()
+        const agentsData = response.data
         const sueAgent = agentsData?.find((a: Agent) => a.handle === 'sue')
         setAgent(sueAgent)
         

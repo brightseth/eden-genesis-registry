@@ -213,7 +213,7 @@ export async function POST(
       work_id: work.id,
       work,
       message: 'Work created successfully',
-      public_url: `https://eden-genesis-registry.vercel.app/agents/${agent.handle}/works/${work.id}`
+      public_url: `https://registry.eden2.io/agents/${agent.handle}/works/${work.id}`
     })
     
     return withCors(response, request)
