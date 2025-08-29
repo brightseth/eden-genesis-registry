@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 const ALLOWED_ORIGINS = [
-  // New eden2.io domains (primary)
+  // Primary eden2.io domains
   'https://registry.eden2.io',
   'https://academy.eden2.io',
   'https://studio.eden2.io',
   'https://curator.eden2.io',
   'https://collector.eden2.io',
-  // Legacy domains (maintain during transition)
-  'https://eden.art',
-  'https://academy.eden.art',
-  'https://studio.eden.art',
-  'https://curator.eden.art',
-  'https://collector.eden.art',
-  // Current Vercel deployments (maintain during transition)
+  // Agent sovereign sites
+  'https://abraham.eden2.io',
+  'https://solienne.eden2.io',
+  'https://bertha.eden2.io',
+  'https://miyomi.eden2.io',
+  'https://citizen.eden2.io',
+  'https://geppetto.eden2.io',
+  'https://koru.eden2.io',
+  'https://sue.eden2.io',
+  'https://bart.eden2.io',
+  // Current Vercel deployments (transition period)
   'https://eden-genesis-registry.vercel.app',
   'https://eden-academy-flame.vercel.app',
   // Local development

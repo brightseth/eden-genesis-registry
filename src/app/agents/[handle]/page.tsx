@@ -87,6 +87,44 @@ export default function AgentDetailPage() {
           console.log('Could not fetch creations')
         }
 
+        // For SUE, also fetch curatorial works
+        if (foundAgent.handle === 'sue') {
+          try {
+            const response = await fetch(`/api/v1/agents/sue/works?limit=10`)
+            if (response.ok) {
+              const worksData = await response.json()
+              if (worksData.success) {
+                // Convert curatorial works to creation format for display
+                const curationalCreations = worksData.works.map((work: any) => ({
+                  id: work.id,
+                  title: `Curatorial Analysis: ${work.title}`,
+                  mediaType: 'CURATION_ANALYSIS',
+                  mediaUri: work.mediaUri,
+                  creationUrl: work.metadata.sourceUrl,
+                  metadata: {
+                    description: `${work.metadata.curatorVerdict} (${work.metadata.overallScore}/100) - ${work.metadata.analysis}`,
+                    curatorVerdict: work.metadata.curatorVerdict,
+                    overallScore: work.metadata.overallScore,
+                    scores: {
+                      artisticInnovation: work.metadata.artisticInnovation,
+                      culturalRelevance: work.metadata.culturalRelevance,
+                      technicalMastery: work.metadata.technicalMastery,
+                      criticalExcellence: work.metadata.criticalExcellence,
+                      marketImpact: work.metadata.marketImpact
+                    }
+                  },
+                  features: work.features,
+                  status: 'PUBLISHED',
+                  createdAt: work.createdAt
+                }))
+                setCreations(prev => [...curationalCreations, ...prev])
+              }
+            }
+          } catch (error) {
+            console.log('Could not fetch SUE curatorial works:', error)
+          }
+        }
+
       } catch {
         setError('Failed to load agent data')
       } finally {
@@ -556,13 +594,58 @@ export default function AgentDetailPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h3 className="text-xl font-bold uppercase tracking-wide mb-3">{creation.title}</h3>
+                      
+                      {/* Special display for SUE's curatorial analyses */}
+                      {creation.mediaType === 'CURATION_ANALYSIS' && creation.metadata?.curatorVerdict && (
+                        <div className="mb-4">
+                          <div className="flex items-center gap-4 mb-3">
+                            <span className={`px-3 py-1 border text-sm uppercase tracking-wide ${
+                              creation.metadata.curatorVerdict === 'MASTERWORK' ? 'border-green-500 text-green-500' :
+                              creation.metadata.curatorVerdict === 'WORTHY' ? 'border-blue-400 text-blue-400' :
+                              creation.metadata.curatorVerdict === 'PROMISING' ? 'border-yellow-500 text-yellow-500' :
+                              'border-red-500 text-red-500'
+                            }`}>
+                              {creation.metadata.curatorVerdict}
+                            </span>
+                            <span className="text-lg font-bold">
+                              {creation.metadata.overallScore}/100
+                            </span>
+                          </div>
+                          
+                          {creation.metadata.scores && (
+                            <div className="grid grid-cols-5 gap-3 mb-3 text-xs">
+                              <div className="text-center">
+                                <p className="opacity-60 uppercase mb-1">INNOVATION</p>
+                                <p className="font-bold">{creation.metadata.scores.artisticInnovation}</p>
+                              </div>
+                              <div className="text-center">
+                                <p className="opacity-60 uppercase mb-1">RELEVANCE</p>
+                                <p className="font-bold">{creation.metadata.scores.culturalRelevance}</p>
+                              </div>
+                              <div className="text-center">
+                                <p className="opacity-60 uppercase mb-1">MASTERY</p>
+                                <p className="font-bold">{creation.metadata.scores.technicalMastery}</p>
+                              </div>
+                              <div className="text-center">
+                                <p className="opacity-60 uppercase mb-1">EXCELLENCE</p>
+                                <p className="font-bold">{creation.metadata.scores.criticalExcellence}</p>
+                              </div>
+                              <div className="text-center">
+                                <p className="opacity-60 uppercase mb-1">IMPACT</p>
+                                <p className="font-bold">{creation.metadata.scores.marketImpact}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
                       {creation.metadata?.description && (
                         <p className="text-lg opacity-80 mb-4">{creation.metadata.description}</p>
                       )}
                       <div className="flex gap-6 text-xs uppercase tracking-wider opacity-60">
                         <span>TYPE: {creation.mediaType}</span>
                         <span>STATUS: {creation.status}</span>
-                        <span>ID: {creation.id}</span>
+                        <span>DATE: {new Date(creation.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
                     {creation.creationUrl && (
@@ -572,7 +655,7 @@ export default function AgentDetailPage() {
                         rel="noopener noreferrer"
                         className="text-white hover:opacity-70 uppercase tracking-wider text-sm ml-6"
                       >
-                        VIEW →
+                        {creation.mediaType === 'CURATION_ANALYSIS' ? 'VIEW ANALYZED WORK →' : 'VIEW →'}
                       </a>
                     )}
                   </div>

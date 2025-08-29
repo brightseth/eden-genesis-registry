@@ -6,7 +6,7 @@ info:
 servers:
   - url: http://localhost:3000/api/v1
     description: Development server
-  - url: https://registry.eden.art/api/v1
+  - url: https://registry.eden2.io/api/v1
     description: Production server
 
 components:

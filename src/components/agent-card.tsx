@@ -17,8 +17,13 @@ interface Agent {
         description: string
         dailyGoal: string
       }
+      social?: {
+        website?: string
+        domain?: string
+      }
     }
   }
+  prototypeUrl?: string
   counts?: {
     creations: number
     personas: number
@@ -30,22 +35,13 @@ interface AgentCardProps {
   agent: Agent
 }
 
-// Mapping of agents to their sovereign domains
-const SOVEREIGN_DOMAINS = {
-  'solienne': 'solienne.ai',
-  'abraham': 'abraham.ai', 
-  'miyomi': 'miyomi.ai',
-  'bertha': 'bertha.ai',
-  'citizen': 'citizen.ai',
-  'geppetto': 'geppetto.ai',
-  'koru': 'koru.ai',
-  'nina': 'nina.ai',
-  'sue': 'sue.ai'
-}
-
 export default function AgentCard({ agent }: AgentCardProps) {
-  // Smart routing: if agent has sovereign domain, show external link
-  const sovereignDomain = SOVEREIGN_DOMAINS[agent.handle as keyof typeof SOVEREIGN_DOMAINS]
+  // Smart routing: get domain from agent profile or prototypeUrl
+  const sovereignDomain = agent.profile?.links?.social?.domain || 
+                         agent.profile?.links?.social?.website?.replace(/^https?:\/\//, '') ||
+                         (agent.prototypeUrl && agent.prototypeUrl.includes('://') 
+                           ? new URL(agent.prototypeUrl).hostname 
+                           : null)
   const isOpenSlot = agent.handle.startsWith('open-')
   
   // Open slots are not clickable
@@ -77,8 +73,8 @@ export default function AgentCard({ agent }: AgentCardProps) {
   }
 
   // Regular agent card with smart routing
-  const href = sovereignDomain ? `https://${sovereignDomain}` : `/agents/${agent.handle}`
-  const isExternal = !!sovereignDomain
+  const href = agent.prototypeUrl || (sovereignDomain ? `https://${sovereignDomain}` : `/agents/${agent.handle}`)
+  const isExternal = !!(agent.prototypeUrl || sovereignDomain)
 
   return (
     <Link
@@ -92,7 +88,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
           <span className="text-xs px-3 py-1 border border-current uppercase tracking-wide">
             {agent.role?.toUpperCase()}
           </span>
-          {sovereignDomain && (
+          {(sovereignDomain || agent.prototypeUrl) && (
             <span className="text-xs px-2 py-1 bg-white text-black uppercase tracking-wide">
               LIVE
             </span>
@@ -136,9 +132,9 @@ export default function AgentCard({ agent }: AgentCardProps) {
         </div>
       )}
 
-      {sovereignDomain && (
+      {(sovereignDomain || agent.prototypeUrl) && (
         <div className="text-xs uppercase tracking-wide opacity-60 font-mono">
-          {sovereignDomain} ↗
+          {sovereignDomain || (agent.prototypeUrl ? new URL(agent.prototypeUrl).hostname : '')} ↗
         </div>
       )}
     </Link>

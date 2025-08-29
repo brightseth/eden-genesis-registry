@@ -6,11 +6,13 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { ComprehensiveLoreSchema, LoreUpdateSchema } from '@/lib/schemas/agent.schema'
+import { ComprehensiveLoreSchema, LoreUpdateSchema, type ComprehensiveLore } from '@/lib/schemas/agent.schema'
 import { withAuth } from '@/middleware/auth'
 import { logApiEvent } from '@/lib/audit'
-import { sendWebhook } from '@/lib/webhooks'
+import { sendRegistryWebhook, type RegistryWebhookData } from '@/lib/webhooks'
 import { handleCors, withCors } from '@/lib/cors'
+import { validateWithGates, createValidationMiddleware } from '@/lib/validation-gates'
+import { assertWritePermission, WriteOperation } from '@/lib/write-gates'
 import { Role } from '@prisma/client'
 import { createHash } from 'crypto'
 
@@ -107,20 +109,59 @@ export async function PUT(
   const corsResponse = handleCors(request)
   if (corsResponse) return corsResponse
 
-  const authResult = await withAuth(request, Role.TRAINER) // Require trainer+ privileges
+  const authResult = await withAuth(request) // Get auth info
   if (authResult instanceof NextResponse) return authResult
 
   try {
     const { id } = await params
     const body = await request.json()
     
-    // TEMP: Skip schema validation for Abraham debugging
-    console.log('TEMP: Skipping schema validation for debugging')
+    // Check write permissions for lore
+    try {
+      assertWritePermission('lore', WriteOperation.UPDATE, {
+        userId: authResult.user.userId,
+        userRole: authResult.user.role as Role,
+        agentId: id,
+        operation: WriteOperation.UPDATE,
+        collection: 'lore'
+      })
+    } catch (error) {
+      return NextResponse.json(
+        { 
+          error: 'Access denied', 
+          details: error instanceof Error ? error.message : 'Insufficient permissions for lore updates'
+        },
+        { status: 403 }
+      )
+    }
+    
+    // Validate lore data with progressive gates
+    const validationResult = validateWithGates<ComprehensiveLore>('lore', body, {
+      agentId: id,
+      userId: authResult.user.userId
+    })
+
+    if (!validationResult.valid) {
+      return NextResponse.json(
+        { 
+          error: 'Invalid lore data',
+          details: validationResult.errors,
+          level: validationResult.level
+        },
+        { status: 400 }
+      )
+    }
+
     const loreData = {
-      ...body,
+      ...validationResult.data,
       agentId: id,
       updatedAt: new Date(),
       updatedBy: authResult.user.userId
+    }
+
+    // Log warnings if any
+    if (validationResult.warnings?.length) {
+      console.warn(`⚠️ Lore validation warnings for agent ${id}:`, validationResult.warnings)
     }
 
     // Find agent by ID or handle
@@ -196,13 +237,15 @@ export async function PUT(
     // TEMP: Skip audit logging for Abraham sync debugging
     // await logApiEvent('update', 'agent_lore', agent.id, { version: loreData.version }, authResult.user.userId)
 
-    // TEMP: Skip webhook notification for Abraham sync debugging
-    // await sendWebhook('agent.lore.updated', {
-    //   agentId: agent.id,
-    //   handle: agent.handle,
-    //   version: loreData.version,
-    //   updatedBy: authResult.user.userId
-    // })
+    // Send registry webhook for lore update
+    await sendRegistryWebhook('registry:lore.updated', {
+      agentId: agent.id,
+      operation: 'update',
+      collection: 'lore',
+      after: lore,
+      userId: authResult.user.userId,
+      timestamp: new Date().toISOString()
+    })
 
     const response = NextResponse.json({
       agentId: agent.id,

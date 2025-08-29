@@ -532,10 +532,10 @@ export default function SchemaPage() {
             </div>
             <div className="flex gap-4">
               <a 
-                href="/api/v1/agents/mock" 
+                href="/api/v1/agents" 
                 className="text-sm uppercase tracking-wider hover:underline"
               >
-                View Mock Data →
+                View Live Data →
               </a>
               <a 
                 href="/" 

@@ -3,8 +3,9 @@ import { prisma } from '@/lib/db'
 import { updateAgentSchema } from '@/lib/validations'
 import { withAuth } from '@/middleware/auth'
 import { logApiEvent } from '@/lib/audit'
-import { sendWebhook } from '@/lib/webhooks'
+import { sendRegistryWebhook, type RegistryWebhookData } from '@/lib/webhooks'
 import { handleCors, withCors } from '@/lib/cors'
+import { assertWritePermission, WriteOperation } from '@/lib/write-gates'
 import { Role } from '@prisma/client'
 
 // OPTIONS handler
@@ -86,6 +87,37 @@ export async function PATCH(
       { status: 400 }
     )
   }
+
+  // Check write permissions
+  try {
+    // Special handling for status updates (ADMIN only)
+    if (validation.data.status) {
+      assertWritePermission('agent_status', WriteOperation.UPDATE, {
+        userId: authResult.user.userId,
+        userRole: authResult.user.role as Role,
+        agentId: params.id,
+        operation: WriteOperation.UPDATE,
+        collection: 'agent_status'
+      })
+    } else {
+      // Regular agent updates (TRAINER+)
+      assertWritePermission('agent', WriteOperation.UPDATE, {
+        userId: authResult.user.userId,
+        userRole: authResult.user.role as Role,
+        agentId: params.id,
+        operation: WriteOperation.UPDATE,
+        collection: 'agent'
+      })
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { 
+        error: 'Access denied', 
+        details: error instanceof Error ? error.message : 'Insufficient permissions'
+      },
+      { status: 403 }
+    )
+  }
   
   try {
     const agent = await prisma.agent.update({
@@ -100,8 +132,16 @@ export async function PATCH(
     // Log event
     await logApiEvent('update', 'agent', agent.id, validation.data, authResult.user.userId)
     
-    // Send webhook
-    await sendWebhook('agent.updated', agent)
+    // Send registry webhook
+    const webhookEvent = validation.data.status ? 'registry:agent.status_changed' : 'registry:agent.updated'
+    await sendRegistryWebhook(webhookEvent, {
+      agentId: agent.id,
+      operation: 'update',
+      collection: 'agent',
+      after: agent,
+      userId: authResult.user.userId,
+      timestamp: new Date().toISOString()
+    })
     
     const response = NextResponse.json(agent)
   return withCors(response, request)

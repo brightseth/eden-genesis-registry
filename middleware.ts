@@ -14,7 +14,7 @@ function getSecurityHeaders(request: NextRequest) {
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob:",
     "media-src 'self' https:",
-    "connect-src 'self' https: wss: https://*.vercel.app https://*.eden.art",
+    "connect-src 'self' https: wss: https://*.vercel.app https://*.eden2.io",
     "frame-src 'self' https://*.vercel.app",
     "object-src 'none'",
     "base-uri 'self'",

@@ -62,11 +62,11 @@ export default function HomePage() {
                 /API/V1/AGENTS
               </a>
               <a 
-                href="/api/v1/agents/mock" 
+                href="/contracts" 
                 target="_blank"
                 className="font-mono text-sm border border-white/40 px-4 py-2 hover:border-white transition-colors"
               >
-                /API/V1/MOCK
+                /API/CONTRACTS
               </a>
             </div>
           </div>

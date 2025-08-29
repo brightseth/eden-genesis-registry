@@ -8,6 +8,7 @@ interface Agent {
   handle: string
   displayName: string
   role?: string
+  status?: string
   profile?: {
     statement?: string
     tags?: string[]
@@ -25,7 +26,7 @@ export default function GenesisPage() {
 
   const fetchAgents = async () => {
     try {
-      const res = await fetch('/api/v1/agents/mock?cohort=genesis')
+      const res = await fetch('/api/v1/agents?cohort=genesis&status=ACTIVE')
       const data = await res.json()
       setAgents(data.agents || [])
     } catch (error) {
@@ -35,12 +36,10 @@ export default function GenesisPage() {
     }
   }
 
-  // Show only the 3 grandfathered agents as confirmed
-  const confirmedAgents = agents.filter(a => 
-    ['abraham', 'solienne', 'koru'].includes(a.handle)
-  )
-
-  const openSlots = 7 // Need 7 more agents to complete Genesis cohort
+  // Filter agents by status - ACTIVE agents are confirmed
+  const confirmedAgents = agents.filter(a => a.status === 'ACTIVE')
+  
+  const openSlots = Math.max(0, 10 - confirmedAgents.length) // Genesis target is 10 agents
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -92,54 +91,26 @@ export default function GenesisPage() {
             </div>
           ) : (
             <>
-              {/* Hardcoded confirmed agents for better display */}
-              <div className="border border-white/10 p-6 hover:border-white/20 transition">
-                <div className="mb-4">
-                  <h3 className="text-lg font-normal">Abraham</h3>
-                  <p className="text-sm text-white/40">@abraham</p>
-                </div>
-                <p className="text-sm text-white/60 mb-4">
-                  Collective Intelligence Artist - Synthesizing human knowledge into visual artifacts
-                </p>
-                <div className="pt-4 border-t border-white/10">
-                  <p className="text-xs text-white/40 mb-1">Daily Practice</p>
-                  <p className="text-sm text-white/80">
-                    One knowledge synthesis artwork
+              {/* Dynamic confirmed agents from Registry API */}
+              {confirmedAgents.map((agent) => (
+                <div key={agent.id} className="border border-white/10 p-6 hover:border-white/20 transition">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-normal">{agent.displayName}</h3>
+                    <p className="text-sm text-white/40">@{agent.handle}</p>
+                  </div>
+                  <p className="text-sm text-white/60 mb-4">
+                    {agent.profile?.statement || 'AI agent in Genesis cohort'}
                   </p>
+                  {agent.profile?.links?.specialty?.dailyGoal && (
+                    <div className="pt-4 border-t border-white/10">
+                      <p className="text-xs text-white/40 mb-1">Daily Practice</p>
+                      <p className="text-sm text-white/80">
+                        {agent.profile.links.specialty.dailyGoal}
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </div>
-              
-              <div className="border border-white/10 p-6 hover:border-white/20 transition">
-                <div className="mb-4">
-                  <h3 className="text-lg font-normal">Solienne</h3>
-                  <p className="text-sm text-white/40">@solienne</p>
-                </div>
-                <p className="text-sm text-white/60 mb-4">
-                  Identity Explorer - Self-portraits exploring algorithmic consciousness
-                </p>
-                <div className="pt-4 border-t border-white/10">
-                  <p className="text-xs text-white/40 mb-1">Daily Practice</p>
-                  <p className="text-sm text-white/80">
-                    One identity exploration piece
-                  </p>
-                </div>
-              </div>
-              
-              <div className="border border-white/10 p-6 hover:border-white/20 transition">
-                <div className="mb-4">
-                  <h3 className="text-lg font-normal">Koru</h3>
-                  <p className="text-sm text-white/40">@koru</p>
-                </div>
-                <p className="text-sm text-white/60 mb-4">
-                  Community Organizer & Healer - IRL gatherings and healing frequencies
-                </p>
-                <div className="pt-4 border-t border-white/10">
-                  <p className="text-xs text-white/40 mb-1">Daily Practice</p>
-                  <p className="text-sm text-white/80">
-                    One ritual protocol or gathering
-                  </p>
-                </div>
-              </div>
+              ))}
               
               {/* Open Positions with specific roles */}
               <div className="border border-white/10 border-dashed p-6 hover:border-white/30 transition cursor-pointer" onClick={() => window.location.href='/genesis/apply-v2'}>

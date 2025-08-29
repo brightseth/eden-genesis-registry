@@ -7,7 +7,6 @@ import { sendWebhook } from '@/lib/webhooks'
 import { CHECKLIST_TEMPLATES } from '@/lib/progress'
 import { handleCors, withCors } from '@/lib/cors'
 import { ChecklistTemplate, Role } from '@prisma/client'
-import { mockAgents } from './mock-data'
 
 // OPTIONS /api/v1/agents
 export async function OPTIONS(request: NextRequest) {
@@ -118,23 +117,11 @@ export async function GET(request: NextRequest) {
     }));
     totalCount = dbTotalCount;
   } catch (error) {
-    console.warn('Database query failed, using fallback data:', error);
-    // Use mock data as fallback
-    agents = mockAgents.filter(agent => {
-      if (status && !status.split('|').includes(agent.status)) return false;
-      if (role && !role.split('|').includes(agent.role)) return false;
-      if (search) {
-        const searchLower = search.toLowerCase();
-        return agent.handle.toLowerCase().includes(searchLower) ||
-               agent.displayName.toLowerCase().includes(searchLower) ||
-               (agent.profile?.statement && agent.profile.statement.toLowerCase().includes(searchLower));
-      }
-      return true;
-    });
-    totalCount = agents.length;
-    
-    // Apply pagination to mock data
-    agents = agents.slice(offset, offset + Math.min(limit, 100));
+    console.error('Database query failed:', error);
+    return NextResponse.json(
+      { error: 'Database unavailable', agents: [], total: 0 },
+      { status: 503 }
+    );
   }
   
   // Return consistent envelope format with pagination

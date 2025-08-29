@@ -1,0 +1,207 @@
+name: Documentation Validation
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths: ['docs/**', 'src/**', 'openapi.yaml']
+  push:
+    branches: [main, develop]
+    paths: ['docs/**', 'src/**', 'openapi.yaml']
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    name: Validate Documentation
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Validate OpenAPI spec
+        run: |
+          npx swagger-codegen-cli validate -i openapi.yaml || exit 1
+          echo "✅ OpenAPI specification is valid"
+          
+      - name: Check docs structure
+        run: |
+          # Verify required docs exist
+          if [[ ! -f "docs/overview.md" ]]; then
+            echo "❌ Missing docs/overview.md"
+            exit 1
+          fi
+          
+          if [[ ! -f "docs/contracts.md" ]]; then
+            echo "❌ Missing docs/contracts.md" 
+            exit 1
+          fi
+          
+          if [[ ! -f "docs/runbook.md" ]]; then
+            echo "❌ Missing docs/runbook.md"
+            exit 1
+          fi
+          
+          if [[ ! -f "docs/three-tier-pattern.md" ]]; then
+            echo "❌ Missing docs/three-tier-pattern.md"
+            exit 1
+          fi
+          
+          echo "✅ All required documentation files exist"
+          
+      - name: Auto-generate contracts from OpenAPI
+        run: |
+          npx tsx scripts/generate-docs-from-openapi.ts
+          
+          # Check if contracts.md was updated
+          if git diff --quiet docs/contracts.md; then
+            echo "✅ Contracts documentation is up to date"
+          else
+            echo "❌ Contracts documentation is out of sync with OpenAPI spec"
+            echo "Run: npx tsx scripts/generate-docs-from-openapi.ts"
+            exit 1
+          fi
+          
+      - name: Validate internal links
+        run: |
+          # Check for broken internal links in markdown files
+          find docs/ -name "*.md" -exec grep -H '\[.*\](' {} \; | \
+          while IFS=':' read -r file link; do
+            # Extract URL from markdown link
+            url=$(echo "$link" | sed -n 's/.*\](\([^)]*\)).*/\1/p')
+            
+            # Skip external URLs (http/https) and anchors
+            if [[ "$url" =~ ^https?:// ]] || [[ "$url" =~ ^# ]]; then
+              continue
+            fi
+            
+            # Convert relative paths to absolute
+            if [[ "$url" =~ ^\/ ]]; then
+              # Absolute path from repo root
+              target_file="${url#/}"
+            else
+              # Relative path from current file
+              file_dir=$(dirname "$file")
+              target_file="$file_dir/$url"
+            fi
+            
+            # Check if target file exists
+            if [[ ! -f "$target_file" ]]; then
+              echo "❌ Broken link in $file: $url -> $target_file"
+              exit 1
+            fi
+          done
+          
+          echo "✅ All internal links are valid"
+          
+      - name: Check agent documentation coverage
+        run: |
+          # Verify each agent has documentation coverage
+          agents=("abraham" "solienne" "citizen" "bertha" "miyomi" "geppetto" "koru" "sue")
+          
+          for agent in "${agents[@]}"; do
+            # Check if agent is mentioned in overview
+            if ! grep -q "$agent" docs/overview.md; then
+              echo "❌ Agent $agent not documented in overview.md"
+              exit 1
+            fi
+            
+            # Check if agent has registry record mentioned
+            if ! grep -q "$agent" docs/contracts.md; then
+              echo "❌ Agent $agent not covered in API contracts"
+              exit 1
+            fi
+          done
+          
+          echo "✅ All agents have documentation coverage"
+          
+      - name: Validate three-tier pattern compliance
+        run: |
+          # Check that three-tier pattern is documented with code links
+          if ! grep -q "/academy/agent/\[" docs/three-tier-pattern.md; then
+            echo "❌ Three-tier pattern missing profile tier documentation"
+            exit 1
+          fi
+          
+          if ! grep -q "/sites/\[" docs/three-tier-pattern.md; then
+            echo "❌ Three-tier pattern missing site tier documentation"
+            exit 1
+          fi
+          
+          if ! grep -q "/dashboard/\[" docs/three-tier-pattern.md; then
+            echo "❌ Three-tier pattern missing dashboard tier documentation"
+            exit 1
+          fi
+          
+          echo "✅ Three-tier pattern documentation is complete"
+          
+      - name: Security check - no hardcoded secrets
+        run: |
+          # Check for accidentally committed secrets in docs
+          if grep -r "sk-" docs/; then
+            echo "❌ Found potential API key in documentation"
+            exit 1
+          fi
+          
+          if grep -r "eyJ" docs/; then
+            echo "❌ Found potential JWT token in documentation"
+            exit 1
+          fi
+          
+          echo "✅ No hardcoded secrets found in documentation"
+          
+      - name: Markdown lint
+        run: |
+          # Basic markdown formatting checks
+          find docs/ -name "*.md" | while read -r file; do
+            # Check for proper heading structure
+            if ! head -1 "$file" | grep -q "^# "; then
+              echo "❌ $file missing top-level heading"
+              exit 1
+            fi
+            
+            # Check for empty files
+            if [[ ! -s "$file" ]]; then
+              echo "❌ $file is empty"
+              exit 1
+            fi
+          done
+          
+          echo "✅ Markdown files are properly formatted"
+
+  deploy-docs:
+    runs-on: ubuntu-latest
+    needs: validate-docs
+    if: github.ref == 'refs/heads/main'
+    name: Deploy Documentation
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Generate latest contracts
+        run: npx tsx scripts/generate-docs-from-openapi.ts
+        
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'

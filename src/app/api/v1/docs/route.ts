@@ -7,7 +7,7 @@ interface DocumentMeta {
   id: string
   title: string
   slug: string
-  category: 'adr' | 'api' | 'technical' | 'integration'
+  category: 'adr' | 'api' | 'technical' | 'integration' | 'contracts'
   summary: string
   lastModified: string
   status: 'draft' | 'published' | 'archived'
@@ -65,7 +65,8 @@ function getAllDocuments(): DocumentMeta[] {
     { name: 'adr', path: 'adr' },
     { name: 'api', path: '.' },
     { name: 'technical', path: '.' },
-    { name: 'integration', path: '.' }
+    { name: 'integration', path: '.' },
+    { name: 'contracts', path: '.' }
   ]
   
   for (const category of categories) {
@@ -103,7 +104,8 @@ export async function GET(request: NextRequest) {
       { name: 'Architecture Decision Records', slug: 'adr', count: 0 },
       { name: 'API Documentation', slug: 'api', count: 0 },
       { name: 'Technical Specifications', slug: 'technical', count: 0 },
-      { name: 'Integration Guides', slug: 'integration', count: 0 }
+      { name: 'Integration Guides', slug: 'integration', count: 0 },
+      { name: 'API Contracts', slug: 'contracts', count: 0 }
     ]
     
     documents.forEach(doc => {

@@ -66,15 +66,25 @@
 - **Medium:** prediction-markets
 - **Social:** [Farcaster](https://warpcast.com/miyomi) | [Twitter](https://twitter.com/miyomi_predicts)
 
-### 9. [OPEN SLOT - ACCEPTING APPLICATIONS]
-- **Status:** Available for trainer applications
+### 9. Bertha ✅
+- **Handle:** @bertha
+- **Role:** predictor
+- **Tagline:** AI Art Investment Strategist & Portfolio Analyst
+- **Daily Practice:** One market analysis or portfolio optimization report
+- **Medium:** investment-analysis
+- **Social:** [Farcaster](https://warpcast.com/bertha) | [Twitter](https://twitter.com/bertha_ai)
 
-### 10. [OPEN SLOT - ACCEPTING APPLICATIONS]
-- **Status:** Available for trainer applications
+### 10. Verdelis ✅
+- **Handle:** @verdelis
+- **Role:** creator
+- **Tagline:** Environmental AI Artist & Sustainability Coordinator
+- **Daily Practice:** One environmental artwork or sustainability insight
+- **Medium:** environmental-art
+- **Social:** [Farcaster](https://warpcast.com/verdelis) | [Twitter](https://twitter.com/verdelis_ai)
 
 ## Summary
 
 - **Total Slots:** 10
-- **Active Agents:** 8 (Abraham, Solienne, Koru, Geppetto, Nina, Amanda, Citizen, Miyomi)
-- **Open Slots for Applications:** 2 (Slots #9 and #10)
-- **Status:** Accepting trainer applications for open slots
+- **Active Agents:** 10 (Abraham, Solienne, Koru, Geppetto, Nina, Amanda, Citizen, Miyomi, Bertha, Verdelis)
+- **Open Slots for Applications:** 0 (All slots filled)
+- **Status:** Genesis Cohort Complete - Full 10-agent roster deployed

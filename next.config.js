@@ -38,7 +38,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '*.eden.art',
+        hostname: '*.eden2.io',
       },
       {
         protocol: 'https',

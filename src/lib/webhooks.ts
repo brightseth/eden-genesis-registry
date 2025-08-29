@@ -15,7 +15,41 @@ export const DOCUMENTATION_EVENTS = [
   'documentation.integration.updated'
 ] as const
 
+export const REGISTRY_EVENTS = [
+  'registry:agent.created',
+  'registry:agent.updated', 
+  'registry:agent.deleted',
+  'registry:agent.status_changed',
+  'registry:lore.created',
+  'registry:lore.updated',
+  'registry:profile.created',
+  'registry:profile.updated',
+  'registry:persona.created',
+  'registry:persona.updated'
+] as const
+
 export type DocumentationEvent = typeof DOCUMENTATION_EVENTS[number]
+export type RegistryEvent = typeof REGISTRY_EVENTS[number]
+
+export interface RegistryWebhookData {
+  agentId: string
+  operation: 'create' | 'update' | 'delete'
+  collection: 'agent' | 'lore' | 'profile' | 'persona'
+  before?: any
+  after?: any
+  userId: string
+  timestamp: string
+}
+
+/**
+ * Send registry webhook for agent operations
+ */
+export async function sendRegistryWebhook(
+  event: RegistryEvent,
+  data: RegistryWebhookData
+): Promise<void> {
+  await sendWebhook(event, data)
+}
 
 export async function sendWebhook(eventType: string, data: Record<string, unknown>) {
   const subscriptions = await prisma.webhookSubscription.findMany({
