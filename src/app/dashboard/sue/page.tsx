@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { registryClient } from '@/lib/registry-sdk-client'
+import { registryClient } from '@/lib/registry-client'
 
 interface CurationSession {
   id: string

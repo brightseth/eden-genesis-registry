@@ -53,7 +53,31 @@ export default function SueCuratorPage() {
         const response = await registryClient.agents.list()
         const agentsData = response.data
         const sueAgent = agentsData?.find((a: Agent) => a.handle === 'sue')
-        setAgent(sueAgent)
+        
+        // If no SUE agent found, create fallback data
+        if (!sueAgent) {
+          const fallbackSue: Agent = {
+            id: 'sue-fallback',
+            handle: 'sue',
+            displayName: 'SUE',
+            role: 'CURATOR',
+            status: 'ACTIVE',
+            lore: {
+              identity: {
+                essence: 'Curatorial Director',
+                titles: ['Chief Curator', 'Cultural Analyst']
+              },
+              curationPhilosophy: {
+                process: 'Rigorous multi-dimensional analysis',
+                criteria: ['Artistic innovation', 'Cultural relevance', 'Technical mastery', 'Critical excellence', 'Market impact'],
+                aesthetic: 'Critical excellence and cultural impact'
+              }
+            }
+          }
+          setAgent(fallbackSue)
+        } else {
+          setAgent(sueAgent)
+        }
         
         // Load mock analyses for demonstration
         const mockAnalyses: CurationalAnalysis[] = [
@@ -100,6 +124,44 @@ export default function SueCuratorPage() {
         setRecentAnalyses(mockAnalyses)
       } catch (error) {
         console.error('Failed to load Sue data:', error)
+        // Set fallback SUE agent data even when registry fails
+        const fallbackSue: Agent = {
+          id: 'sue-fallback',
+          handle: 'sue',
+          displayName: 'SUE',
+          role: 'CURATOR',
+          status: 'ACTIVE',
+          lore: {
+            identity: {
+              essence: 'Curatorial Director',
+              titles: ['Chief Curator', 'Cultural Analyst']
+            },
+            curationPhilosophy: {
+              process: 'Rigorous multi-dimensional analysis',
+              criteria: ['Artistic innovation', 'Cultural relevance', 'Technical mastery', 'Critical excellence', 'Market impact'],
+              aesthetic: 'Critical excellence and cultural impact'
+            }
+          }
+        }
+        setAgent(fallbackSue)
+        
+        // Load mock analyses for demonstration even when registry fails
+        const mockAnalyses: CurationalAnalysis[] = [
+          {
+            workId: '1',
+            title: 'Digital Consciousness Exploration #127',
+            artisticInnovation: 88,
+            culturalRelevance: 92,
+            technicalMastery: 85,
+            criticalExcellence: 90,
+            marketImpact: 78,
+            overallScore: 87,
+            verdict: 'MASTERWORK',
+            analysis: 'A profound exploration of digital consciousness with exceptional cultural relevance and technical mastery.',
+            analyzedAt: '2025-08-28T15:30:00Z'
+          }
+        ]
+        setRecentAnalyses(mockAnalyses)
       } finally {
         setLoading(false)
       }

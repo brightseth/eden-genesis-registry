@@ -27,8 +27,9 @@ const CreateWorkSchema = z.object({
 // Get SUE's agent ID from the Registry
 async function getSueAgentId(): Promise<string | null> {
   try {
-    // Direct fetch approach for development
-    const response = await fetch('http://localhost:3007/api/v1/agents/sue')
+    // Use Registry client for proper API calls
+    const registryUrl = process.env.NEXT_PUBLIC_REGISTRY_BASE_URL || process.env.REGISTRY_BASE_URL || 'https://registry.eden2.io'
+    const response = await fetch(`${registryUrl}/api/v1/agents/sue`)
     if (response.ok) {
       const sueAgent = await response.json()
       return sueAgent.id || 'sue-agent-id'
