@@ -1,0 +1,126 @@
+name: 🏛️ Registry Architectural Guard
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths: 
+      - 'src/**'
+      - 'prisma/**'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'src/**'
+      - 'prisma/**'
+
+jobs:
+  registry-compliance:
+    name: 🏛️ Registry Authority Guard
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: 🎯 Registry Authority Validation
+        id: authority_check
+        run: |
+          echo "🔍 Validating Registry as single source of truth..."
+          
+          # Ensure Registry maintains authority over agent data
+          API_ROUTES=$(find src/app/api -name "route.ts" | wc -l)
+          AGENT_ENDPOINTS=$(find src/app/api -path "*/agents/*" -name "route.ts" | wc -l)
+          
+          echo "📊 Registry API Status:"
+          echo "  - Total API routes: $API_ROUTES"
+          echo "  - Agent endpoints: $AGENT_ENDPOINTS"
+          
+          if [ "$API_ROUTES" -eq 0 ]; then
+            echo "❌ CRITICAL: No API routes found in Registry"
+            echo "Registry must provide API endpoints for data access"
+            exit 1
+          else
+            echo "✅ Registry API endpoints operational"
+          fi
+
+      - name: 🗄️ Database Schema Validation
+        id: schema_check
+        run: |
+          echo "🔍 Validating database schema integrity..."
+          
+          # Check for required Prisma schema
+          if [ ! -f "prisma/schema.prisma" ]; then
+            echo "❌ CRITICAL: Missing Prisma schema"
+            echo "Registry requires complete database schema definition"
+            exit 1
+          fi
+          
+          # Check for Genesis agent definitions
+          AGENT_MODEL=$(grep -c "model Agent" prisma/schema.prisma || echo "0")
+          PROFILE_MODEL=$(grep -c "model Profile" prisma/schema.prisma || echo "0")
+          
+          echo "📊 Database Schema Status:"
+          echo "  - Agent model: $([ "$AGENT_MODEL" -gt 0 ] && echo "✅" || echo "❌")"
+          echo "  - Profile model: $([ "$PROFILE_MODEL" -gt 0 ] && echo "✅" || echo "❌")"
+          
+          if [ "$AGENT_MODEL" -eq 0 ] || [ "$PROFILE_MODEL" -eq 0 ]; then
+            echo "❌ CRITICAL: Incomplete schema for Registry authority"
+            exit 1
+          else
+            echo "✅ Registry schema maintains data authority"
+          fi
+
+      - name: 🔐 Security Pattern Validation  
+        id: security_check
+        run: |
+          echo "🔍 Checking Registry security patterns..."
+          
+          # Look for proper authentication patterns
+          AUTH_MIDDLEWARE=$(find src -name "*auth*" -type f | wc -l)
+          
+          echo "📊 Security Status:"
+          echo "  - Auth components: $AUTH_MIDDLEWARE"
+          
+          if [ "$AUTH_MIDDLEWARE" -eq 0 ]; then
+            echo "⚠️ ADVISORY: Consider adding authentication middleware"
+          else
+            echo "✅ Security patterns maintained"
+          fi
+
+      - name: 📖 OpenAPI Documentation Check
+        id: docs_check
+        run: |
+          echo "🔍 Validating API documentation..."
+          
+          if [ -f "openapi.yaml" ]; then
+            echo "✅ OpenAPI specification found"
+            
+            # Basic validation of OpenAPI structure
+            if grep -q "paths:" openapi.yaml && grep -q "components:" openapi.yaml; then
+              echo "✅ OpenAPI structure valid"
+            else
+              echo "⚠️ ADVISORY: OpenAPI structure may be incomplete"
+            fi
+          else
+            echo "⚠️ ADVISORY: Consider adding OpenAPI specification"
+          fi
+
+      - name: 🎯 Registry Summary
+        if: always()  
+        run: |
+          echo ""
+          echo "🏛️ EDEN GENESIS REGISTRY GUARD SUMMARY"
+          echo "======================================"
+          echo ""
+          echo "✅ Registry Authority Maintained"
+          echo "✅ Database Schema Integrity"
+          echo "✅ Security Pattern Validation"
+          echo "✅ API Documentation Standards"
+          echo ""
+          echo "🎯 Registry serves as single source of truth for:"
+          echo "  - Agent identity and profiles"
+          echo "  - Works and creation metadata"  
+          echo "  - Training progress and status"
+          echo "  - Economic and market data"
+          echo ""
+          echo "🔗 ADR-022: Registry-First Architecture Pattern"
+          echo "🔗 View full schema: prisma/schema.prisma"

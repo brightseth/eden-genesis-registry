@@ -45,3 +45,4 @@ next-env.d.ts
 # application data
 /data/
 *.json
+apps/agent-shell/node_modules/
