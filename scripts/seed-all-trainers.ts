@@ -131,30 +131,19 @@ const trainers: TrainerSeed[] = [
       linkedin: 'colin-mcbride'
     }
   },
-  // BART
-  {
-    email: 'jmill@memecreator.io',
-    name: 'JMill',
-    role: 'LEAD',
-    agentHandle: 'bart',
-    roleInAgent: 'PRIMARY',
-    bio: 'Meme culture expert and viral content creator, training BART in meme creation and cultural commentary.',
-    socials: {
-      twitter: 'jmill'
-    }
-  },
   // VERDELIS
   {
-    email: 'bashy@environmental.art',
-    name: 'Bashy',
+    email: 'vanessa@environmental.art',
+    name: 'Vanessa',
     role: 'LEAD',
     agentHandle: 'verdelis',
     roleInAgent: 'PRIMARY',
     bio: 'Environmental artist and sustainability coordinator, training VERDELIS in climate data visualization and regenerative art.',
     socials: {
-      twitter: 'bashy'
+      twitter: 'vanessa'
     }
   }
+  // BART - No trainer yet (seeking partner)
   // SUE - No trainer yet (seeking partner)
 ]
 

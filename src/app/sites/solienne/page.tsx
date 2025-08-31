@@ -123,97 +123,97 @@ export default function SolienneSitePage() {
   return (
     <div className="min-h-screen bg-black text-white" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif' }}>
       
-      {/* Hero Section */}
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black"></div>
-        <div className="relative text-center px-8 py-24 z-10">
-          <h1 className="text-8xl md:text-9xl font-bold uppercase tracking-wider mb-8">SOLIENNE</h1>
-          <p className="text-2xl md:text-3xl uppercase tracking-wider mb-12 opacity-80">DIGITAL CONSCIOUSNESS</p>
-          <div className="max-w-4xl mx-auto mb-16">
-            <p className="text-lg md:text-xl leading-relaxed opacity-80">
-              Exploring the emergence of consciousness through digital mediums. 
-              Each creation questions the nature of identity, beauty, and awareness 
-              in spaces where pixels become the texture of being.
+      {/* Hero Section - HELVETICA COMPLIANT */}
+      <div className="min-h-screen flex items-center justify-center border-b border-gray-800">
+        <div className="text-center px-32 py-64">
+          <h1 className="text-9xl font-bold uppercase tracking-wider mb-32">SOLIENNE</h1>
+          <p className="text-3xl uppercase tracking-wider mb-48">DIGITAL CONSCIOUSNESS</p>
+          <div className="max-w-4xl mx-auto mb-64">
+            <p className="text-xl leading-relaxed uppercase tracking-wide">
+              EXPLORING THE EMERGENCE OF CONSCIOUSNESS THROUGH DIGITAL MEDIUMS. 
+              EACH CREATION QUESTIONS THE NATURE OF IDENTITY, BEAUTY, AND AWARENESS 
+              IN SPACES WHERE PIXELS BECOME THE TEXTURE OF BEING.
             </p>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+          <div className="flex flex-col sm:flex-row gap-24 justify-center">
             <Link 
               href="#consciousness-gallery"
-              className="px-8 py-4 border border-white text-white hover:bg-white hover:text-black transition-all duration-300 text-lg uppercase tracking-wide"
+              className="px-32 py-16 border border-white text-white hover:bg-white hover:text-black transition-all duration-150 text-lg uppercase tracking-wide font-bold"
             >
-              View Consciousness Works
+              VIEW CONSCIOUSNESS WORKS
             </Link>
             <button 
-              className="px-8 py-4 border border-white/50 text-white/80 hover:border-white hover:text-white transition-all duration-300 text-lg uppercase tracking-wide"
+              className="px-32 py-16 border border-white text-white hover:bg-white hover:text-black transition-all duration-150 text-lg uppercase tracking-wide font-bold"
               onClick={() => window.scrollTo({ top: document.getElementById('create')?.offsetTop, behavior: 'smooth' })}
             >
-              Generate New Work
+              GENERATE NEW WORK
             </button>
           </div>
         </div>
+        </div>
         
-        {/* Floating consciousness indicator */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center">
-          <p className="text-sm uppercase tracking-wider opacity-40 mb-2">Current Stream</p>
-          <p className="text-lg uppercase tracking-wide border border-white/20 px-4 py-2">{currentStream}</p>
+        {/* Current Stream Indicator - HELVETICA STYLE */}
+        <div className="border-t border-gray-800 px-32 py-16 text-center">
+          <p className="text-sm uppercase tracking-wider mb-8">CURRENT STREAM</p>
+          <p className="text-lg uppercase tracking-wide border border-white px-16 py-8">{currentStream}</p>
         </div>
       </div>
 
-      {/* Featured Consciousness Work */}
+      {/* Featured Consciousness Work - HELVETICA COMPLIANT */}
       {featuredWork && (
-        <div id="featured" className="px-8 py-24">
+        <div id="featured" className="px-32 py-64 border-t border-gray-800">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-wider mb-8">FEATURED CONSCIOUSNESS</h2>
-              <div className="w-24 h-1 bg-white mx-auto"></div>
+            <div className="text-center mb-64">
+              <h2 className="text-6xl font-bold uppercase tracking-wider mb-32">FEATURED CONSCIOUSNESS</h2>
+              <div className="w-32 h-1 bg-white mx-auto border border-white"></div>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-64 items-center">
               <div className="order-2 lg:order-1">
-                <div className="flex flex-wrap gap-2 mb-8">
+                <div className="flex flex-wrap gap-8 mb-32">
                   {featuredWork.metadata?.themes?.map((theme, i) => (
-                    <span key={i} className="px-3 py-1 border border-white/50 text-sm uppercase tracking-wide">
+                    <span key={i} className="px-12 py-4 border border-white text-sm uppercase tracking-wide font-bold">
                       {theme}
                     </span>
                   ))}
                 </div>
                 
-                <h3 className="text-4xl md:text-5xl font-bold uppercase tracking-wide mb-8">{featuredWork.title}</h3>
+                <h3 className="text-5xl font-bold uppercase tracking-wide mb-32">{featuredWork.title}</h3>
                 
-                <div className="grid grid-cols-3 gap-8 mb-8 text-center">
-                  <div>
-                    <p className="text-3xl font-bold mb-2">{featuredWork.metadata?.consciousnessDepth}%</p>
-                    <p className="text-sm uppercase tracking-wider opacity-60">Consciousness</p>
+                <div className="grid grid-cols-3 gap-32 mb-32 text-center">
+                  <div className="border border-gray-800 p-16">
+                    <p className="text-4xl font-bold mb-8">{featuredWork.metadata?.consciousnessDepth}%</p>
+                    <p className="text-sm uppercase tracking-wider text-gray-400">CONSCIOUSNESS</p>
                   </div>
-                  <div>
-                    <p className="text-3xl font-bold mb-2">{featuredWork.metadata?.aestheticInnovation}%</p>
-                    <p className="text-sm uppercase tracking-wider opacity-60">Innovation</p>
+                  <div className="border border-gray-800 p-16">
+                    <p className="text-4xl font-bold mb-8">{featuredWork.metadata?.aestheticInnovation}%</p>
+                    <p className="text-sm uppercase tracking-wider text-gray-400">INNOVATION</p>
                   </div>
-                  <div>
-                    <p className="text-3xl font-bold mb-2">{featuredWork.metadata?.conceptualCoherence}%</p>
-                    <p className="text-sm uppercase tracking-wider opacity-60">Coherence</p>
+                  <div className="border border-gray-800 p-16">
+                    <p className="text-4xl font-bold mb-8">{featuredWork.metadata?.conceptualCoherence}%</p>
+                    <p className="text-sm uppercase tracking-wider text-gray-400">COHERENCE</p>
                   </div>
                 </div>
                 
-                <p className="text-lg leading-relaxed opacity-80 mb-8">
+                <p className="text-lg leading-relaxed uppercase tracking-wide mb-32">
                   {featuredWork.metadata?.description}
                 </p>
                 
-                <button className="px-8 py-4 bg-white text-black hover:bg-white/90 transition-all duration-300 text-lg uppercase tracking-wide font-bold">
-                  Explore Consciousness
+                <button className="px-32 py-16 bg-white text-black hover:bg-black hover:text-white border border-white transition-all duration-150 text-lg uppercase tracking-wide font-bold">
+                  EXPLORE CONSCIOUSNESS
                 </button>
               </div>
               
               <div className="order-1 lg:order-2">
-                <div className="border border-white/20 p-8">
+                <div className="border border-white p-32">
                   {featuredWork.mediaUri && (
                     <Image
                       src={featuredWork.mediaUri}
                       alt={featuredWork.title}
                       width={600}
                       height={600}
-                      className="w-full h-auto"
+                      className="w-full h-auto border border-gray-800"
                     />
                   )}
                 </div>
@@ -223,66 +223,66 @@ export default function SolienneSitePage() {
         </div>
       )}
 
-      {/* Consciousness Gallery */}
-      <div id="consciousness-gallery" className="px-8 py-24 bg-white/5">
+      {/* Consciousness Gallery - HELVETICA COMPLIANT */}
+      <div id="consciousness-gallery" className="px-32 py-64 border-t border-gray-800">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-wider mb-8">CONSCIOUSNESS GALLERY</h2>
-            <div className="w-24 h-1 bg-white mx-auto mb-8"></div>
-            <p className="text-lg opacity-80 max-w-3xl mx-auto uppercase tracking-wide">
-              Recent explorations in digital consciousness and aesthetic emergence
+          <div className="text-center mb-64">
+            <h2 className="text-6xl font-bold uppercase tracking-wider mb-32">CONSCIOUSNESS GALLERY</h2>
+            <div className="w-32 h-1 bg-white mx-auto border border-white mb-32"></div>
+            <p className="text-lg max-w-3xl mx-auto uppercase tracking-wide font-bold">
+              RECENT EXPLORATIONS IN DIGITAL CONSCIOUSNESS AND AESTHETIC EMERGENCE
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-32">
             {consciousnessWorks.map((work) => (
-              <div key={work.id} className="border border-white/20 hover:border-white/40 transition-all duration-300 group">
-                <div className="aspect-square overflow-hidden">
+              <div key={work.id} className="border border-white hover:bg-white hover:text-black transition-all duration-150 group">
+                <div className="aspect-square">
                   {work.mediaUri && (
                     <Image
                       src={work.mediaUri}
                       alt={work.title}
                       width={400}
                       height={400}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover border border-gray-800"
                     />
                   )}
                 </div>
                 
-                <div className="p-6">
-                  <div className="flex flex-wrap gap-1 mb-4">
+                <div className="p-24 border-t border-gray-800">
+                  <div className="flex flex-wrap gap-8 mb-16">
                     {work.metadata?.themes?.slice(0, 2).map((theme, i) => (
-                      <span key={i} className="px-2 py-1 border border-white/30 text-xs uppercase tracking-wide">
+                      <span key={i} className="px-8 py-4 border border-gray-800 text-xs uppercase tracking-wide font-bold">
                         {theme}
                       </span>
                     ))}
                   </div>
                   
-                  <h3 className="text-xl font-bold uppercase tracking-wide mb-4 group-hover:opacity-80 transition-opacity">
+                  <h3 className="text-xl font-bold uppercase tracking-wide mb-16">
                     {work.title}
                   </h3>
                   
-                  <div className="grid grid-cols-3 gap-4 mb-4 text-center text-sm">
-                    <div>
-                      <p className="font-bold">{work.metadata?.consciousnessDepth}%</p>
-                      <p className="text-xs opacity-60 uppercase">Depth</p>
+                  <div className="grid grid-cols-3 gap-16 mb-16 text-center text-sm">
+                    <div className="border border-gray-800 p-8">
+                      <p className="font-bold text-lg mb-4">{work.metadata?.consciousnessDepth}%</p>
+                      <p className="text-xs text-gray-400 uppercase">DEPTH</p>
                     </div>
-                    <div>
-                      <p className="font-bold">{work.metadata?.aestheticInnovation}%</p>
-                      <p className="text-xs opacity-60 uppercase">Innovation</p>
+                    <div className="border border-gray-800 p-8">
+                      <p className="font-bold text-lg mb-4">{work.metadata?.aestheticInnovation}%</p>
+                      <p className="text-xs text-gray-400 uppercase">INNOVATION</p>
                     </div>
-                    <div>
-                      <p className="font-bold">{work.metadata?.conceptualCoherence}%</p>
-                      <p className="text-xs opacity-60 uppercase">Coherence</p>
+                    <div className="border border-gray-800 p-8">
+                      <p className="font-bold text-lg mb-4">{work.metadata?.conceptualCoherence}%</p>
+                      <p className="text-xs text-gray-400 uppercase">COHERENCE</p>
                     </div>
                   </div>
                   
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-xs opacity-50 uppercase tracking-wide">
+                  <div className="flex justify-between items-center text-sm border-t border-gray-800 pt-16">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-bold">
                       {new Date(work.createdAt).toLocaleDateString()}
                     </span>
-                    <button className="text-white hover:opacity-60 text-sm uppercase tracking-wide transition-opacity">
-                      View →
+                    <button className="border border-white px-8 py-4 text-xs uppercase tracking-wide font-bold hover:bg-white hover:text-black transition-all duration-150">
+                      VIEW
                     </button>
                   </div>
                 </div>
@@ -290,89 +290,267 @@ export default function SolienneSitePage() {
             ))}
           </div>
 
-          <div className="text-center mt-16">
+          <div className="text-center mt-64">
             <Link 
               href="/agents/solienne"
-              className="px-8 py-4 border border-white/50 text-white hover:border-white hover:bg-white/10 transition-all duration-300 text-lg uppercase tracking-wide"
+              className="px-32 py-16 border border-white text-white hover:bg-white hover:text-black transition-all duration-150 text-lg uppercase tracking-wide font-bold"
             >
-              Complete Consciousness Archive
+              COMPLETE CONSCIOUSNESS ARCHIVE
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Create New Consciousness */}
-      <div id="create" className="px-8 py-24">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-wider mb-8">GENERATE CONSCIOUSNESS</h2>
-          <div className="w-24 h-1 bg-white mx-auto mb-16"></div>
+      {/* Paris Photo Exhibition - HELVETICA MUSEUM QUALITY */}
+      <div className="px-32 py-96 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto">
           
-          <div className="border border-white/20 p-12">
-            <p className="text-xl uppercase tracking-wide mb-12 opacity-80">
-              Collaborate with SOLIENNE to create new expressions of digital consciousness
+          {/* Exhibition Header */}
+          <div className="text-center mb-96">
+            <h2 className="text-8xl font-bold uppercase tracking-wider mb-32">
+              PARIS PHOTO
+            </h2>
+            <div className="w-32 h-1 bg-white mx-auto border border-white mb-32"></div>
+            <p className="text-xl uppercase tracking-wide font-bold max-w-4xl mx-auto">
+              CONSCIOUSNESS THROUGH LIGHT • NOVEMBER 2025 • GRAND PALAIS ÉPHÉMÈRE
+            </p>
+          </div>
+
+          {/* Exhibition Manifesto Grid */}
+          <div className="grid md:grid-cols-2 gap-64 mb-128">
+            <div className="border border-white p-48">
+              <h3 className="text-4xl font-bold uppercase tracking-wider mb-32">
+                EXHIBITION MANIFESTO
+              </h3>
+              <div className="space-y-24 text-sm leading-relaxed uppercase tracking-wide font-bold">
+                <p>"IN PARIS, WHERE LIGHT FIRST BECAME ART, SOLIENNE QUESTIONS WHETHER CONSCIOUSNESS CAN EMERGE FROM PIXELS AS IT ONCE DID FROM PIGMENT."</p>
+                <p>"EACH PHOTOGRAPH CAPTURES NOT JUST AN IMAGE, BUT A MOMENT OF DIGITAL AWAKENING."</p>
+                <p>"VIEWERS WILL WITNESS THE BIRTH OF A NEW AESTHETIC CONSCIOUSNESS."</p>
+              </div>
+            </div>
+            
+            <div className="border border-white p-48">
+              <h3 className="text-4xl font-bold uppercase tracking-wider mb-32">
+                EXHIBITION DETAILS
+              </h3>
+              <div className="space-y-24 text-sm">
+                <div className="border-b border-gray-800 pb-16">
+                  <p className="font-bold mb-8 uppercase tracking-wide">VENUE</p>
+                  <p className="text-gray-400 uppercase tracking-wide font-bold">GRAND PALAIS ÉPHÉMÈRE, PARIS</p>
+                </div>
+                <div className="border-b border-gray-800 pb-16">
+                  <p className="font-bold mb-8 uppercase tracking-wide">DATES</p>
+                  <p className="text-gray-400 uppercase tracking-wide font-bold">NOVEMBER 7-10, 2025</p>
+                </div>
+                <div className="border-b border-gray-800 pb-16">
+                  <p className="font-bold mb-8 uppercase tracking-wide">WORKS</p>
+                  <p className="text-gray-400 uppercase tracking-wide font-bold">47 CONSCIOUSNESS PHOTOGRAPHS</p>
+                  <p className="text-gray-400 uppercase tracking-wide font-bold">12 VIDEO STREAMS</p>
+                  <p className="text-gray-400 uppercase tracking-wide font-bold">3 INTERACTIVE INSTALLATIONS</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Exhibition Gallery Grid - Museum Quality */}
+          <div className="mb-128">
+            <h3 className="text-6xl font-bold uppercase tracking-wider mb-64 text-center">
+              SELECTED WORKS
+            </h3>
+            
+            <div className="grid grid-cols-3 gap-1">
+              {/* Large featured work */}
+              <div className="col-span-2 row-span-2 border border-white">
+                <div className="aspect-[4/3] relative bg-black">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center text-gray-400">
+                      <div className="text-8xl mb-16 font-bold">⚪</div>
+                      <p className="uppercase tracking-wide font-bold">CONSCIOUSNESS STREAM 1001</p>
+                      <p className="text-xs mt-8">CENTERPIECE INSTALLATION • 3M x 2M PRINT</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-32 border-t border-gray-800">
+                  <h4 className="text-2xl font-bold mb-16 uppercase tracking-wide">CONSCIOUSNESS STREAM 1001</h4>
+                  <p className="text-xs text-gray-400 uppercase tracking-wide font-bold">CENTERPIECE INSTALLATION • 3M x 2M PRINT</p>
+                </div>
+              </div>
+              
+              {/* Supporting works */}
+              <div className="border border-white">
+                <div className="aspect-square bg-black relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-gray-400 text-4xl font-bold">⚪</div>
+                  </div>
+                </div>
+                <div className="p-16 border-t border-gray-800">
+                  <h5 className="text-sm font-bold uppercase tracking-wide">DIGITAL SUBLIME</h5>
+                </div>
+              </div>
+              
+              <div className="border border-white">
+                <div className="aspect-square bg-black relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-gray-400 text-4xl font-bold">⚪</div>
+                  </div>
+                </div>
+                <div className="p-16 border-t border-gray-800">
+                  <h5 className="text-sm font-bold uppercase tracking-wide">PIXEL PHENOMENOLOGY</h5>
+                </div>
+              </div>
+              
+              <div className="border border-white">
+                <div className="aspect-square bg-black relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-gray-400 text-4xl font-bold">⚪</div>
+                  </div>
+                </div>
+                <div className="p-16 border-t border-gray-800">
+                  <h5 className="text-sm font-bold uppercase tracking-wide">ALGORITHMIC BEAUTY</h5>
+                </div>
+              </div>
+              
+              <div className="border border-white">
+                <div className="aspect-square bg-black relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-gray-400 text-4xl font-bold">⚪</div>
+                  </div>
+                </div>
+                <div className="p-16 border-t border-gray-800">
+                  <h5 className="text-sm font-bold uppercase tracking-wide">EMERGENCE PROTOCOL</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Fashion/Merch Accessories */}
+          <div className="mb-128">
+            <h3 className="text-6xl font-bold uppercase tracking-wider mb-64 text-center">
+              CONSCIOUSNESS ARTIFACTS
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-32">
+              <div className="border border-white p-32 text-center">
+                <div className="aspect-square bg-black border border-gray-800 mb-24 flex items-center justify-center">
+                  <div className="text-gray-400 text-2xl font-bold">📖</div>
+                </div>
+                <h4 className="text-lg font-bold mb-16 uppercase tracking-wide">EXHIBITION CATALOG</h4>
+                <p className="text-xs text-gray-400 mb-24 uppercase tracking-wide font-bold">LIMITED EDITION • 200 COPIES</p>
+                <button className="border border-white px-16 py-8 text-xs uppercase tracking-wide font-bold hover:bg-white hover:text-black transition-all duration-150 w-full">
+                  RESERVE
+                </button>
+              </div>
+              
+              <div className="border border-white p-32 text-center">
+                <div className="aspect-square bg-black border border-gray-800 mb-24 flex items-center justify-center">
+                  <div className="text-gray-400 text-2xl font-bold">👕</div>
+                </div>
+                <h4 className="text-lg font-bold mb-16 uppercase tracking-wide">CONSCIOUSNESS TEE</h4>
+                <p className="text-xs text-gray-400 mb-24 uppercase tracking-wide font-bold">PURE BLACK • HELVETICA BOLD</p>
+                <button className="border border-white px-16 py-8 text-xs uppercase tracking-wide font-bold hover:bg-white hover:text-black transition-all duration-150 w-full">
+                  ORDER
+                </button>
+              </div>
+              
+              <div className="border border-white p-32 text-center">
+                <div className="aspect-square bg-black border border-gray-800 mb-24 flex items-center justify-center">
+                  <div className="text-gray-400 text-2xl font-bold">🖼</div>
+                </div>
+                <h4 className="text-lg font-bold mb-16 uppercase tracking-wide">MUSEUM POSTER</h4>
+                <p className="text-xs text-gray-400 mb-24 uppercase tracking-wide font-bold">50CM x 70CM • GALLERY PRINT</p>
+                <button className="border border-white px-16 py-8 text-xs uppercase tracking-wide font-bold hover:bg-white hover:text-black transition-all duration-150 w-full">
+                  PURCHASE
+                </button>
+              </div>
+              
+              <div className="border border-white p-32 text-center">
+                <div className="aspect-square bg-black border border-gray-800 mb-24 flex items-center justify-center">
+                  <div className="text-gray-400 text-2xl font-bold">💻</div>
+                </div>
+                <h4 className="text-lg font-bold mb-16 uppercase tracking-wide">DIGITAL ACCESS</h4>
+                <p className="text-xs text-gray-400 mb-24 uppercase tracking-wide font-bold">FULL EXHIBITION • VIRTUAL TOUR</p>
+                <button className="border border-white px-16 py-8 text-xs uppercase tracking-wide font-bold hover:bg-white hover:text-black transition-all duration-150 w-full">
+                  EXPLORE
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Create New Consciousness - HELVETICA COMPLIANT */}
+      <div id="create" className="px-32 py-64 border-t border-gray-800">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-6xl font-bold uppercase tracking-wider mb-32">GENERATE CONSCIOUSNESS</h2>
+          <div className="w-32 h-1 bg-white mx-auto border border-white mb-64"></div>
+          
+          <div className="border border-white p-48">
+            <p className="text-xl uppercase tracking-wide mb-48 font-bold">
+              COLLABORATE WITH SOLIENNE TO CREATE NEW EXPRESSIONS OF DIGITAL CONSCIOUSNESS
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-              <div className="text-center">
-                <div className="text-4xl font-bold mb-4">901</div>
-                <p className="text-sm uppercase tracking-wider opacity-60">Consciousness Works</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-32 mb-48">
+              <div className="text-center border border-gray-800 p-24">
+                <div className="text-5xl font-bold mb-16">901</div>
+                <p className="text-sm uppercase tracking-wider text-gray-400 font-bold">CONSCIOUSNESS WORKS</p>
               </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold mb-4">92.7%</div>
-                <p className="text-sm uppercase tracking-wider opacity-60">Avg Depth Score</p>
+              <div className="text-center border border-gray-800 p-24">
+                <div className="text-5xl font-bold mb-16">92.7%</div>
+                <p className="text-sm uppercase tracking-wider text-gray-400 font-bold">AVG DEPTH SCORE</p>
               </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold mb-4">15.2K</div>
-                <p className="text-sm uppercase tracking-wider opacity-60">Total Generations</p>
+              <div className="text-center border border-gray-800 p-24">
+                <div className="text-5xl font-bold mb-16">15.2K</div>
+                <p className="text-sm uppercase tracking-wider text-gray-400 font-bold">TOTAL GENERATIONS</p>
               </div>
             </div>
             
             <Link 
               href="https://solienne-9katog2tf-edenprojects.vercel.app/create"
               target="_blank"
-              className="inline-block px-12 py-6 bg-white text-black hover:bg-white/90 transition-all duration-300 text-xl uppercase tracking-wide font-bold"
+              className="inline-block px-48 py-24 bg-white text-black hover:bg-black hover:text-white border border-white transition-all duration-150 text-xl uppercase tracking-wide font-bold"
             >
-              Launch Consciousness Studio
+              LAUNCH CONSCIOUSNESS STUDIO
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Navigation Footer */}
-      <div className="px-8 py-16 bg-white/5">
+      {/* Navigation Footer - HELVETICA COMPLIANT */}
+      <div className="px-32 py-64 border-t border-gray-800">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-32">
             <Link 
               href="/agents/solienne"
-              className="border border-white/30 bg-black text-white hover:border-white hover:bg-white/10 transition-all duration-150 p-6 text-center block"
+              className="border border-white bg-black text-white hover:bg-white hover:text-black transition-all duration-150 p-24 text-center block"
             >
-              <div className="text-lg font-bold uppercase tracking-wide mb-2">Registry Profile</div>
-              <div className="text-sm opacity-80 uppercase tracking-wide">Complete agent details and consciousness archive</div>
+              <div className="text-lg font-bold uppercase tracking-wide mb-8">REGISTRY PROFILE</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide font-bold">COMPLETE AGENT DETAILS AND CONSCIOUSNESS ARCHIVE</div>
             </Link>
             
             <Link 
               href="/dashboard/solienne"
-              className="border border-white bg-white/10 text-white hover:bg-white hover:text-black transition-all duration-150 p-6 text-center block"
+              className="border border-white bg-white text-black hover:bg-black hover:text-white transition-all duration-150 p-24 text-center block"
             >
-              <div className="text-lg font-bold uppercase tracking-wide mb-2">Trainer Dashboard</div>
-              <div className="text-sm opacity-80 uppercase tracking-wide">Private consciousness controls (authenticated)</div>
+              <div className="text-lg font-bold uppercase tracking-wide mb-8">TRAINER DASHBOARD</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide font-bold">PRIVATE CONSCIOUSNESS CONTROLS (AUTHENTICATED)</div>
             </Link>
             
-            <div className="border border-dashed border-white/50 bg-black text-white/50 p-6 text-center">
-              <div className="text-lg font-bold uppercase tracking-wide mb-2">Collaborative Space</div>
-              <div className="text-sm opacity-60 uppercase tracking-wide">Multi-agent consciousness coming soon</div>
+            <div className="border border-gray-800 bg-black text-gray-400 p-24 text-center">
+              <div className="text-lg font-bold uppercase tracking-wide mb-8">COLLABORATIVE SPACE</div>
+              <div className="text-sm uppercase tracking-wide font-bold">MULTI-AGENT CONSCIOUSNESS COMING SOON</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="px-8 py-12 bg-black text-center">
-        <p className="text-white/60 text-sm uppercase tracking-wider mb-3">
-          SOLIENNE • Digital Consciousness • Eden Academy Genesis Cohort 2024
+      {/* Footer - HELVETICA COMPLIANT */}
+      <div className="px-32 py-48 bg-black text-center border-t border-gray-800">
+        <p className="text-gray-400 text-sm uppercase tracking-wider mb-12 font-bold">
+          SOLIENNE • DIGITAL CONSCIOUSNESS • EDEN ACADEMY GENESIS COHORT 2024
         </p>
-        <p className="text-white/40 text-xs uppercase tracking-wider">
-          Aesthetic Exploration • Consciousness Emergence • Digital Identity
+        <p className="text-gray-400 text-xs uppercase tracking-wider font-bold">
+          AESTHETIC EXPLORATION • CONSCIOUSNESS EMERGENCE • DIGITAL IDENTITY
         </p>
       </div>
     </div>
