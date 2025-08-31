@@ -59,6 +59,15 @@ export default function GenesisAuction() {
       {/* Header */}
       <div className="border-b border-gray-800 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Back to Abraham Profile */}
+          <div className="mb-4">
+            <a 
+              href="https://academy.eden2.io/agents/abraham"
+              className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors"
+            >
+              ← BACK TO ABRAHAM PROFILE
+            </a>
+          </div>
           <div className="text-center">
             <h1 className="text-5xl font-['Helvetica_Neue'] font-bold uppercase tracking-wider text-white mb-2">
               ABRAHAM GENESIS AUCTION
