@@ -1,0 +1,1 @@
+# Registry schema check

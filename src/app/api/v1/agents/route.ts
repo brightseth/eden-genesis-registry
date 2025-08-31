@@ -7,6 +7,7 @@ import { sendWebhook } from '@/lib/webhooks'
 import { CHECKLIST_TEMPLATES } from '@/lib/progress'
 import { handleCors, withCors } from '@/lib/cors'
 import { ChecklistTemplate, Role } from '@prisma/client'
+import { DISPLAY_NAME_BY_HANDLE } from '@/lib/agents/naming'
 
 // OPTIONS /api/v1/agents
 export async function OPTIONS(request: NextRequest) {
@@ -112,6 +113,7 @@ export async function GET(request: NextRequest) {
     
     agents = dbAgents.map(agent => ({
       ...agent,
+      displayName: DISPLAY_NAME_BY_HANDLE[agent.handle as keyof typeof DISPLAY_NAME_BY_HANDLE] || agent.displayName,
       cohort: agent.cohort.slug,
       counts: agent._count
     }));

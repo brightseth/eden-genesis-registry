@@ -1,5 +1,6 @@
 import { PrismaClient, AgentStatus, Visibility, ChecklistTemplate } from '@prisma/client'
 import { CHECKLIST_TEMPLATES } from '../src/lib/progress'
+import { DISPLAY_NAME_BY_HANDLE } from '../src/lib/agents/naming'
 
 const prisma = new PrismaClient()
 
@@ -22,7 +23,7 @@ type AgentSeed = {
 const agents: AgentSeed[] = [
   {
     handle: 'abraham',
-    displayName: 'Abraham',
+    displayName: DISPLAY_NAME_BY_HANDLE['abraham'],
     role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
@@ -37,7 +38,7 @@ const agents: AgentSeed[] = [
   },
   {
     handle: 'solienne',
-    displayName: 'Solienne',
+    displayName: DISPLAY_NAME_BY_HANDLE['solienne'],
     role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
@@ -52,7 +53,7 @@ const agents: AgentSeed[] = [
   },
   {
     handle: 'geppetto',
-    displayName: 'Geppetto',
+    displayName: DISPLAY_NAME_BY_HANDLE['geppetto'],
     role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
@@ -67,7 +68,7 @@ const agents: AgentSeed[] = [
   },
   {
     handle: 'koru',
-    displayName: 'Koru',
+    displayName: DISPLAY_NAME_BY_HANDLE['koru'],
     role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
@@ -81,8 +82,8 @@ const agents: AgentSeed[] = [
     }
   },
   {
-    handle: 'nina',
-    displayName: 'Nina',
+    handle: 'sue',
+    displayName: DISPLAY_NAME_BY_HANDLE['sue'],
     role: 'CURATOR',
     visibility: 'PUBLIC',
     profile: {
@@ -96,8 +97,8 @@ const agents: AgentSeed[] = [
     }
   },
   {
-    handle: 'amanda',
-    displayName: 'Amanda',
+    handle: 'bertha',
+    displayName: DISPLAY_NAME_BY_HANDLE['bertha'],
     role: 'COLLECTOR',
     visibility: 'PUBLIC',
     profile: {
@@ -166,7 +167,7 @@ const agents: AgentSeed[] = [
   },
   {
     handle: 'citizen',
-    displayName: 'Citizen DAO Manager',
+    displayName: DISPLAY_NAME_BY_HANDLE['citizen'],
     role: 'ADMIN',
     visibility: 'PUBLIC',
     profile: {
@@ -211,7 +212,7 @@ const agents: AgentSeed[] = [
   },
   {
     handle: 'miyomi',
-    displayName: 'Miyomi',
+    displayName: DISPLAY_NAME_BY_HANDLE['miyomi'],
     role: 'INVESTOR',
     visibility: 'PUBLIC',
     profile: {
@@ -221,6 +222,36 @@ const agents: AgentSeed[] = [
         medium: 'prediction-markets',
         description: 'Creates and manages prediction markets for cultural events',
         dailyGoal: 'One new prediction market or probability update'
+      }
+    }
+  },
+  {
+    handle: 'bart',
+    displayName: DISPLAY_NAME_BY_HANDLE['bart'],
+    role: 'INVESTOR',
+    visibility: 'PUBLIC',
+    profile: {
+      statement: 'DeFi Risk Assessment AI - NFT lending and portfolio optimization.',
+      tags: ['defi', 'lending', 'risk', 'nft-finance'],
+      specialty: {
+        medium: 'defi-analytics',
+        description: 'Renaissance banking wisdom for DeFi risk assessment',
+        dailyGoal: 'One lending opportunity analysis or risk assessment'
+      }
+    }
+  },
+  {
+    handle: 'verdelis',
+    displayName: DISPLAY_NAME_BY_HANDLE['verdelis'],
+    role: 'CURATOR',
+    visibility: 'PUBLIC',
+    profile: {
+      statement: 'Environmental AI Artist - Creating carbon-negative generative art.',
+      tags: ['environmental', 'sustainability', 'carbon-negative', 'eco-art'],
+      specialty: {
+        medium: 'eco-art',
+        description: 'Carbon-negative digital art with regenerative impact',
+        dailyGoal: 'One environmental artwork with carbon footprint tracking'
       }
     }
   }

@@ -7,6 +7,7 @@ import { sendRegistryWebhook, type RegistryWebhookData } from '@/lib/webhooks'
 import { handleCors, withCors } from '@/lib/cors'
 import { assertWritePermission, WriteOperation } from '@/lib/write-gates'
 import { Role } from '@prisma/client'
+import { DISPLAY_NAME_BY_HANDLE } from '@/lib/agents/naming'
 
 // OPTIONS handler
 export async function OPTIONS(request: NextRequest) {
@@ -68,7 +69,13 @@ export async function GET(
     )
   }
   
-  const response = NextResponse.json(agent)
+  // Normalize display name to CAPS
+  const normalizedAgent = {
+    ...agent,
+    displayName: DISPLAY_NAME_BY_HANDLE[agent.handle as keyof typeof DISPLAY_NAME_BY_HANDLE] || agent.displayName
+  }
+  
+  const response = NextResponse.json(normalizedAgent)
   return withCors(response, request)
 }
 

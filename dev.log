@@ -1,0 +1,200 @@
+
+> eden-genesis-registry@0.1.0 dev
+> next dev --turbopack
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/seth/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/seth/eden-genesis-registry/package-lock.json
+
+ ⚠ Port 3000 is in use by process 67832, using available port 3001 instead.
+   ▲ Next.js 15.5.0 (Turbopack)
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.1.94:3001
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Compiled middleware in 68ms
+ ✓ Ready in 898ms
+ ○ Compiling /api/v1/agents/[id] ...
+ ✓ Compiled /api/v1/agents/[id] in 730ms
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+ GET /api/v1/agents/abraham 200 in 1549ms
+ ○ Compiling /agents/[handle] ...
+ ✓ Compiled /agents/[handle] in 1063ms
+ GET /agents/abraham 200 in 1447ms
+ ✓ Compiled middleware in 0ms
+ ✓ Compiled middleware in 1ms
+ ✓ Compiled /api/debug/env in 62ms
+ GET /api/debug/env 200 in 316ms
+ ✓ Compiled middleware in 1ms
+ ✓ Compiled /api/debug/test-abraham in 69ms
+Trying Production Registry: https://registry.eden2.io
+Production Registry failed: This operation was aborted
+Trying Local Development Registry: http://localhost:3001
+ GET /api/v1/agents/abraham 200 in 326ms
+ GET /api/debug/test-abraham 200 in 5695ms
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+ ✓ Compiled middleware in 1ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/app/api/v1/agents/[id]/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/app/api/v1/agents/[id]/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 588ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.keod0v89b3'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.keod0v89b3'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/app/api/v1/agents/[id]/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/app/api/v1/agents/[id]/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.qgf0q13rxcg'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.qgf0q13rxcg'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.tiicvr7igdp'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.tiicvr7igdp'
+}
+ ✓ Compiled middleware in 0ms
+ ✓ Compiled /academy/agent/abraham in 130ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1powgy04pel'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1powgy04pel'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.67btdgouocm'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.67btdgouocm'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1powgy04pel'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1powgy04pel'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.8p0pkzg0rao'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.8p0pkzg0rao'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.i7kf85j4mg9'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.i7kf85j4mg9'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/app/api/debug/test-abraham/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/app/api/debug/test-abraham/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.oe2fa8kj1yl'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.oe2fa8kj1yl'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/app/api/debug/test-abraham/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/app/api/debug/test-abraham/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1cglmtrnseyh'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1cglmtrnseyh'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.718ui35lk9i'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.718ui35lk9i'
+}
+ ✓ Compiled middleware in 0ms
+ ✓ Compiled middleware in 0ms
+ ✓ Compiled /api/v1/agents in 67ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1q9keqqfx27'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1q9keqqfx27'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1q9keqqfx27'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/static/development/_buildManifest.js.tmp.1q9keqqfx27'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/app/api/v1/agents/[id]/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/app/api/v1/agents/[id]/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/app/api/v1/agents/[id]/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/app/api/v1/agents/[id]/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/eden-genesis-registry/.next/server/pages/_app/build-manifest.json'
+}
+ ✓ Compiled middleware in 0ms
+[?25h
