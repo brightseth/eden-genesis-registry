@@ -198,9 +198,9 @@ export async function POST(
   { params }: { params: { handle: string } }
 ) {
   try {
-    // Verify service role key (basic auth for now)
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader || !authHeader.includes(process.env.SUPABASE_SERVICE_ROLE_KEY!)) {
+    // Verify service role key
+    const serviceKey = request.headers.get('x-registry-service');
+    if (serviceKey !== process.env.REGISTRY_SERVICE_KEY) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
