@@ -46,3 +46,4 @@ next-env.d.ts
 /data/
 *.json
 apps/agent-shell/node_modules/
+.env.production

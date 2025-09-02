@@ -60,6 +60,12 @@ export async function GET(
   { params }: { params: { handle: string } }
 ) {
   try {
+    console.log('[works] GET request', { 
+      handle: params.handle, 
+      url: request.url,
+      headers: Object.fromEntries(request.headers.entries())
+    });
+    
     // Parse query params
     const searchParams = Object.fromEntries(request.nextUrl.searchParams);
     const query = querySchema.parse(searchParams);
@@ -198,9 +204,16 @@ export async function POST(
   { params }: { params: { handle: string } }
 ) {
   try {
+    console.log('[works] POST request', { 
+      handle: params.handle,
+      hasServiceKey: !!request.headers.get('x-registry-service'),
+      origin: request.headers.get('origin')
+    });
+    
     // Verify service role key
     const serviceKey = request.headers.get('x-registry-service');
     if (serviceKey !== process.env.REGISTRY_SERVICE_KEY) {
+      console.error('[works] Auth failed', { provided: !!serviceKey, expected: !!process.env.REGISTRY_SERVICE_KEY });
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
