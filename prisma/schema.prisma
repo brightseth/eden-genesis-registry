@@ -137,6 +137,18 @@ enum CohortStatus {
   ARCHIVED
 }
 
+enum WorkVisibility {
+  PUBLIC
+  PRIVATE
+  DRAFT
+}
+
+enum WorkStatus {
+  ACTIVE
+  MISSING
+  CORRUPT
+}
+
 // Core Models
 
 model Cohort {
@@ -179,6 +191,9 @@ model Agent {
   tradingSignals   TradingSignal[]   @relation("AgentTradingSignals") 
   marketSentiment  MarketSentiment[] @relation("AgentMarketSentiment")
   tradingMetrics   TradingMetrics[]  @relation("AgentTradingMetrics")
+  
+  // Works relation for agent creative outputs
+  works          Work[]           @relation("AgentWorks")
   
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
@@ -597,4 +612,33 @@ model TradingMetrics {
   updatedAt       DateTime @updatedAt
 
   @@index([agentId, period])
+}
+
+// Work model for agent creative outputs with signed URLs
+model Work {
+  id               String         @id @default(cuid())
+  agentId          String
+  agent            Agent          @relation("AgentWorks", fields: [agentId], references: [id], onDelete: Cascade)
+  ordinal          Int            // Sequential work number for this agent
+  title            String?
+  description      String?
+  storageBucket    String         // e.g., "eden"
+  storagePath      String         // e.g., "solienne/generations/1.png"
+  visibility       WorkVisibility @default(PUBLIC)
+  status           WorkStatus     @default(ACTIVE)
+  checksum         String?        // SHA256 of the file content
+  mimeType         String?        // e.g., "image/png"
+  sizeBytes        Int?
+  width            Int?           // For images
+  height           Int?           // For images
+  metadata         Json?          // Additional work-specific data
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  publishedAt      DateTime?      // When made public
+  lastVerifiedAt   DateTime?      // Last time file existence was checked
+
+  @@unique([agentId, ordinal])
+  @@index([agentId, status, visibility])
+  @@index([agentId, ordinal(sort: Desc)])
+  @@index([publishedAt])
 }
