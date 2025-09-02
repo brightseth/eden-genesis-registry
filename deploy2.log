@@ -1,0 +1,88 @@
+Vercel CLI 46.1.0
+Retrieving project…
+Deploying edenprojects/eden-genesis-registry
+Uploading [--------------------] (0.0B/4.3KB)
+Uploading [====================] (4.3KB/4.3KB)
+Inspect: https://vercel.com/edenprojects/eden-genesis-registry/GWnxYPrNT7CjMzMkpGE4BG3SnXAt [2s]
+Production: https://eden-genesis-registry-h5zjq1xrh-edenprojects.vercel.app [2s]
+https://eden-genesis-registry-h5zjq1xrh-edenprojects.vercel.appQueued
+Building
+Error: Command "npx prisma generate && next build" exited with 1
+
+2025-09-02T14:24:20.321Z  Running build in Washington, D.C., USA (East) – iad1
+2025-09-02T14:24:20.322Z  Build machine configuration: 4 cores, 8 GB
+2025-09-02T14:24:20.353Z  Retrieving list of deployment files...
+2025-09-02T14:24:20.872Z  Downloading 470 deployment files...
+2025-09-02T14:24:26.322Z  Restored build cache from previous deployment (2vohoJCAsYDS2WVjdYeKYfJ4qkVN)
+2025-09-02T14:24:27.183Z  Running "vercel build"
+2025-09-02T14:24:28.090Z  Vercel CLI 46.1.1
+2025-09-02T14:24:28.488Z  Installing dependencies...
+2025-09-02T14:24:29.897Z  
+2025-09-02T14:24:29.898Z  > eden-genesis-registry@0.1.0 postinstall
+2025-09-02T14:24:29.898Z  > prisma generate
+2025-09-02T14:24:29.898Z  
+2025-09-02T14:24:31.628Z  warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+2025-09-02T14:24:31.629Z  For more information, see: https://pris.ly/prisma-config
+2025-09-02T14:24:31.629Z  
+2025-09-02T14:24:31.743Z  Environment variables loaded from .env
+2025-09-02T14:24:31.745Z  Prisma schema loaded from prisma/schema.prisma
+2025-09-02T14:24:32.321Z  
+2025-09-02T14:24:32.322Z  ✔ Generated Prisma Client (v6.14.0) to ./node_modules/@prisma/client in 368ms
+2025-09-02T14:24:32.322Z  
+2025-09-02T14:24:32.322Z  Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-09-02T14:24:32.322Z  
+2025-09-02T14:24:32.322Z  Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+2025-09-02T14:24:32.322Z  
+2025-09-02T14:24:32.350Z  
+2025-09-02T14:24:32.350Z  up to date in 4s
+2025-09-02T14:24:32.351Z  
+2025-09-02T14:24:32.351Z  234 packages are looking for funding
+2025-09-02T14:24:32.351Z    run `npm fund` for details
+2025-09-02T14:24:32.384Z  Detected Next.js version: 15.5.0
+2025-09-02T14:24:32.385Z  Running "npx prisma generate && next build"
+2025-09-02T14:24:34.032Z  warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+2025-09-02T14:24:34.032Z  For more information, see: https://pris.ly/prisma-config
+2025-09-02T14:24:34.032Z  
+2025-09-02T14:24:34.077Z  Environment variables loaded from .env
+2025-09-02T14:24:34.091Z  Prisma schema loaded from prisma/schema.prisma
+2025-09-02T14:24:34.631Z  ┌─────────────────────────────────────────────────────────┐
+2025-09-02T14:24:34.631Z  │  Update available 6.14.0 -> 6.15.0                      │
+2025-09-02T14:24:34.631Z  │  Run the following to update                            │
+2025-09-02T14:24:34.631Z  │    npm i --save-dev prisma@latest                       │
+2025-09-02T14:24:34.631Z  │    npm i @prisma/client@latest                          │
+2025-09-02T14:24:34.631Z  └─────────────────────────────────────────────────────────┘
+2025-09-02T14:24:34.632Z  
+2025-09-02T14:24:34.632Z  ✔ Generated Prisma Client (v6.14.0) to ./node_modules/@prisma/client in 292ms
+2025-09-02T14:24:34.632Z  
+2025-09-02T14:24:34.632Z  Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-09-02T14:24:34.632Z  
+2025-09-02T14:24:34.632Z  Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+2025-09-02T14:24:34.632Z  
+2025-09-02T14:24:35.510Z     ▲ Next.js 15.5.0
+2025-09-02T14:24:35.510Z     - Environments: .env.production, .env
+2025-09-02T14:24:35.510Z  
+2025-09-02T14:24:35.633Z     Creating an optimized production build ...
+2025-09-02T14:24:47.628Z  Failed to compile.
+2025-09-02T14:24:47.628Z  
+2025-09-02T14:24:47.628Z  ./src/app/sites/solienne/page.tsx
+2025-09-02T14:24:47.628Z  Error:   [31mx[0m Expected ',', got '{'
+2025-09-02T14:24:47.628Z       ,-[[36;1;4m/vercel/path0/src/app/sites/solienne/page.tsx[0m:163:1]
+2025-09-02T14:24:47.628Z   [2m160[0m |         </div>
+2025-09-02T14:24:47.628Z   [2m161[0m |       </div>
+2025-09-02T14:24:47.629Z   [2m162[0m | 
+2025-09-02T14:24:47.629Z   [2m163[0m |       {/* Featured Consciousness Work - HELVETICA COMPLIANT */}
+2025-09-02T14:24:47.629Z       : [35;1m      ^[0m
+2025-09-02T14:24:47.629Z   [2m164[0m |       {featuredWork && (
+2025-09-02T14:24:47.629Z   [2m165[0m |         <div id="featured" className="px-32 py-64 border-t border-gray-800">
+2025-09-02T14:24:47.629Z   [2m166[0m |           <div className="max-w-7xl mx-auto">
+2025-09-02T14:24:47.629Z       `----
+2025-09-02T14:24:47.629Z  
+2025-09-02T14:24:47.629Z  Caused by:
+2025-09-02T14:24:47.629Z      Syntax Error
+2025-09-02T14:24:47.629Z  
+2025-09-02T14:24:47.629Z  Import trace for requested module:
+2025-09-02T14:24:47.629Z  ./src/app/sites/solienne/page.tsx
+2025-09-02T14:24:47.629Z  
+2025-09-02T14:24:47.645Z  
+2025-09-02T14:24:47.646Z  > Build failed because of webpack errors
+2025-09-02T14:24:47.664Z  Error: Command "npx prisma generate && next build" exited with 1

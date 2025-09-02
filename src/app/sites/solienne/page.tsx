@@ -151,7 +151,6 @@ export default function SolienneSitePage() {
             </button>
           </div>
         </div>
-        </div>
         
         {/* Current Stream Indicator - HELVETICA STYLE */}
         <div className="border-t border-gray-800 px-32 py-16 text-center">

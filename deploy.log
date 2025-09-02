@@ -1,0 +1,67 @@
+Vercel CLI 46.1.0
+Retrieving project…
+Deploying edenprojects/eden-genesis-registry
+Uploading [--------------------] (0.0B/108.1KB)
+Uploading [======--------------] (36.0KB/108.1KB)
+Uploading [==========----------] (58.4KB/108.1KB)
+Uploading [===============-----] (82.0KB/108.1KB)
+Uploading [====================] (108.1KB/108.1KB)
+Inspect: https://vercel.com/edenprojects/eden-genesis-registry/DuW4bzij717AVNnSeh2xs5d6zybm [3s]
+Production: https://eden-genesis-registry-dscwrh2s0-edenprojects.vercel.app [3s]
+https://eden-genesis-registry-dscwrh2s0-edenprojects.vercel.appQueued
+Building
+Error: Command "npx prisma generate && next build" exited with 1
+
+2025-09-02T14:17:27.763Z  Running build in Washington, D.C., USA (East) – iad1
+2025-09-02T14:17:27.763Z  Build machine configuration: 4 cores, 8 GB
+2025-09-02T14:17:27.777Z  Retrieving list of deployment files...
+2025-09-02T14:17:28.279Z  Downloading 469 deployment files...
+2025-09-02T14:17:33.852Z  Restored build cache from previous deployment (2vohoJCAsYDS2WVjdYeKYfJ4qkVN)
+2025-09-02T14:17:34.582Z  Running "vercel build"
+2025-09-02T14:17:34.984Z  Vercel CLI 46.1.1
+2025-09-02T14:17:35.338Z  Installing dependencies...
+2025-09-02T14:17:36.610Z  
+2025-09-02T14:17:36.610Z  > eden-genesis-registry@0.1.0 postinstall
+2025-09-02T14:17:36.610Z  > prisma generate
+2025-09-02T14:17:36.610Z  
+2025-09-02T14:17:38.039Z  warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+2025-09-02T14:17:38.039Z  For more information, see: https://pris.ly/prisma-config
+2025-09-02T14:17:38.039Z  
+2025-09-02T14:17:38.177Z  Environment variables loaded from .env
+2025-09-02T14:17:38.178Z  Prisma schema loaded from prisma/schema.prisma
+2025-09-02T14:17:38.734Z  
+2025-09-02T14:17:38.735Z  ✔ Generated Prisma Client (v6.14.0) to ./node_modules/@prisma/client in 325ms
+2025-09-02T14:17:38.735Z  
+2025-09-02T14:17:38.735Z  Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-09-02T14:17:38.735Z  
+2025-09-02T14:17:38.735Z  Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+2025-09-02T14:17:38.735Z  
+2025-09-02T14:17:38.761Z  
+2025-09-02T14:17:38.761Z  up to date in 3s
+2025-09-02T14:17:38.762Z  
+2025-09-02T14:17:38.762Z  234 packages are looking for funding
+2025-09-02T14:17:38.762Z    run `npm fund` for details
+2025-09-02T14:17:38.792Z  Detected Next.js version: 15.5.0
+2025-09-02T14:17:38.793Z  Running "npx prisma generate && next build"
+2025-09-02T14:17:40.312Z  warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+2025-09-02T14:17:40.312Z  For more information, see: https://pris.ly/prisma-config
+2025-09-02T14:17:40.312Z  
+2025-09-02T14:17:40.351Z  Environment variables loaded from .env
+2025-09-02T14:17:40.364Z  Prisma schema loaded from prisma/schema.prisma
+2025-09-02T14:17:40.841Z  ┌─────────────────────────────────────────────────────────┐
+2025-09-02T14:17:40.841Z  │  Update available 6.14.0 -> 6.15.0                      │
+2025-09-02T14:17:40.841Z  │  Run the following to update                            │
+2025-09-02T14:17:40.841Z  │    npm i --save-dev prisma@latest                       │
+2025-09-02T14:17:40.841Z  │    npm i @prisma/client@latest                          │
+2025-09-02T14:17:40.842Z  └─────────────────────────────────────────────────────────┘
+2025-09-02T14:17:40.842Z  
+2025-09-02T14:17:40.842Z  ✔ Generated Prisma Client (v6.14.0) to ./node_modules/@prisma/client in 231ms
+2025-09-02T14:17:40.842Z  
+2025-09-02T14:17:40.842Z  Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-09-02T14:17:40.842Z  
+2025-09-02T14:17:40.842Z  Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+2025-09-02T14:17:40.842Z  
+2025-09-02T14:17:41.605Z     ▲ Next.js 15.5.0
+2025-09-02T14:17:41.605Z     - Environments: .env.production, .env
+2025-09-02T14:17:41.606Z  
+2025-09-02T14:17:41.717Z     Creating an optimized production build ...
