@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "prisma generate && next build",
-    "postbuild": "echo '[migrate] Starting migrations...' && prisma migrate deploy && echo '[migrate] Migrations complete'",
+    "postbuild": "echo '[migrate] Starting migrations...' && prisma migrate deploy || (echo '[migrate] FAILED' && exit 1) && echo '[migrate] Migrations complete'",
     "start": "next start",
     "lint": "eslint",
     "prisma:seed": "tsx prisma/seed.ts",
