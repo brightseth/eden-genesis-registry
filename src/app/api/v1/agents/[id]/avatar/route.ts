@@ -3,20 +3,20 @@ import { generateAgentProfileSVG } from '@/lib/profile-generation/agent-profiles
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ handle: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { handle } = await context.params;
+    const { id } = await context.params;
     
-    if (!handle) {
+    if (!id) {
       return NextResponse.json(
-        { error: 'Agent handle required' },
+        { error: 'Agent ID required' },
         { status: 400 }
       );
     }
 
-    // Generate SVG for the agent
-    const svg = generateAgentProfileSVG(handle.toLowerCase());
+    // Generate SVG for the agent (id is the handle/slug)
+    const svg = generateAgentProfileSVG(id.toLowerCase());
 
     // Return SVG with proper headers
     return new NextResponse(svg, {
