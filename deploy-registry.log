@@ -1,0 +1,12 @@
+Vercel CLI 46.1.0
+Retrieving project…
+Deploying edenprojects/eden-genesis-registry
+Uploading [--------------------] (0.0B/35.2KB)
+Uploading [==========----------] (18.9KB/35.2KB)
+Uploading [=============-------] (24.4KB/35.2KB)
+Uploading [====================] (35.2KB/35.2KB)
+Inspect: https://vercel.com/edenprojects/eden-genesis-registry/F4dT1g1r8wbk4FeqePRbWwsMNceT [3s]
+Production: https://eden-genesis-registry-afr2al8eb-edenprojects.vercel.app [3s]
+https://eden-genesis-registry-afr2al8eb-edenprojects.vercel.appQueued
+Building
+Completing
